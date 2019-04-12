@@ -1,0 +1,36 @@
+{
+  "type": 1,
+  "name": "js.vp8.medooze.config.json %ts",
+  "remotes": [
+    {
+      "type": "local",
+      "remoteAddress": "http://localhost:4444/wd/hub"
+    }
+  ],
+  "tests": [
+    {
+      "name": "Medooze Simulcast H.264 %ts",
+      "description":"Simulcast Test for Medooze with H.264 codec",
+      "tupleSize": 1,
+      "noOfThreads": 2,
+      "testImpl": "simulcast.js",
+      "payload":{
+        "url": "https://playground.cosmosoftware.io/simulcast/index.html?codec=h264",
+        "takeScreenshotForEachTest": true,
+        "testTimeout": 20,
+        "getStats": true,
+        "statsCollectionTime" : 2,
+        "statsCollectionInterval" : 1,
+        "selectedStats": ["inbound-rtp", "outbound-rtp", "candidate-pair"]
+      }
+    }
+  ],
+  "browsers": [
+    {
+      "browserName": "chrome",
+      "version": "73",
+      "platform": "WINDOWS",
+      "headless": false
+    }
+  ]
+}

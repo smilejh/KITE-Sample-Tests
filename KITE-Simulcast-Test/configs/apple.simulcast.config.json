@@ -1,0 +1,73 @@
+{
+  "type": 1,
+  "name": "Medooze Simulcast %ts",
+  "permute": false,
+  "remotes": [
+    {
+      "type": "local",
+      "remoteAddress": "http://192.168.1.33:4444/wd/hub"
+    }
+  ],
+  "tests": [
+    {
+      "name": "Medooze Simulcast H.264 %ts",
+      "description":"Simulcast Test for Medooze with VP8 codec",
+      "tupleSize": 1,
+      "noOfThreads": 2,
+      "testImpl": "io.cosmosoftware.kite.simulcast.KiteMedoozeTest",
+      "payload":{
+        "url": "https://playground.cosmosoftware.io/simulcast/index.html?codec=h264",
+        "takeScreenshotForEachTest": true,
+        "testTimeout": 20,
+        "getStats": true,
+        "statsCollectionTime" : 2,
+        "statsCollectionInterval" : 1,
+        "selectedStats": ["inbound-rtp", "outbound-rtp", "candidate-pair"]
+      }
+    },
+    {
+      "name": "Medooze Simulcast VP8 %ts",
+      "description":"Simulcast Test for Medooze with H.264 codec",
+      "tupleSize": 1,
+      "noOfThreads": 2,
+      "testImpl": "io.cosmosoftware.kite.simulcast.KiteMedoozeTest",
+      "payload":{
+        "url": "https://playground.cosmosoftware.io/simulcast/index.html?codec=vp8",
+        "takeScreenshotForEachTest": true,
+        "testTimeout": 20,
+        "getStats": true,
+        "statsCollectionTime" : 2,
+        "statsCollectionInterval" : 1,
+        "selectedStats": ["inbound-rtp", "outbound-rtp", "candidate-pair"]
+      }
+    }
+  ],
+  "browsers": [
+    {
+      "browserName": "chrome",
+      "version": "73",
+      "platform": "WINDOWS",
+      "windowSize": "1280,800",
+      "headless": true
+    },
+    {
+      "browserName": "firefox",
+      "windowSize": "1280,800",
+      "version": "66",
+      "platform": "WINDOWS",
+      "headless": true
+    },
+    {
+      "browserName": "edge",
+      "version": "44.17763",
+      "platform": "WINDOWS",
+      "headless": false
+    },
+    {
+      "browserName": "safari",
+      "version": "12.0",
+      "platform": "MAC",
+      "headless": true
+    }
+  ]
+}
