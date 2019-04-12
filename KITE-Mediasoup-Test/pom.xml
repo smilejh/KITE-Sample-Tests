@@ -7,7 +7,7 @@
 
   <parent>
     <groupId>org.webrtc.kite</groupId>
-    <artifactId>kite-base</artifactId>
+    <artifactId>kite-sample-tests</artifactId>
     <version>2.0.2</version>
   </parent>
 
@@ -30,6 +30,11 @@
   </build>
 
   <dependencies>
+    <dependency>
+      <groupId>com.github.CoSMoSoftware</groupId>
+      <artifactId>KITE-Extras</artifactId>
+      <version>0.1.1</version>
+    </dependency>
     <dependency>
       <groupId>org.webrtc.kite</groupId>
       <artifactId>kite-framework</artifactId>

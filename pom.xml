@@ -5,9 +5,9 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.webrtc.kite</groupId>
-  <artifactId>kite-base</artifactId>
+  <artifactId>kite-sample-tests</artifactId>
   <version>2.0.2</version>
-  <name>kite-base</name>
+  <name>kite-sample-tests</name>
   <packaging>pom</packaging>
 
   <build>
@@ -95,8 +95,14 @@
     <!-- Node and NPM  -->
     <kite.node.version>v8.11.3</kite.node.version>
     <kite.npm.version>6.9.0</kite.npm.version>
-
   </properties>
+
+  <repositories>
+    <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+    </repository>
+  </repositories>
 
   <modules>
     <module>KITE-Simulcast-Test</module>

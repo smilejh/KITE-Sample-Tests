@@ -2,3 +2,5 @@ target
 node
 node_modules
 package-lock.json
+logs
+/.idea
