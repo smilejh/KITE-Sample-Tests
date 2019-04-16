@@ -32,6 +32,7 @@ public class AllVideoCheck extends TestStep {
   @Override
   protected void step() throws KiteTestException {
     try {
+      janusPage.setLogger(logger);
       //wait a while to allow all videos to load.
       waitAround(numberOfParticipants * 3 * ONE_SECOND_INTERVAL);
       logger.info("Looking for video elements");

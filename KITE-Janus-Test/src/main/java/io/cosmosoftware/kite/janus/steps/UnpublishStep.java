@@ -22,6 +22,7 @@ public class UnpublishStep extends TestStep {
 
   @Override
   protected void step() throws KiteInteractionException {
+    janusPage.setLogger(logger);
     janusPage.unpublish();
   }
   
