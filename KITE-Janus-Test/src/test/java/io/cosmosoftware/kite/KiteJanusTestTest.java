@@ -31,14 +31,11 @@ public class KiteJanusTestTest extends TestCase {
   private List<WebDriver> webDriverList = new ArrayList<>();
   private List<EndPoint> endPointList = getEndPointList(CONFIG_FILE, "browsers");
 
-  private static final String platform = getSystemPlatform();
-
   public void setUp() throws Exception {
     super.setUp();
   }
 
   public void tearDown()  {
-    // Close all the browsers
     for (WebDriver webDriver : this.webDriverList)
       try {
         webDriver.quit();
