@@ -27,39 +27,19 @@ public class AudioCheck extends TestStep {
 
   private Map<String, Object> sessionMap;
 
-  private String scoreDirectory;
+  private final String scoreDirectory;
 
-  private String scoreCommand;
+  private final String scoreCommand;
 
-  private String audioDuration;
+  private final String audioDuration;
 
-  public String getScoreDirectory() {
-    return scoreDirectory;
-  }
-
-  public void setScoreDirectory(String scoreDirectory) {
-    this.scoreDirectory = scoreDirectory;
-  }
-
-  public String getScoreCommand() {
-    return scoreCommand;
-  }
-
-  public void setScoreCommand(String scoreCommand) {
-    this.scoreCommand = scoreCommand;
-  }
-
-  public String getAudioDuration() {
-    return audioDuration;
-  }
-
-  public void setAudioDuration(String audioDuration) {
-    this.audioDuration = audioDuration;
-  }
-
-  public AudioCheck(WebDriver webDriver, Map<String, Object> sessionMap) {
+  public AudioCheck(WebDriver webDriver, Map<String, Object> sessionMap, String scoreDirectory, String scoreCommand,
+                    String audioDuration) {
     super(webDriver);
     this.sessionMap = sessionMap;
+    this.scoreDirectory = scoreDirectory;
+    this.scoreCommand = scoreCommand;
+    this.audioDuration = audioDuration;
   }
 
   @Override
@@ -69,8 +49,7 @@ public class AudioCheck extends TestStep {
 
   @Override
   protected void step() throws KiteTestException {
-    String nodeHost = (String) sessionMap.get("node_host") + "/extra/AudioRecorder?";
-    // nodeHost = "http://localhost:8080/KITEServer/AudioRecorder?";
+    String nodeHost = sessionMap.get("node_host") + "/extra/AudioRecorder?";
     String response = TestUtils.doHttpGet(nodeHost + "record=1&duration=" + this.audioDuration);
     logger.info("Recording Response: " + response);
     logger.info("Waiting for recording to finish ...");
@@ -87,9 +66,7 @@ public class AudioCheck extends TestStep {
           ((Browser) this.sessionMap.get("end_point")).getFakeMediaAudio(),
           filePath
         };
-        response =
-            TestUtils.executeCommand(
-                this.scoreDirectory, Arrays.asList(command), logger, "AudioCheck");
+        response = TestUtils.executeCommand( this.scoreDirectory, Arrays.asList(command), logger, "AudioCheck");
         logger.info("Score Response: " + response);
         Reporter.getInstance().textAttachment(this.report, "AudioQualityScore", response, "text");
       }
@@ -103,13 +80,12 @@ public class AudioCheck extends TestStep {
    * Verify the size of the recorded file.
    *
    * @param pathToFile path to recorded file.
-   * @return if the recorded file is empty.
+   * @return true if the recorded file is empty.
    * @throws IOException the IOException.
    */
   private boolean isZeroLength(String pathToFile) throws IOException {
     FileInputStream fileInputStream = null;
     long duration = 0;
-
     try {
       fileInputStream = new FileInputStream(pathToFile);
       duration = Objects.requireNonNull(fileInputStream).getChannel().size() / _128_BITS;
@@ -122,7 +98,6 @@ public class AudioCheck extends TestStep {
         }
       }
     }
-
     return duration == 0;
   }
 }

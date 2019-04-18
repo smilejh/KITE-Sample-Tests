@@ -15,6 +15,9 @@
       "tupleSize": 2,
       "testImpl": "io.cosmosoftware.kite.janus.KiteJanusTest",
       "payload":{
+        "audioScoreWorkingDirectory": "PATH TO AUDIO TOOLS",
+        "audioScoreTool": "AUDIO SCORE TOOL NAME",
+        "audioDuration": "03:23",
         "url": "https://lbclient.cosmosoftware.io/videoroomtest_videoanalysis.html?roomId=",
         "rooms": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
           "11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
@@ -47,7 +50,7 @@
     },
     {
       "browserName": "firefox",
-      "version": "66",
+      "version": "63",
       "platform": "WINDOWS",
       "headless": false
     }
