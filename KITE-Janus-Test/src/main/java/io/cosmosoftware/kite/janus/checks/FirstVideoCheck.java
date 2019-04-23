@@ -28,6 +28,7 @@ public class FirstVideoCheck extends TestStep {
   @Override
   protected void step() throws KiteTestException {
     try {
+      janusPage.setLogger(logger);
       logger.info("Looking for video object");
       List<WebElement> videos = janusPage.getVideoElements();
       if (videos.isEmpty()) {

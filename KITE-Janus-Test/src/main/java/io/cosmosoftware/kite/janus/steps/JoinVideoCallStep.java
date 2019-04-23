@@ -24,6 +24,7 @@ public class JoinVideoCallStep extends TestStep {
   
   @Override
   protected void step() {
+    janusPage.setLogger(logger);
     janusPage.load(url);
   }
 }
