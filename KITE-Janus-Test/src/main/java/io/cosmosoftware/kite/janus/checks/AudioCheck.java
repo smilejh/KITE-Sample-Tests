@@ -21,7 +21,6 @@ import static io.cosmosoftware.kite.entities.Timeouts.TEN_SECOND_INTERVAL;
 
 public class AudioCheck extends TestStep {
 
-  private final Logger logger = Logger.getLogger(this.getClass().getSimpleName());
 
   private final int _128_BITS = 128;
 

@@ -40,7 +40,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <kite.version>2.0.1</kite.version>
-    <kite.extra.version>0.1.1</kite.extra.version>
+    <kite.extras.version>0.1.5</kite.extras.version>
     <kite.framework.version>0.1.1</kite.framework.version>
     <kite.log4j.version>1.2.17</kite.log4j.version>
     <!-- Core dependencies -->
@@ -107,8 +107,8 @@
 
 
   <modules>
-    <module>KITE-Simulcast-Test</module>
     <module>KITE-Janus-Test</module>
+    <module>KITE-Simulcast-Test</module>
     <module>KITE-Mediasoup-Test</module>
   </modules>
 </project>

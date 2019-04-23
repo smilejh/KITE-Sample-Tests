@@ -8,7 +8,6 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -17,8 +16,6 @@ import java.util.List;
 import static io.cosmosoftware.kite.util.WebDriverUtils.loadPage;
 
 public class JanusPage extends BasePage {
-
-  private final Logger logger = Logger.getLogger(this.getClass().getName());
 
   private final String PUBLISHING = "//b[text()='Publishing...']";
   
@@ -31,8 +28,8 @@ public class JanusPage extends BasePage {
   @FindBy(id="unpublish")
   private WebElement unpublish;
 
-  public JanusPage(WebDriver webDriver) {
-    super(webDriver);
+  public JanusPage(WebDriver webDriver, Logger logger) {
+    super(webDriver, logger);
   }
 
 

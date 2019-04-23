@@ -20,8 +20,6 @@ import static org.webrtc.kite.Utils.getStackTrace;
 
 public class KiteMediasoupTest extends KiteBaseTest {
 
-  private final Logger logger = Logger.getLogger(this.getClass().getName());
-
   private int loadReachTime = 0;
 
   

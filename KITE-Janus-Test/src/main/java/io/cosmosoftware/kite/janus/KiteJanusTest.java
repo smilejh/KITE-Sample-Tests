@@ -16,9 +16,7 @@ import static org.webrtc.kite.Utils.getStackTrace;
 
 
 public class KiteJanusTest extends KiteBaseTest {
-
-
-  private static final Logger logger = Logger.getLogger(KiteJanusTest.class.getName());
+  
 
   private int loadReachTime = 0;
   private String audioScoreWorkingDirectory = null;

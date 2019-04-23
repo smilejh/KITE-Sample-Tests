@@ -9,7 +9,7 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 
 public class LoopbackStats {
-  private static final Logger logger = Logger.getLogger(LoopbackStats.class.getName());
+  
   private final String sentWidth;
   private final String sentHeight;
   private final String sentFPS;
@@ -44,7 +44,7 @@ public class LoopbackStats {
     return jsonObjectBuilder.build();
   }
 
-  public void validate(String rid) throws KiteTestException {
+  public void validate(String rid, Logger logger) throws KiteTestException {
     int factor = "a".equalsIgnoreCase(rid) ? 1 : "b".equalsIgnoreCase(rid) ? 2 : 4;
     int expectedWidth = Integer.parseInt(sentWidth.trim())/factor;
     int expectedHeight = Integer.parseInt(sentHeight.trim())/factor;

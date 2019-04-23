@@ -5,10 +5,7 @@ import io.cosmosoftware.kite.steps.TestStep;
 import org.openqa.selenium.WebDriver;
 
 public class JoinVideoCallStep extends TestStep {
-
-
-
-  private final JanusPage janusPage = new JanusPage(this.webDriver);
+  
   private final String url;
 
   
@@ -24,7 +21,7 @@ public class JoinVideoCallStep extends TestStep {
   
   @Override
   protected void step() {
-    janusPage.setLogger(logger);
+    final JanusPage janusPage = new JanusPage(this.webDriver, this.logger);
     janusPage.load(url);
   }
 }
