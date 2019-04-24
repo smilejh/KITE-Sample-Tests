@@ -1,5 +1,6 @@
 package io.cosmosoftware.kite.mediasoup.pages;
 
+import io.cosmosoftware.kite.pages.BasePage;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -13,17 +14,15 @@ import java.util.List;
 
 import static io.cosmosoftware.kite.util.WebDriverUtils.loadPage;
 
-public class MediasoupPage {
+public class MediasoupPage extends BasePage {
 
-  private final Logger logger = Logger.getLogger(this.getClass().getName());
-  private final WebDriver webDriver;
   
   @FindBy(tagName="video")
   private List<WebElement> videos;
 
 
-  public MediasoupPage(WebDriver webDriver) {
-    this.webDriver = webDriver;
+  public MediasoupPage(WebDriver webDriver, Logger logger) {
+    super(webDriver, logger);
     PageFactory.initElements(webDriver, this);
   }
 

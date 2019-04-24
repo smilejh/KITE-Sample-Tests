@@ -14,7 +14,7 @@ import java.util.List;
 
 public class AllVideoCheck extends TestStep {
 
-  private final MediasoupPage mediasoupPage = new MediasoupPage(this.webDriver);
+  
   private final int numberOfParticipants;
 
   public AllVideoCheck(WebDriver webDriver, int numberOfParticipants) {
@@ -29,6 +29,7 @@ public class AllVideoCheck extends TestStep {
 
   @Override
   protected void step() throws KiteTestException {
+    final MediasoupPage mediasoupPage = new MediasoupPage(this.webDriver, logger);
     try {
       //wait a while to allow all videos to load.
       TestUtils.waitAround(numberOfParticipants * 3 * Timeouts.ONE_SECOND_INTERVAL);

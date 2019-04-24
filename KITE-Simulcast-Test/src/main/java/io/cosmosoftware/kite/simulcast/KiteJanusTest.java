@@ -19,7 +19,6 @@ import javax.json.JsonObject;
 public class KiteJanusTest extends KiteBaseTest {
 
 
-  private static final Logger logger = Logger.getLogger(KiteJanusTest.class.getName());
 
   private int loadReachTime = 0;
   private int bandwidthCheckDuration = 0;
@@ -45,7 +44,7 @@ public class KiteJanusTest extends KiteBaseTest {
     WebDriver webDriver = runner.getWebDriver();
     runner.addStep(new LoadPageStep(webDriver, this.url));
     if (!this.fastRampUp()) {
-      JanusLoopbackPage page = new JanusLoopbackPage(webDriver);
+      JanusLoopbackPage page = new JanusLoopbackPage(webDriver, logger);
       runner.addStep(new SenderVideoCheck(webDriver, page));
       runner.addStep(new ReceiverVideoCheck(webDriver, page));
       if (this.getStats()) {

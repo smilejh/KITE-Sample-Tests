@@ -3,6 +3,7 @@ package io.cosmosoftware.kite.simulcast.pages;
 import io.cosmosoftware.kite.entities.Timeouts;
 import io.cosmosoftware.kite.simulcast.LoopbackStats;
 import io.cosmosoftware.kite.util.TestUtils;
+import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -62,8 +63,8 @@ public class JanusLoopbackPage extends SimulcastPageBase {
   private WebElement low;
 
 
-  public JanusLoopbackPage(WebDriver webDriver) {
-    super(webDriver);
+  public JanusLoopbackPage(WebDriver webDriver, Logger logger) {
+    super(webDriver, logger);
     this.wait = new WebDriverWait(webDriver, Timeouts.TEN_SECOND_INTERVAL);
     PageFactory.initElements(webDriver, this);
   }
@@ -133,7 +134,8 @@ public class JanusLoopbackPage extends SimulcastPageBase {
    *
    * @param button
    */
-  private void click(WebElement button) {
+  @Override
+  public void click(WebElement button) {
     if (button.getAttribute("class").contains("btn-success")) {
       logger.info("skipping button " + button.getText() + " since class = " + button.getAttribute("class"));
       return;

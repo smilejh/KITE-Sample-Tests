@@ -1,8 +1,7 @@
 const {TestUtils, WebDriverFactory, KiteBaseTest} = require('kite-common');
-const waitAround = TestUtils.waitAround;
-const globalVariables = TestUtils.getGlobalVariables(process);
 const {JoinVideoCallStep, GetStatsStep} = require('./steps'); 
 
+const globalVariables = TestUtils.getGlobalVariables(process);
 const numberOfParticipant = globalVariables.numberOfParticipant;
 const id = globalVariables.id;
 const capabilities = require(globalVariables.capabilitiesPath);

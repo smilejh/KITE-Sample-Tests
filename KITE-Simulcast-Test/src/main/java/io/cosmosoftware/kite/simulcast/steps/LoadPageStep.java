@@ -28,7 +28,7 @@ public class LoadPageStep extends TestStep {
     loadPage(webDriver, url, 20);
     waitAround(ONE_SECOND_INTERVAL);
     if (url.contains("meetecho")) {
-      new JanusLoopbackPage(webDriver).clickButton();
+      new JanusLoopbackPage(webDriver, logger).clickButton();
     }
   }
 }

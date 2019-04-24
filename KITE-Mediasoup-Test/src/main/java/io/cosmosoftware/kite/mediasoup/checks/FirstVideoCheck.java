@@ -13,7 +13,7 @@ import java.util.List;
 
 public class FirstVideoCheck extends TestStep {
 
-  private final MediasoupPage mediasoupPage = new MediasoupPage(this.webDriver);
+  
 
   public FirstVideoCheck(WebDriver webDriver) {
     super(webDriver);
@@ -27,6 +27,7 @@ public class FirstVideoCheck extends TestStep {
   @Override
   protected void step() throws KiteTestException {
     try {
+      final MediasoupPage mediasoupPage = new MediasoupPage(this.webDriver, logger);
       logger.info("Looking for video object");
       List<WebElement> videos = mediasoupPage.getVideoElements();
       if (videos.isEmpty()) {
