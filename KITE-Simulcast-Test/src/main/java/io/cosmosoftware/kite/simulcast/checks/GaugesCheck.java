@@ -36,6 +36,6 @@ public class GaugesCheck extends TestStep {
     Reporter.getInstance().jsonAttachment(report, "stats", loopbackStats.getJson());
     Reporter.getInstance().screenshotAttachment(report,
       "Gauges_" + rid + tid + "_" + timestamp(), saveScreenshotPNG(webDriver));
-    loopbackStats.validate(rid);
+    loopbackStats.validate(rid, logger);
   }
 }

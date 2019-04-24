@@ -17,9 +17,6 @@ import javax.json.JsonObject;
 
 public class KiteMedoozeTest extends KiteBaseTest {
 
-
-  private static final Logger logger = Logger.getLogger(KiteMedoozeTest.class.getName());
-
   private int loadReachTime = 0;
 
 
@@ -42,7 +39,7 @@ public class KiteMedoozeTest extends KiteBaseTest {
     WebDriver webDriver = runner.getWebDriver();
     runner.addStep(new LoadPageStep(webDriver, this.url));
     if (!this.fastRampUp()) {
-      MedoozeLoopbackPage page = new MedoozeLoopbackPage(webDriver);
+      MedoozeLoopbackPage page = new MedoozeLoopbackPage(webDriver, logger);
       runner.addStep(new SenderVideoCheck(webDriver, page));
       runner.addStep(new ReceiverVideoCheck(webDriver, page));
       if (this.getStats()) {

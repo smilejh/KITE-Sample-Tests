@@ -6,7 +6,7 @@ import org.openqa.selenium.WebDriver;
 
 public class JoinVideoCallStep extends TestStep {
 
-  private final MediasoupPage mediasoupPage = new MediasoupPage(this.webDriver);
+   
   private final String url;
 
   
@@ -22,6 +22,7 @@ public class JoinVideoCallStep extends TestStep {
   
   @Override
   protected void step() {
+    final MediasoupPage mediasoupPage = new MediasoupPage(this.webDriver, logger);
     mediasoupPage.load(url);
   }
 }

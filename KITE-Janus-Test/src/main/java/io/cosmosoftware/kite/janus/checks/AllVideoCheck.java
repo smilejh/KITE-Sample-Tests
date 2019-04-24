@@ -16,7 +16,7 @@ import static io.cosmosoftware.kite.util.TestUtils.waitAround;
 
 public class AllVideoCheck extends TestStep {
 
-  private final JanusPage janusPage = new JanusPage(this.webDriver);
+   
   private final int numberOfParticipants;
 
   public AllVideoCheck(WebDriver webDriver, int numberOfParticipants) {
@@ -32,6 +32,7 @@ public class AllVideoCheck extends TestStep {
   @Override
   protected void step() throws KiteTestException {
     try {
+      final JanusPage janusPage = new JanusPage(this.webDriver, logger);
       //wait a while to allow all videos to load.
       waitAround(numberOfParticipants * 3 * ONE_SECOND_INTERVAL);
       logger.info("Looking for video elements");
