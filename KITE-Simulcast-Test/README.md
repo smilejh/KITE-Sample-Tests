@@ -2,7 +2,9 @@
 
 This sample test script is designed for testing the simulcast loopback page against medooze SFU.
 
-
+__NOTE:__ This sample test requires the following servers to be up:
+https://d10.conf.meetecho.com/ietf104/echotest-cap.html?simulcast2=true&vcodec=vp8
+https://playground.cosmosoftware.io/simulcast/index.html?codec=h264
 
 ## Pre-requisite: Selenium Grid
 
