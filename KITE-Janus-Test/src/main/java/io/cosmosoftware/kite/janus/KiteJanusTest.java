@@ -5,6 +5,7 @@ import io.cosmosoftware.kite.janus.checks.AllVideoCheck;
 import io.cosmosoftware.kite.janus.checks.AudioCheck;
 import io.cosmosoftware.kite.janus.checks.FirstVideoCheck;
 import io.cosmosoftware.kite.janus.steps.*;
+import io.cosmosoftware.kite.util.ReportUtils;
 import io.cosmosoftware.kite.util.TestUtils;
 import org.openqa.selenium.WebDriver;
 import org.webrtc.kite.tests.KiteBaseTest;
@@ -42,8 +43,12 @@ public class KiteJanusTest extends KiteBaseTest {
       audioScoreTool= this.payload.getString("audioScoreTool", audioScoreTool);
       audioDuration= this.payload.getString("audioDuration", audioDuration);
       JsonArray jsonArray2 = this.payload.getJsonArray("scenarios");
-      for(int i = 0; i < jsonArray2.size(); ++i) {
-        this.scenarioArrayList.add(new Scenario(jsonArray2.getJsonObject(i), logger));
+      try {
+        for (int i = 0; i < jsonArray2.size(); ++i) {
+          this.scenarioArrayList.add(new Scenario(jsonArray2.getJsonObject(i), logger));
+        }
+      } catch (Exception e) {
+        logger.error("Invalid scenario.\r\n" + ReportUtils.getStackTrace(e));
       }
     }
     if (rooms != null) {
@@ -88,7 +93,7 @@ public class KiteJanusTest extends KiteBaseTest {
           runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
           runner.addStep(new GetStatsStep(webDriver, getMaxUsersPerRoom(),
                   getStatsCollectionTime(), getStatsCollectionInterval(), getSelectedStats()));
-          runner.addStep(new ScreenshotStep(webDriver));
+          runner.addStep(new ScreenshotStep(webDriver, scenario));
           runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
           runner.addStep(new NWInstCleanupStep(webDriver, scenario, nwInstrumentation, runner.getId()));
           runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));

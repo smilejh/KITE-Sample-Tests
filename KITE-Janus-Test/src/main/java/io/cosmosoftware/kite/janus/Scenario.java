@@ -7,23 +7,48 @@ import io.cosmosoftware.kite.util.ReportUtils;
 import org.apache.log4j.Logger;
 
 import javax.json.JsonObject;
-import java.lang.reflect.Array;
 
 public class Scenario {
 
-  protected final int clientId;
-  protected final String name;
-  protected final String gateway;
-  protected final String command;
-  protected final Integer duration;
+  protected  Integer clientId;
+  protected  String name;
+  protected  String gateway;
+  protected  String command;
+  protected  Integer duration;
   private final Logger logger;
 
-  public Scenario(JsonObject jsonObject, Logger logger) {
-    clientId = jsonObject.getInt("clientId", -1);
-    name = jsonObject.getString("name");
-    gateway = jsonObject.getString("gateway");
-    command = jsonObject.getString("command");
-    duration = jsonObject.getInt("duration");
+  public Scenario(JsonObject jsonObject, Logger logger) throws Exception {
+
+    Integer jsonClientId = jsonObject.getInt("clientId", -1);
+    if (jsonClientId < 0) {
+      clientId =0;
+    } else {
+      clientId = jsonClientId;
+    }
+    String jsonGateway = jsonObject.getString("gateway");
+    if (jsonGateway == null) {
+      throw new Exception("Error in json config scenario, gateway is invalid.");
+    } else {
+      gateway = jsonGateway;
+    }
+    String jsonCommand = jsonObject.getString("command");
+    if (jsonCommand == null) {
+      throw new Exception("Error in json config scenario, command is invalid.");
+    } else {
+      command = jsonCommand;
+    }
+    String jsonName  = jsonObject.getString("name");
+    if (jsonName == null) {
+      name = command;
+    } else {
+      name = jsonName;
+    }
+    Integer jsonDuration = jsonObject.getInt("duration");
+    if (jsonDuration < 0 || jsonDuration == 0) {
+      duration = 10000;
+    } else {
+      duration = jsonDuration;
+    }
     this.logger = logger;
   }
 
@@ -75,7 +100,8 @@ public class Scenario {
     return result;
   }
 
-  public void cleanUp(Instrumentation instrumentation) {
+  public String cleanUp(Instrumentation instrumentation) {
+    String result = "";
     Instance instance = instrumentation.getInstanceById(this.gateway);
     String[]  interfacesList = {instance.getNit0(), instance.getNit1(), instance.getNit2()};
     for (String inter : interfacesList) {
@@ -87,8 +113,10 @@ public class Scenario {
           if (sshManager.call().commandSuccessful()) {
             Thread.sleep(1000);
             logger.info("cleanUp() : " + inter);
+            result += cleanUpCommand;
           } else {
             logger.error("Failed cleanUp() : " + inter);
+            result += "  FAILURE (Client : " + instance.getIpAddress() + ")";
           }
         } catch (Exception e) {
           logger.error(
@@ -96,12 +124,14 @@ public class Scenario {
                   + inter
                   + "\r\n"
                   + ReportUtils.getStackTrace(e));
+          result += "  Error " + e.getMessage();
         }
       }
       else {
         logger.info("No CleanUp to do on interface : " + inter);
       }
     }
+    return result;
 
   }
 
