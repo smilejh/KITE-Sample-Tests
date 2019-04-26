@@ -22,15 +22,22 @@ module.exports = {
   verifyVideo: async function(driver, numberOfParticipant, timeout) {
     await driver.wait(until.elementLocated(elements.publishingLocator));
     //wait a while to allow all videos to load.
-    await TestUtils.waitAround(numberOfParticipant * 3 * 1000);
+    await TestUtils.waitAround(numberOfParticipant * 10 * 1000);
     await TestUtils.waitForElement(driver, elements.video.type, elements.video.value, timeout);
     let videos = await driver.findElements(elements.videos);
     let details = {};
     let ids = await map(videos, e => e.getAttribute("id"));
-    ids.forEach(async function(id) {
-      const videoCheck = await TestUtils.verifyVideoDisplayById(driver, id);
-      details['videoCheck_' + id] = videoCheck;
-    });
+    console.log(ids);
+    for(let i = 0; i < ids.length; i++) {
+      if(ids[i] != undefined) {
+        const videoCheck =  await TestUtils.verifyVideoDisplayById(driver, ids[i]);
+        details['videoCheck_' + ids[i]] = videoCheck;
+      } else {
+        details['videoCheck_' + ids[i]] = {};
+      }
+
+    }
+    console.log(details);
     return details;
   }
 }

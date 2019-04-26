@@ -40,7 +40,8 @@
         "reconnectionDelay" : 0,
         "reconnectionRandom" : 0,
         "chanceOfMeetingEnded": 0,
-        "checkStatusPeriod": 0
+        "checkStatusPeriod": 0,
+        "selectedStats": ["inbound-rtp", "outbound-rtp", "candidate-pair"]
       }
     }
   ],

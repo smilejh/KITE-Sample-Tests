@@ -31,12 +31,13 @@ class Janus extends KiteBaseTest {
       var driver = await WebDriverFactory.getDriver(capabilities, capabilities.remoteAddress);
       let joinVideoCallStep = new JoinVideoCallStep(driver, getRoomUrl(), numberOfParticipant, this.timeout);
       await joinVideoCallStep.execute(this.report, this.reporter);
+      
+      
       let pcArray = [];
-      pcArray.push('window.pc');
-      for(let i = 0; i < numberOfParticipant -1; i++) {
+      for(let i = 0; i < numberOfParticipant-1; i++) {
         pcArray.push('window.remotePc[' + i + ']');
       }
-      let getStatsStep = new GetStatsStep(driver, this.statsCollectionDuration, this.statsCollectionInterval, pcArray);
+      let getStatsStep = new GetStatsStep(driver, this.statsCollectionDuration, this.statsCollectionInterval, pcArray, this.selectedStats);
       await getStatsStep.execute(this.report, this.reporter);
       
       this.report.setStopTimestamp();

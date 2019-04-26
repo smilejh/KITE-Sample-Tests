@@ -18,10 +18,9 @@ class JoinVideoCallStep extends TestStep {
     return 'Open ' + this.url + ' and check the video';
   }
 
-  async step(alluteTestReport, reporter) {
+  async step(allureTestReport, reporter) {
     await janusPage.open(this.driver, this.url, this.timeout);
     let details = await janusPage.verifyVideo(this.driver, this.numberOfparticipant, this.timeout);
-    await TestUtils.waitAround(10000); // wait for details
     reporter.textAttachment(this.report, "videoChecks", JSON.stringify(details), "json");
   }
 }
