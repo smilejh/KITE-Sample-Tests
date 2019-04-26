@@ -59,7 +59,7 @@
     {
       "browserName": "firefox",
       "windowSize": "1280,800",
-      "version": "65",
+      "version": "66",
       "platform": "WINDOWS",
       "headless": false
     }
