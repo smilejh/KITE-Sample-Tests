@@ -1,7 +1,7 @@
 package io.cosmosoftware.kite.janus;
 
-import io.cosmosoftware.kite.axel.Instance;
-import io.cosmosoftware.kite.axel.Instrumentation;
+import io.cosmosoftware.kite.instrumentation.Instance;
+import io.cosmosoftware.kite.instrumentation.Instrumentation;
 import io.cosmosoftware.kite.manager.SSHManager;
 import io.cosmosoftware.kite.util.ReportUtils;
 import org.apache.log4j.Logger;
@@ -10,43 +10,32 @@ import javax.json.JsonObject;
 
 public class Scenario {
 
-  protected  Integer clientId;
-  protected  String name;
-  protected  String gateway;
-  protected  String command;
-  protected  Integer duration;
+  private  Integer clientId = 0;
+  private  String name;
+  private  String gateway;
+  private  String command;
+  private  Integer duration = 10000;
   private final Logger logger;
 
-  public Scenario(JsonObject jsonObject, Logger logger) throws Exception {
+  public Scenario(JsonObject jsonObject, Logger logger, Integer i) throws Exception {
 
-    Integer jsonClientId = jsonObject.getInt("clientId", -1);
-    if (jsonClientId < 0) {
-      clientId =0;
-    } else {
+    Integer jsonClientId = jsonObject.getInt("clientId", 0);
+    if (jsonClientId >= 0) {
       clientId = jsonClientId;
     }
-    String jsonGateway = jsonObject.getString("gateway");
-    if (jsonGateway == null) {
+    if (jsonObject.containsKey("gateway")) {
+      gateway = jsonObject.getString("gateway");
+    } else {
       throw new Exception("Error in json config scenario, gateway is invalid.");
-    } else {
-      gateway = jsonGateway;
     }
-    String jsonCommand = jsonObject.getString("command");
-    if (jsonCommand == null) {
+    if (jsonObject.containsKey("command")) {
+      command = jsonObject.getString("command");
+    } else {
       throw new Exception("Error in json config scenario, command is invalid.");
-    } else {
-      command = jsonCommand;
     }
-    String jsonName  = jsonObject.getString("name");
-    if (jsonName == null) {
-      name = command;
-    } else {
-      name = jsonName;
-    }
-    Integer jsonDuration = jsonObject.getInt("duration");
-    if (jsonDuration < 0 || jsonDuration == 0) {
-      duration = 10000;
-    } else {
+    name = jsonObject.getString("name", "Scenario number : " + i);
+    Integer jsonDuration = jsonObject.getInt("duration", 10000);
+    if (jsonDuration > 0) {
       duration = jsonDuration;
     }
     this.logger = logger;
@@ -74,7 +63,7 @@ public class Scenario {
 
   public String runCommands(Instrumentation instrumentation) {
     logger.info("Trying to run " + this.command + " on " + this.gateway);
-    Instance instance = instrumentation.getInstanceById(this.gateway);
+    Instance instance = instrumentation.get(this.gateway);
     logger.info("TEST : " + instance.getIpAddress());
     String result = this.command;
     logger.info("Executing command : " + command + " on " + instance.getIpAddress());
@@ -102,7 +91,7 @@ public class Scenario {
 
   public String cleanUp(Instrumentation instrumentation) {
     String result = "";
-    Instance instance = instrumentation.getInstanceById(this.gateway);
+    Instance instance = instrumentation.get(this.gateway);
     String[]  interfacesList = {instance.getNit0(), instance.getNit1(), instance.getNit2()};
     for (String inter : interfacesList) {
       if (this.command.contains(inter)) {

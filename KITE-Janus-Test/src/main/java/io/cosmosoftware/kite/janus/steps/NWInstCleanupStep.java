@@ -1,6 +1,6 @@
 package io.cosmosoftware.kite.janus.steps;
 
-import io.cosmosoftware.kite.axel.Instrumentation;
+import io.cosmosoftware.kite.instrumentation.Instrumentation;
 import io.cosmosoftware.kite.exception.KiteTestException;
 import io.cosmosoftware.kite.janus.Scenario;
 import io.cosmosoftware.kite.report.Reporter;
@@ -40,7 +40,7 @@ public class NWInstCleanupStep extends TestStep {
         logger.info("Cleaning up scenario for " + this.scenario.getName());
         Reporter.getInstance().textAttachment(report, "NW Instrumentation CleanUp for " + scenario.getName() + " on gateway " + scenario.getGateway(), "Command executed : " + cleanUpCommand, "plain");
         if (cleanUpCommand.contains("FAILURE")) {
-          throw new KiteTestException("Failed to clean up.", Status.BROKEN);
+          throw new KiteTestException("Failed to clean up.", Status.FAILED);
         }
       }
       waitAround(1000);

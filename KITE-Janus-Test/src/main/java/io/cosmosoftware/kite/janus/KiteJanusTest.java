@@ -1,6 +1,6 @@
 package io.cosmosoftware.kite.janus;
 
-import io.cosmosoftware.kite.axel.Instrumentation;
+import io.cosmosoftware.kite.instrumentation.Instrumentation;
 import io.cosmosoftware.kite.janus.checks.AllVideoCheck;
 import io.cosmosoftware.kite.janus.checks.AudioCheck;
 import io.cosmosoftware.kite.janus.checks.FirstVideoCheck;
@@ -33,22 +33,24 @@ public class KiteJanusTest extends KiteBaseTest {
     String[] rooms = null;
     if (this.payload != null) {
       loadReachTime = this.payload.getInt("loadReachTime", loadReachTime);
-      setExpectedTestDuration(Math.max(getExpectedTestDuration(), (loadReachTime + 300)/60));
+      setExpectedTestDuration(Math.max(getExpectedTestDuration(), (loadReachTime + 300) / 60));
       JsonArray jsonArray = this.payload.getJsonArray("rooms");
       rooms = new String[jsonArray.size()];
       for (int i = 0; i < jsonArray.size(); i++) {
         rooms[i] = jsonArray.getString(i);
       }
-      audioScoreWorkingDirectory= this.payload.getString("audioScoreWorkingDirectory", audioScoreWorkingDirectory);
-      audioScoreTool= this.payload.getString("audioScoreTool", audioScoreTool);
-      audioDuration= this.payload.getString("audioDuration", audioDuration);
-      JsonArray jsonArray2 = this.payload.getJsonArray("scenarios");
-      try {
+      audioScoreWorkingDirectory = this.payload.getString("audioScoreWorkingDirectory", audioScoreWorkingDirectory);
+      audioScoreTool = this.payload.getString("audioScoreTool", audioScoreTool);
+      audioDuration = this.payload.getString("audioDuration", audioDuration);
+      if (this.payload.containsKey("scenarios")) {
+        JsonArray jsonArray2 = this.payload.getJsonArray("scenarios");
         for (int i = 0; i < jsonArray2.size(); ++i) {
-          this.scenarioArrayList.add(new Scenario(jsonArray2.getJsonObject(i), logger));
+          try {
+            this.scenarioArrayList.add(new Scenario(jsonArray2.getJsonObject(i), logger, i));
+        } catch (Exception e) {
+            logger.error("Invalid scenario number : "+ i + "\r\n" + ReportUtils.getStackTrace(e));
+          }
         }
-      } catch (Exception e) {
-        logger.error("Invalid scenario.\r\n" + ReportUtils.getStackTrace(e));
       }
     }
     if (rooms != null) {
