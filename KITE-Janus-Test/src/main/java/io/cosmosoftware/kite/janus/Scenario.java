@@ -5,39 +5,49 @@ import io.cosmosoftware.kite.instrumentation.Instrumentation;
 import io.cosmosoftware.kite.manager.SSHManager;
 import io.cosmosoftware.kite.util.ReportUtils;
 import org.apache.log4j.Logger;
+import io.cosmosoftware.kite.exception.KiteTestException;
+import io.cosmosoftware.kite.report.Status;
+import org.webrtc.kite.tests.TestRunner;
+
+import java.util.List;
 
 import javax.json.JsonObject;
 
 public class Scenario {
 
-  private  Integer clientId = 0;
-  private  String name;
-  private  String gateway;
-  private  String command;
-  private  Integer duration = 10000;
+  private final Instrumentation instrumentation;
+  private final int clientId;
+  private final  String name;
+  private final String gateway;
+  private final String command;
+  private final int duration;
   private final Logger logger;
+  private String missingKey;
 
-  public Scenario(JsonObject jsonObject, Logger logger, Integer i) throws Exception {
+  public Scenario(JsonObject jsonObject, Logger logger, Integer i, Instrumentation instrumentation, List<TestRunner> testRunners) throws Exception {
 
-    Integer jsonClientId = jsonObject.getInt("clientId", 0);
-    if (jsonClientId >= 0) {
-      clientId = jsonClientId;
+    this.instrumentation = instrumentation;
+    clientId = jsonObject.containsKey("clientId") ? jsonObject.getInt("clientId") : 0;
+    if (clientId < 0 || clientId > testRunners.size()) {
+      throw new Exception(" Error in json config scenario, clientId specified is invalid ! ");
     }
-    if (jsonObject.containsKey("gateway")) {
+    missingKey = "gateway";
+    try {
       gateway = jsonObject.getString("gateway");
-    } else {
-      throw new Exception("Error in json config scenario, gateway is invalid.");
+      if (instrumentation.get(gateway) == null) {
+        throw new Exception(" Error in json config scenario, gateway specified is not in the instrumentation file ! ");
+      }
+    } catch (NullPointerException e) {
+      throw new KiteTestException("Error in json config scenario, the key " + missingKey + " is missing.", Status.BROKEN, e);
     }
-    if (jsonObject.containsKey("command")) {
+    missingKey = "command";
+    try {
       command = jsonObject.getString("command");
-    } else {
-      throw new Exception("Error in json config scenario, command is invalid.");
+    } catch (NullPointerException e) {
+      throw new KiteTestException("Error in json config scenario, the key " + missingKey + " is missing.", Status.BROKEN, e);
     }
     name = jsonObject.getString("name", "Scenario number : " + i);
-    Integer jsonDuration = jsonObject.getInt("duration", 10000);
-    if (jsonDuration > 0) {
-      duration = jsonDuration;
-    }
+    duration = jsonObject.containsKey("duration") ? jsonObject.getInt("duration") : 10000;
     this.logger = logger;
   }
 
@@ -61,10 +71,9 @@ public class Scenario {
     return duration;
   }
 
-  public String runCommands(Instrumentation instrumentation) {
+  public String runCommands() {
     logger.info("Trying to run " + this.command + " on " + this.gateway);
     Instance instance = instrumentation.get(this.gateway);
-    logger.info("TEST : " + instance.getIpAddress());
     String result = this.command;
     logger.info("Executing command : " + command + " on " + instance.getIpAddress());
     try {
@@ -89,7 +98,7 @@ public class Scenario {
     return result;
   }
 
-  public String cleanUp(Instrumentation instrumentation) {
+  public String cleanUp() {
     String result = "";
     Instance instance = instrumentation.get(this.gateway);
     String[]  interfacesList = {instance.getNit0(), instance.getNit1(), instance.getNit2()};

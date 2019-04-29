@@ -1,6 +1,5 @@
 package io.cosmosoftware.kite.janus.steps;
 
-import io.cosmosoftware.kite.instrumentation.Instrumentation;
 import io.cosmosoftware.kite.exception.KiteTestException;
 import io.cosmosoftware.kite.janus.Scenario;
 import io.cosmosoftware.kite.report.Reporter;
@@ -14,14 +13,12 @@ import static io.cosmosoftware.kite.util.TestUtils.waitAround;
 public class NWInstrumentationStep extends TestStep {
 
   private final Scenario scenario;
-  private final Instrumentation instrumentation;
   private final int clientId;
   private String result;
 
-  public NWInstrumentationStep(WebDriver webDriver, Scenario scenario, Instrumentation instrumentation, int clientId) {
+  public NWInstrumentationStep(WebDriver webDriver, Scenario scenario, int clientId) {
     super(webDriver);
     this.scenario = scenario;
-    this.instrumentation = instrumentation;
     this.clientId = clientId;
     this.setName(getName() + "_" + scenario.getName());
   }
@@ -38,7 +35,7 @@ public class NWInstrumentationStep extends TestStep {
           scenario.getCommand(), "plain");
       waitAround(1000);
       if (this.clientId == scenario.getClientId()) {
-        result = scenario.runCommands(instrumentation);
+        result = scenario.runCommands();
         Reporter.getInstance().textAttachment(report, "Result", result, "plain");
         if (result.contains("FAILURE")) {
           throw new KiteTestException("Failed to execute command.", Status.FAILED);

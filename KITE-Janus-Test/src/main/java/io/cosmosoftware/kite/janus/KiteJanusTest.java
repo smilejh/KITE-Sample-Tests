@@ -1,6 +1,5 @@
 package io.cosmosoftware.kite.janus;
 
-import io.cosmosoftware.kite.instrumentation.Instrumentation;
 import io.cosmosoftware.kite.janus.checks.AllVideoCheck;
 import io.cosmosoftware.kite.janus.checks.AudioCheck;
 import io.cosmosoftware.kite.janus.checks.FirstVideoCheck;
@@ -46,9 +45,9 @@ public class KiteJanusTest extends KiteBaseTest {
         JsonArray jsonArray2 = this.payload.getJsonArray("scenarios");
         for (int i = 0; i < jsonArray2.size(); ++i) {
           try {
-            this.scenarioArrayList.add(new Scenario(jsonArray2.getJsonObject(i), logger, i));
-        } catch (Exception e) {
-            logger.error("Invalid scenario number : "+ i + "\r\n" + ReportUtils.getStackTrace(e));
+            this.scenarioArrayList.add(new Scenario(jsonArray2.getJsonObject(i), logger, i, instrumentation, testRunners));
+          } catch (Exception e) {
+            logger.error("Invalid scenario number : " + i + "\r\n" + ReportUtils.getStackTrace(e));
           }
         }
       }
@@ -61,7 +60,6 @@ public class KiteJanusTest extends KiteBaseTest {
   @Override
   public void populateTestSteps(TestRunner runner) {
     try {
-      Instrumentation nwInstrumentation = getInstrumentation();
       WebDriver webDriver = runner.getWebDriver();
       String roomUrl = getRoomManager().getRoomUrl()  + "&username=user" + TestUtils.idToString(runner.getId());
       runner.addStep(new JoinVideoCallStep(webDriver, roomUrl));
@@ -84,31 +82,19 @@ public class KiteJanusTest extends KiteBaseTest {
           runner.addStep(new StayInMeetingStep(webDriver, loadReachTime));
         }
 
-        //nwInstrumentation.sendCommand(scenarios[0].gateway, scenarios[0].command);
-        //step wait for scenarios[0].duration seconds
-        //step getstats
-        //step screenshot
         runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
 
         for (Scenario scenario : this.scenarioArrayList ) {
-          runner.addStep(new NWInstrumentationStep(webDriver, scenario, nwInstrumentation, runner.getId()));
+          runner.addStep(new NWInstrumentationStep(webDriver, scenario, runner.getId()));
           runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
           runner.addStep(new GetStatsStep(webDriver, getMaxUsersPerRoom(),
                   getStatsCollectionTime(), getStatsCollectionInterval(), getSelectedStats()));
           runner.addStep(new ScreenshotStep(webDriver, scenario));
           runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
-          runner.addStep(new NWInstCleanupStep(webDriver, scenario, nwInstrumentation, runner.getId()));
+          runner.addStep(new NWInstCleanupStep(webDriver, scenario, runner.getId()));
           runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
         }
 
-        /*
-        if (this.getNWInstConfig() != null) {
-          runner.addStep(new NWInstrumentationStep(webDriver, getNWInstConfig()));
-          runner.addStep(new GetStatsStep(webDriver, getMaxUsersPerRoom(),
-            getStatsCollectionTime(), getStatsCollectionInterval(), getSelectedStats()));
-          runner.addStep(new NWInstCleanupStep(webDriver, getNWInstConfig()));
-        }
-        */
         if (this.audioScoreWorkingDirectory != null) {
           if (runner.getId() == 0) {
             runner.addStep(new UnpublishStep(webDriver));

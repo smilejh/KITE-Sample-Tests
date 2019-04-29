@@ -1,6 +1,5 @@
 package io.cosmosoftware.kite.janus.steps;
 
-import io.cosmosoftware.kite.instrumentation.Instrumentation;
 import io.cosmosoftware.kite.exception.KiteTestException;
 import io.cosmosoftware.kite.janus.Scenario;
 import io.cosmosoftware.kite.report.Reporter;
@@ -14,14 +13,12 @@ import static io.cosmosoftware.kite.util.TestUtils.waitAround;
 public class NWInstCleanupStep extends TestStep {
 
   private final Scenario scenario;
-  private final Instrumentation instrumentation;
   private final int clientId;
   private String cleanUpCommand;
 
-  public NWInstCleanupStep(WebDriver webDriver, Scenario scenario, Instrumentation instrumentation, int clientId) {
+  public NWInstCleanupStep(WebDriver webDriver, Scenario scenario, int clientId) {
     super(webDriver);
     this.scenario = scenario;
-    this.instrumentation = instrumentation;
     this.clientId= clientId;
     this.setName(getName() + "_" + scenario.getName());
   }
@@ -36,7 +33,7 @@ public class NWInstCleanupStep extends TestStep {
   protected void step() throws KiteTestException {
     try {
       if (this.clientId == scenario.getClientId()) {
-        cleanUpCommand = this.scenario.cleanUp(instrumentation);
+        cleanUpCommand = this.scenario.cleanUp();
         logger.info("Cleaning up scenario for " + this.scenario.getName());
         Reporter.getInstance().textAttachment(report, "NW Instrumentation CleanUp for " + scenario.getName() + " on gateway " + scenario.getGateway(), "Command executed : " + cleanUpCommand, "plain");
         if (cleanUpCommand.contains("FAILURE")) {
