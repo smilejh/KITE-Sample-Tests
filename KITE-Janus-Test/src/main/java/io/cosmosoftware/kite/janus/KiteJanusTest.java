@@ -1,10 +1,10 @@
 package io.cosmosoftware.kite.janus;
 
+import io.cosmosoftware.kite.instrumentation.Scenario;
 import io.cosmosoftware.kite.janus.checks.AllVideoCheck;
 import io.cosmosoftware.kite.janus.checks.AudioCheck;
 import io.cosmosoftware.kite.janus.checks.FirstVideoCheck;
 import io.cosmosoftware.kite.janus.steps.*;
-import io.cosmosoftware.kite.util.ReportUtils;
 import io.cosmosoftware.kite.util.TestUtils;
 import org.openqa.selenium.WebDriver;
 import org.webrtc.kite.tests.KiteBaseTest;
@@ -12,7 +12,6 @@ import org.webrtc.kite.tests.TestRunner;
 import org.webrtc.kite.tests.WaitForOthersStep;
 
 import javax.json.JsonArray;
-import java.util.ArrayList;
 
 import static org.webrtc.kite.Utils.getStackTrace;
 
@@ -24,7 +23,6 @@ public class KiteJanusTest extends KiteBaseTest {
   private String audioScoreWorkingDirectory = null;
   private String audioScoreTool = null;
   private String audioDuration = null;
-  private ArrayList<Scenario> scenarioArrayList = new ArrayList<>();
 
   @Override
   protected void payloadHandling() {
@@ -41,16 +39,6 @@ public class KiteJanusTest extends KiteBaseTest {
       audioScoreWorkingDirectory = this.payload.getString("audioScoreWorkingDirectory", audioScoreWorkingDirectory);
       audioScoreTool = this.payload.getString("audioScoreTool", audioScoreTool);
       audioDuration = this.payload.getString("audioDuration", audioDuration);
-      if (this.payload.containsKey("scenarios")) {
-        JsonArray jsonArray2 = this.payload.getJsonArray("scenarios");
-        for (int i = 0; i < jsonArray2.size(); ++i) {
-          try {
-            this.scenarioArrayList.add(new Scenario(jsonArray2.getJsonObject(i), logger, i, instrumentation, testRunners));
-          } catch (Exception e) {
-            logger.error("Invalid scenario number : " + i + "\r\n" + ReportUtils.getStackTrace(e));
-          }
-        }
-      }
     }
     if (rooms != null) {
       getRoomManager().setRoomNames(rooms);
@@ -84,7 +72,7 @@ public class KiteJanusTest extends KiteBaseTest {
 
         runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
 
-        for (Scenario scenario : this.scenarioArrayList ) {
+        for (Scenario scenario : scenarioArrayList ) {
           runner.addStep(new NWInstrumentationStep(webDriver, scenario, runner.getId()));
           runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
           runner.addStep(new GetStatsStep(webDriver, getMaxUsersPerRoom(),

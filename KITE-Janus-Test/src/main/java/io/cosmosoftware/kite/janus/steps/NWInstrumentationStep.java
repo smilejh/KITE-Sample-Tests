@@ -1,7 +1,7 @@
 package io.cosmosoftware.kite.janus.steps;
 
 import io.cosmosoftware.kite.exception.KiteTestException;
-import io.cosmosoftware.kite.janus.Scenario;
+import io.cosmosoftware.kite.instrumentation.Scenario;
 import io.cosmosoftware.kite.report.Reporter;
 import io.cosmosoftware.kite.report.Status;
 import io.cosmosoftware.kite.steps.TestStep;
