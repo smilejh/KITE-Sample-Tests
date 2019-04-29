@@ -12,7 +12,7 @@
       "name": "Janus test",
       "description":"interop test for Janus",
       "tupleSize": 2,
-      "testImpl": "janus.js",
+      "testImpl": "Janus.js",
       "csvReport": true,
       "jsonReport": true,
       "callable": true,
@@ -34,13 +34,14 @@
         "takeScreenshotForEachTest": true,
         "testTimeout": 60,
         "getStats": true,
-        "statsCollectionTime" : 4,
+        "statsCollectionDuration" : 4,
         "statsCollectionInterval" : 2,
         "loadReachTime" : 0,
         "reconnectionDelay" : 0,
         "reconnectionRandom" : 0,
         "chanceOfMeetingEnded": 0,
-        "checkStatusPeriod": 0
+        "checkStatusPeriod": 0,
+        "selectedStats": ["inbound-rtp", "outbound-rtp", "candidate-pair"]
       }
     }
   ],
