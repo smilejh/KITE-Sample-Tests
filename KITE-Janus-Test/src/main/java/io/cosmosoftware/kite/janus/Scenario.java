@@ -22,11 +22,12 @@ public class Scenario {
   private final String command;
   private final int duration;
   private final Logger logger;
-  private String missingKey;
+
 
   public Scenario(JsonObject jsonObject, Logger logger, Integer i, Instrumentation instrumentation, List<TestRunner> testRunners) throws Exception {
 
     this.instrumentation = instrumentation;
+    String missingKey;
     clientId = jsonObject.containsKey("clientId") ? jsonObject.getInt("clientId") : 0;
     if (clientId < 0 || clientId > testRunners.size()) {
       throw new Exception(" Error in json config scenario, clientId specified is invalid ! ");
