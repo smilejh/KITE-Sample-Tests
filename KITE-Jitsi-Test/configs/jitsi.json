@@ -1,0 +1,34 @@
+{
+  "type": 1,
+  "name": "Jitsi Test",
+  "permute": false,
+  "remotes": [
+    {
+      "type": "local",
+      "remoteAddress": "http://localhost:4444/wd/hub"
+    }
+  ],
+  "tests": [
+    {
+      "name": "Mediasoup Local Grid %ts",
+      "description": "interop test for Mediasoup",
+      "tupleSize": 2,
+      "testImpl": "io.cosmosoftware.kite.jitsi.KiteJitsiTest",
+      "payload": {
+        "getStats" : true,
+        "url": "https://meet.jit.si",
+        "testTimeout": 20,
+        "statsCollectionTime": 10,
+        "statsCollectionInterval": 1
+      }
+    }
+  ],
+  "browsers": [
+    {
+      "browserName": "chrome",
+      "version": "73",
+      "platform": "WINDOWS",
+      "focus": true
+    }
+  ]
+}
