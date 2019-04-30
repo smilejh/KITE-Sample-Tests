@@ -11,7 +11,7 @@ public class RemoteVideoCheck extends TestStep {
 
   @Override
   public String stepDescription() {
-    return "Video Check";
+    return "Checking if the remote video is playing";
   }
 
   @Override
