@@ -9,7 +9,7 @@ To setup KITE, please follow these [instructions](https://github.com/webrtc/KITE
 Edit the file `./KITE-Janus-Test/configs/local.janus.config.json` with your favorite text editor.  
 You will need to change __`version`__ and __`platform`__ according to what is installed on your local grid.
 
-To run the AppRTC iceconnection test:
+To run the Janus test:
 ```
 cd %KITE_HOME%\KITE-Janus-Test
 r local.janus.config.json
@@ -29,6 +29,6 @@ On Linux/Mac:
 
 After running the test, you can open the Allure dashboard with the command `a`.
 ```
-cd %KITE_HOME%\KITE-AppRTC-Test
+cd %KITE_HOME%\KITE-Janus-Test
 a
 ```
