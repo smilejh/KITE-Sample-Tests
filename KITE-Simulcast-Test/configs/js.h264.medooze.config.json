@@ -13,7 +13,7 @@
       "description":"Simulcast Test for Medooze with H.264 codec",
       "tupleSize": 1,
       "noOfThreads": 2,
-      "testImpl": "simulcast.js",
+      "testImpl": "Meedoze.js",
       "payload":{
         "url": "https://playground.cosmosoftware.io/simulcast/index.html?codec=h264",
         "takeScreenshotForEachTest": true,

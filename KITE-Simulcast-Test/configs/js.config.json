@@ -13,7 +13,7 @@
       "description":"Simulcast Test for Medooze with VP8 codec",
       "tupleSize": 1,
       "noOfThreads": 2,
-      "testImpl": "simulcast.js",
+      "testImpl": "Medooze.js",
       "payload":{
         "url": "https://playground.cosmosoftware.io/simulcast/index.html?codec=vp8",
         "takeScreenshotForEachTest": true,

@@ -1,34 +1,39 @@
-const {Builder, By, Key, until, promise} = require('selenium-webdriver');
-const {TestUtils} = require('kite-common');
-const waitAround = TestUtils.waitAround;
+const {TestUtils, TestStep, Status, KiteTestError} = require('kite-common');
 
-module.exports = {
-	execute: async function(driver, testReport, pc, statsCollectionTime, statsCollectionInterval) {
-		let report = {};
-		let attachment = {};
-		attachment['type'] = 'json';
-		let stats = {};
-		let result = 'passed';
-    report['name'] = 'Getting WebRTC stats via getStats';
-    report['start'] = Date.now();
-    if (testReport.status === 'passed') {
-			try {
-        console.log('executing: ' + report.name);
-				stats['receivedStats'] = await TestUtils.getStats(driver, pc, statsCollectionTime, statsCollectionInterval);
-	      attachment['value'] = stats;
-			} catch (error) {
-				result = 'failed';
-        attachment['value'] = '' + error;
-        console.log(error);
-			}
-		} else {
-      result = 'skipped';
-      console.log('skipping: ' + report.name);
-		}
-		await waitAround(getStatDuration*pcArray.length); // wait for getstats to actually finish
-    report['status'] = result;
-    report['stop'] = Date.now();
-    report['attachment'] = attachment;
-    testReport.steps.push(report);
-	}
+/**
+ * Class: GetStatsStep
+ * Extends: TestStep
+ * Description:
+ */
+class GetStatsStep extends TestStep {
+  constructor(kiteBaseTest, pc) {
+    super();
+    this.driver = kiteBaseTest.driver;
+    this.statsCollectionTime = kiteBaseTest.statsCollectionTime;
+    this.statsCollectionInterval = kiteBaseTest.statsCollectionInterval;
+    this.selectedStats = kiteBaseTest.selectedStats;
+    this.pc = pc;
+
+    // Test reporter if you want to add attachment(s)
+    this.testReporter = kiteBaseTest.reporter;
+  }
+
+  stepDescription() {
+    return 'Getting WebRTC stats via getStats';
+  }
+
+  async step() {
+    try {
+    let receivedStats = await TestUtils.getStats(this);
+
+    // Data
+    this.testReporter.textAttachment(this.report, 'getStatsRaw', JSON.stringify(receivedStats), "json");
+    
+    } catch (error) {
+      console.log(e);
+      throw new KiteTestError(Status.BROKEN, "Failed to getStats");
+    }
+  }
 }
+
+module.exports = GetStatsStep;
