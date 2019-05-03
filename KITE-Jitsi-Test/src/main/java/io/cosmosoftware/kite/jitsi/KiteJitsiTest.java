@@ -26,7 +26,8 @@ public class KiteJitsiTest extends KiteBaseTest {
           new GetStatsStep(
               runner.getWebDriver(),
               getStatsCollectionTime(),
-              getStatsCollectionInterval()
+              getStatsCollectionInterval(),
+              getSelectedStats()
               ));
     }
     runner.addStep(new ScreenshotStep(runner.getWebDriver()));

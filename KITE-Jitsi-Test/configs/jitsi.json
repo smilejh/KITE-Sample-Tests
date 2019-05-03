@@ -12,14 +12,15 @@
     {
       "name": "Mediasoup Local Grid %ts",
       "description": "interop test for Mediasoup",
-      "tupleSize": 2,
+      "tupleSize": 3,
       "testImpl": "io.cosmosoftware.kite.jitsi.KiteJitsiTest",
       "payload": {
         "getStats" : true,
         "url": "https://meet.jit.si",
         "testTimeout": 20,
         "statsCollectionTime": 10,
-        "statsCollectionInterval": 1
+        "statsCollectionInterval": 1,
+        "selectedStats" : ["videobwe", "ssrc"]
       }
     }
   ],

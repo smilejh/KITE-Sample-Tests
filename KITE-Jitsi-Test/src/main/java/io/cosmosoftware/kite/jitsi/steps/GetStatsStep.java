@@ -6,16 +6,19 @@ import io.cosmosoftware.kite.report.Reporter;
 import io.cosmosoftware.kite.steps.TestStep;
 import org.openqa.selenium.WebDriver;
 
-import static io.cosmosoftware.kite.stats.GetStatsUtils.getStatsOnce;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
 
 public class GetStatsStep extends TestStep {
   private int durationInSeconds;
   private int intervalInSeconds;
+  private JsonArray selectedStats;
 
-  public GetStatsStep(WebDriver webDriver, int durationInSeconds, int intervalInSeconds) {
+  public GetStatsStep(WebDriver webDriver, int durationInSeconds, int intervalInSeconds, JsonArray selectedStats) {
     super(webDriver);
     this.durationInSeconds = durationInSeconds;
     this.intervalInSeconds = intervalInSeconds;
+    this.selectedStats = selectedStats;
   }
 
   @Override
@@ -26,17 +29,12 @@ public class GetStatsStep extends TestStep {
   @Override
   protected void step() throws KiteTestException {
     MeetingPage meetingPage = new MeetingPage(webDriver, logger);
-    try {
-      String rawStats = getStatsOnce("jitsi", webDriver).toString().replaceAll("=", ":");
-      System.out.println(rawStats);
-      Object formattedStats = meetingPage.formatToJsonString(rawStats);
-      System.out.println(formattedStats);
-    } catch (Exception e) {
+    try{
+    String stats =
+        meetingPage.getPCStatOverTime(webDriver, durationInSeconds, intervalInSeconds, selectedStats);
+        Reporter.getInstance().textAttachment(this.report, "Peer connection's stats", stats,"false");
+    }catch(Exception e){
       e.printStackTrace();
     }
-
-    //    JsonObject stats = meetingPage.getPCStatOverTime(webDriver, durationInSeconds,
-    // intervalInSeconds);
-//    Reporter.getInstance().jsonAttachment(this.report, "Peer connection's stats", stats);
   }
 }

@@ -2,9 +2,7 @@ import io.cosmosoftware.kite.jitsi.KiteJitsiTest;
 import junit.framework.TestCase;
 import org.webrtc.kite.config.EndPoint;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
+import javax.json.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,9 +14,13 @@ public class KiteJitsiTestTest extends TestCase {
 
   public JsonObject setFakePayload(){
     JsonObjectBuilder builder = Json.createObjectBuilder();
+    JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
     builder.add("getStats", true);
     builder.add("statsCollectionTime", 10);
     builder.add("statsCollectionInterval", 1);
+    arrayBuilder.add("ssrc");
+    arrayBuilder.add("videobwe");
+    builder.add("selectedStats",arrayBuilder.build());
     return builder.build();
   }
 
