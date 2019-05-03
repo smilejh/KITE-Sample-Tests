@@ -1,0 +1,1 @@
+exports.medoozePage = require("./medooze-page");
