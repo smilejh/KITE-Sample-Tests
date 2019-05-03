@@ -46,9 +46,14 @@ public class MeetingPage extends BasePage {
     return "return APP.conference.getNumberOfParticipantsWithTracks();";
   }
 
+  private JsonObject stringToJson(String s) {
+    JsonReader r = Json.createReader(new StringReader(s));
+    return r.readObject();
+  }
+
   public JsonObject getPCStatOnce(WebDriver webDriver) {
     Object result = executeJsScript(webDriver, getStatsScript());
-    return formatToJson(result.toString().replaceAll("=", ":"));
+    return stringToJson(formatToJsonString(result.toString().replaceAll("=", ":")));
   }
 
   public JsonObject getPCStatOverTime(
@@ -87,7 +92,8 @@ public class MeetingPage extends BasePage {
               JsonObject currentData = currentArr.getJsonObject(j);
               JsonObject newData = currentArr.getJsonObject(j);
               for (String innerKey : newData.keySet()) {
-                if (newData.get(innerKey).toString().matches("\\d+")) {
+                if (newData.get(innerKey) != null
+                    && newData.get(innerKey).toString().matches("\\d+")) {
                   int sum = currentData.getInt(innerKey);
                   sum += newData.getInt(innerKey);
                   builder.add(innerKey, sum / count);
@@ -105,14 +111,14 @@ public class MeetingPage extends BasePage {
           }
 
         } else {
-
           if (data.get(key) instanceof JsonObject) {
             JsonObjectBuilder builder = Json.createObjectBuilder();
             JsonReader reader = Json.createReader(new StringReader(statsMap.get(key).toString()));
             JsonObject json = reader.readObject();
+            System.out.println(key + "data: " + json);
             JsonObject innerData = data.getJsonObject(key);
             for (String innerKey : innerData.keySet()) {
-              if (json.get(innerKey).toString().matches("\\d+")) {
+              if (innerData.get(innerKey).toString().matches("\\d+")) {
                 int sum = json.getInt(innerKey);
                 sum += innerData.getInt(innerKey);
                 builder.add(innerKey, sum);
@@ -127,7 +133,7 @@ public class MeetingPage extends BasePage {
             for (int j = 0; j < currentArr.size(); j++) {
               JsonObjectBuilder builder = Json.createObjectBuilder();
               JsonObject currentData = currentArr.getJsonObject(j);
-              JsonObject newData = currentArr.getJsonObject(j);
+              JsonObject newData = newArr.getJsonObject(j);
               for (String innerKey : newData.keySet()) {
                 if (newData.get(innerKey).toString().matches("\\d+")) {
                   int sum = currentData.getInt(innerKey);
@@ -168,14 +174,16 @@ public class MeetingPage extends BasePage {
     return mainBuilder.build();
   }
 
-  private JsonObject formatToJson(String s) {
+  public String formatToJsonString(String s) {
     String r = "";
     int start;
-    int end = 0;
+    int end;
+    boolean needSpecialFormat = false;
     for (int i = 0; i < s.length(); i++) {
       String toBeAppended = "";
       char c = s.charAt(i);
-      if (c == '{' || c == ' ') {
+      char nextChar = (i != s.length()-1? s.charAt(i + 1) : '\0');
+      if (c == '{' || (c == ' ' && nextChar != '{' && nextChar != '[')) {
         start = i + 1;
         end = start + 1;
         while (end < s.length()) {
@@ -185,16 +193,31 @@ public class MeetingPage extends BasePage {
           }
           end++;
         }
-        toBeAppended = '"' + s.substring(start, end) + '"';
-      } else if (c == ':' && s.charAt(i + 1) != '{' && s.charAt(i + 1) != '[') {
+        String key = s.substring(start,end);
+        if (key.equals("googTimingFrameInfo")) needSpecialFormat = true;
+        toBeAppended = '"' + key + '"';
+      } else if (c == ':') {
         start = i + 1;
         end = start + 1;
-        while (end < s.length()) {
-          if (s.charAt(end) == '}' || s.charAt(end) == ',') {
-            i = end - 1;
-            break;
+        if (!needSpecialFormat) {
+          while (end < s.length()) {
+            if (s.charAt(end) == '}' || s.charAt(end) == ',') {
+              i = end - 1;
+              break;
+            }
+            end++;
           }
-          end++;
+        }
+        else{
+          needSpecialFormat = false;
+          while (end < s.length()) {
+            if (s.charAt(end) == ' ') {
+              i = end-2;
+              end = end -1;
+              break;
+            }
+            end++;
+          }
         }
         String value = s.substring(start, end);
         if (!value.matches("\\d+")) {
@@ -205,9 +228,6 @@ public class MeetingPage extends BasePage {
       }
       r += c + toBeAppended;
     }
-    JsonReader jsonReader = Json.createReader(new StringReader(r));
-    JsonObject json = jsonReader.readObject();
-    jsonReader.close();
-    return json;
+    return r;
   }
 }
