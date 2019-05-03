@@ -1,5 +1,6 @@
 const {By, until, promise} = require('selenium-webdriver');
-const {TestUtils} = require('kite-common'); 
+const {TestUtils, KiteTestError, Status} = require('kite-common'); 
+const waitAround = TestUtils.waitAround;
 const map = promise.map;
 
 const elements = {
@@ -14,30 +15,44 @@ const elements = {
 
 module.exports = {
 
-  open: async function(driver, url, timeout) {
-    await driver.get(url);
-    await TestUtils.waitForPage(driver, timeout);
+  open: async function(stepInfo) {
+    await stepInfo.driver.get(stepInfo.url);
+    await TestUtils.waitForPage(stepInfo.driver, stepInfo.timeout);
   },
 
-  verifyVideo: async function(driver, numberOfParticipant, timeout) {
-    await driver.wait(until.elementLocated(elements.publishingLocator));
-    //wait a while to allow all videos to load.
-    await TestUtils.waitAround(numberOfParticipant * 10 * 1000);
-    await TestUtils.waitForElement(driver, elements.video.type, elements.video.value, timeout);
-    let videos = await driver.findElements(elements.videos);
-    let details = {};
-    let ids = await map(videos, e => e.getAttribute("id"));
-    console.log(ids);
-    for(let i = 0; i < ids.length; i++) {
-      if(ids[i] != undefined) {
-        const videoCheck =  await TestUtils.verifyVideoDisplayById(driver, ids[i]);
-        details['videoCheck_' + ids[i]] = videoCheck;
-      } else {
-        details['videoCheck_' + ids[i]] = {};
-      }
+  verifyVideo: async function(stepInfo, index) {
+    /*
+    if (index === 0) {
+      await stepInfo.driver.wait(until.elementLocated(elements.publishingLocator));
+    } */
 
+    // wait for videos 
+    await TestUtils.waitAround(stepInfo.numberOfParticipant * 5 * 1000);
+
+    let videos;
+    let ids = [];
+    let i = 0;
+    await TestUtils.waitForElement(stepInfo.driver, elements.video.type, elements.video.value, stepInfo.timeout);
+    while (ids.length < stepInfo.numberOfParticipant && i < stepInfo.timeout / 1000) {
+      videos = await stepInfo.driver.findElements(elements.videos);
+      ids = await map(videos, e => e.getAttribute("id"));
+      i++;
+      console.log(ids);
+      await waitAround(1000);
     }
-    console.log(details);
-    return details;
+
+    if (i === stepInfo.timeout) {
+      throw new KiteTestError(Status.FAILED, "Unable to find " + stepInfo.numberOfParticipants + " <video> element on the page. No video found = " + ids.length);
+    }
+
+    let checked = await TestUtils.verifyVideoDisplayById(stepInfo.driver, ids[index]);
+    
+    i = 0;
+    while(i < 3 && checked.result != 'video') {
+      checked = await TestUtils.verifyVideoDisplayById(stepInfo.driver, ids[index]);
+      i++;
+      await waitAround(3 * 1000);
+    }
+    return checked.result;
   }
 }

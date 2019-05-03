@@ -34,7 +34,7 @@
         "takeScreenshotForEachTest": true,
         "testTimeout": 60,
         "getStats": true,
-        "statsCollectionDuration" : 4,
+        "statsCollectionTime" : 4,
         "statsCollectionInterval" : 2,
         "loadReachTime" : 0,
         "reconnectionDelay" : 0,
