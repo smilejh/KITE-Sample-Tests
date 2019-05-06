@@ -30,9 +30,10 @@ public class GetStatsStep extends TestStep {
   protected void step() throws KiteTestException {
     MeetingPage meetingPage = new MeetingPage(webDriver, logger);
     try{
-    String stats =
+    JsonObject stats =
         meetingPage.getPCStatOverTime(webDriver, durationInSeconds, intervalInSeconds, selectedStats);
-        Reporter.getInstance().textAttachment(this.report, "Peer connection's stats", stats,"false");
+      System.out.println(stats);
+        Reporter.getInstance().jsonAttachment(this.report, "Peer connection's stats", stats);
     }catch(Exception e){
       e.printStackTrace();
     }

@@ -22,8 +22,6 @@ public class MeetingPage extends BasePage {
 
   public int numberOfParticipants =
       Integer.parseInt(executeJsScript(webDriver, getNumberOfParticipantScript()).toString()) + 1;
-  public long statsCollectionTime;
-  public long statsCollectionInterval;
 
   @FindBy(id = "largeVideo")
   public WebElement mainVideo;
@@ -45,27 +43,29 @@ public class MeetingPage extends BasePage {
     return "return APP.conference.getNumberOfParticipantsWithTracks();";
   }
 
-  private JsonObject stringToJsonObject(String s) {
-    JsonReader r = Json.createReader(new StringReader(s));
-    return r.readObject();
-  }
-
-  private JsonArray stringToJsonArray(String s) {
-    JsonReader r = Json.createReader(new StringReader(s));
-    return r.readArray();
-  }
-
-  public JsonObject getPCStatOnce(WebDriver webDriver) {
-    Object result = executeJsScript(webDriver, getStatsScript());
-    return stringToJsonObject(result.toString().replaceAll("=", ":"));
-  }
-
-  public String getPCStatOverTime(
+  public JsonObject getPCStatOverTime(
       WebDriver webDriver, int durationInSeconds, int intervalInSeconds, JsonArray selectedStats)
       throws Exception {
-    String statString = null;
+    String statString;
+    HashMap<String, HashMap<String, JsonArrayBuilder>> allStatsMap = new HashMap<>();
     HashMap<String, JsonArrayBuilder> videoBweMap = new HashMap<>();
     HashMap<String, JsonArrayBuilder> ssrcMap = new HashMap<>();
+    HashMap<String, JsonArrayBuilder> localCandidateMap = new HashMap<>();
+    HashMap<String, JsonArrayBuilder> remoteCandidateMap = new HashMap<>();
+    HashMap<String, JsonArrayBuilder> googTrackMap = new HashMap<>();
+    HashMap<String, JsonArrayBuilder> googComponentMap = new HashMap<>();
+    HashMap<String, JsonArrayBuilder> googCandidatePairMap = new HashMap<>();
+    HashMap<String, JsonArrayBuilder> googLibjingleSessionMap = new HashMap<>();
+    HashMap<String, JsonArrayBuilder> googCertificateMap = new HashMap<>();
+    allStatsMap.put("videoBwe", videoBweMap);
+    allStatsMap.put("ssrc", ssrcMap);
+    allStatsMap.put("localCandidate", localCandidateMap);
+    allStatsMap.put("remoteCandidate", remoteCandidateMap);
+    allStatsMap.put("googTrack", googTrackMap);
+    allStatsMap.put("googComponent", googComponentMap);
+    allStatsMap.put("googCandidatePair", googCandidatePairMap);
+    allStatsMap.put("googLibjingleSession", googLibjingleSessionMap);
+    allStatsMap.put("googCertificate", googCertificateMap);
     for (int timer = 0; timer < durationInSeconds; timer += intervalInSeconds) {
       statString =
           formatToJsonString(getStatsOnce("jitsi", webDriver).toString().replaceAll("=", ":"));
@@ -75,25 +75,75 @@ public class MeetingPage extends BasePage {
         for (String key : data.keySet()) {
           if (key.equals("type")) {
             String type = data.getString(key);
-            // possible selectedStats type: VideoBwe, ssrc, localcandidate, remotecandidate,
-            // googTrack, googComponent, googCandidatePair, googLibjingleSession, googCertificate
             for (JsonValue value : selectedStats) {
               String statName = value.toString();
               statName = statName.substring(1, statName.length() - 1);
-              if (type.equalsIgnoreCase(statName) && type.equals("ssrc")) {
-                String ssrcId = data.getString("id");
-                updateHashMap(ssrcMap, ssrcId, data);
-              } else if (type.equalsIgnoreCase(statName) && type.equals("VideoBwe")) {
-                updateHashMap(videoBweMap, "videoBwe", data);
+              String mapDataKey = data.getString("id");
+              if (type.equalsIgnoreCase(statName)) {
+                switch (type) {
+                  case "VideoBwe":
+                    updateHashMap(videoBweMap, "videoBwe", data);
+                  case "ssrc":
+                    updateHashMap(ssrcMap, mapDataKey, data);
+                    break;
+                  case "localcandidate":
+                    updateHashMap(localCandidateMap, mapDataKey, data);
+                    break;
+                  case "remotecandidate":
+                    updateHashMap(remoteCandidateMap, mapDataKey, data);
+                    break;
+                  case "googTrack":
+                    updateHashMap(googTrackMap, mapDataKey, data);
+                    break;
+                  case "googComponent":
+                    updateHashMap(googComponentMap, mapDataKey, data);
+                    break;
+                  case "googCandidatePair":
+                    updateHashMap(googCandidatePairMap, mapDataKey, data);
+                    break;
+                  case "googLibjingleSession":
+                    updateHashMap(googLibjingleSessionMap, mapDataKey, data);
+                    break;
+                  case "googCertificate":
+                    updateHashMap(googCertificateMap, mapDataKey, data);
+                    break;
+                }
               }
             }
           }
         }
       }
     }
-    System.out.println(avgValue(videoBweMap));
-    System.out.println(avgValue(ssrcMap));
-    return statString;
+    return buildFinalStats(allStatsMap);
+  }
+
+  private void printMap(HashMap<String, HashMap<String, JsonArrayBuilder>> map) {
+    for (String a : map.keySet()) {
+      HashMap<String, JsonArrayBuilder> innerMap = map.get(a);
+      if (innerMap != null) {
+        for (String k : innerMap.keySet()) {
+          System.out.println(k + ": " + innerMap.get(k).build());
+        }
+      }
+    }
+  }
+
+  private JsonObject buildFinalStats(
+      HashMap<String, HashMap<String, JsonArrayBuilder>> allStatsMap) {
+    JsonObjectBuilder finalBuilder = Json.createObjectBuilder();
+    for (String mapKey : allStatsMap.keySet()) {
+      HashMap<String, JsonArrayBuilder> map = allStatsMap.get(mapKey);
+      JsonArrayBuilder innerBuilder = Json.createArrayBuilder();
+      JsonObject json = null;
+      if (!map.isEmpty()) {
+        HashMap<String, JsonObject> avgMap = avgValue(map);
+        for (String key : avgMap.keySet()) {
+          innerBuilder.add(avgMap.get(key));
+        }
+        finalBuilder.add(mapKey, innerBuilder.build());
+      }
+    }
+    return finalBuilder.build();
   }
 
   private HashMap<String, JsonArrayBuilder> updateHashMap(
@@ -110,24 +160,45 @@ public class MeetingPage extends BasePage {
     for (String key : map.keySet()) {
       JsonArray arr = map.get(key).build();
       JsonObjectBuilder builder = Json.createObjectBuilder();
+      long startTime = 0;
+      long endTime;
       for (String k : arr.getJsonObject(0).keySet()) {
-        int sum = 0;
+        long sum = 0;
         int count = 0;
         for (int i = 0; i < arr.size(); i++) {
           String value = arr.getJsonObject(i).getString(k);
-          if (value.matches("\\d+") & value != null & !k.equals("timestamp")) {
-            sum += Integer.parseInt(value);
-            count++;
-            if(i + 1 == arr.size()){
-              builder.add(k, sum/count);
+          if (value.matches("\\d+") && value != null && !k.equals("timestamp")) {
+            if ((k.contains("Received") || k.contains("Sent")) && !k.contains("Rate")) {
+              sum = Long.parseLong(value);
+              if (i == arr.size() - 1) {
+                builder.add(k, Long.toString(sum));
+              }
+
+            } else {
+              sum += Long.parseLong(value);
+              count++;
+              if (i == arr.size() - 1) {
+                builder.add(k, Long.toString(sum / count));
+              }
+            }
+          } else if (k.equals("timestamp")) {
+            if (i == 0) {
+              startTime = Long.parseLong(value);
+              builder.add("startTime", value);
+            } else if (i == arr.size() - 1) {
+              endTime = Long.parseLong(value);
+              builder.add("endTime", value);
+              builder.add("elapsedTime", Long.toString(endTime - startTime));
             }
           } else {
-            builder.add(k,value);
-            break;
+            if (i == arr.size() - 1) {
+              builder.add(k, value);
+            }
           }
         }
       }
-      newMap.put(key,builder.build());
+      JsonObject avgStatObject = builder.build();
+      newMap.put(key, avgStatObject);
     }
 
     return newMap;
@@ -184,5 +255,15 @@ public class MeetingPage extends BasePage {
       r += c + toBeAppended;
     }
     return r;
+  }
+
+  private JsonObject stringToJsonObject(String s) {
+    JsonReader r = Json.createReader(new StringReader(s));
+    return r.readObject();
+  }
+
+  private JsonArray stringToJsonArray(String s) {
+    JsonReader r = Json.createReader(new StringReader(s));
+    return r.readArray();
   }
 }
