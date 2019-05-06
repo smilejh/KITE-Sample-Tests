@@ -14,6 +14,7 @@ import java.util.Map;
 
 import static io.cosmosoftware.kite.stats.GetStatsUtils.getStatsOnce;
 import static io.cosmosoftware.kite.util.TestUtils.executeJsScript;
+import static io.cosmosoftware.kite.util.TestUtils.waitAround;
 
 public class MeetingPage extends BasePage {
   public MeetingPage(WebDriver webDriver, Logger logger) {
@@ -31,13 +32,6 @@ public class MeetingPage extends BasePage {
 
   @FindBy(xpath = "//*[@id=\"new-toolbox\"]/div[2]/div[3]/div[1]/div/div")
   public WebElement manyTilesVideoToggle;
-
-  @FindBy(className = "button-group-right")
-  public WebElement rightButtonContainer;
-
-  public String getStatsScript() {
-    return "return APP.conference.getStats();";
-  }
 
   public String getNumberOfParticipantScript() {
     return "return APP.conference.getNumberOfParticipantsWithTracks();";
@@ -57,10 +51,10 @@ public class MeetingPage extends BasePage {
     HashMap<String, JsonArrayBuilder> googCandidatePairMap = new HashMap<>();
     HashMap<String, JsonArrayBuilder> googLibjingleSessionMap = new HashMap<>();
     HashMap<String, JsonArrayBuilder> googCertificateMap = new HashMap<>();
-    allStatsMap.put("videoBwe", videoBweMap);
+    allStatsMap.put("VideoBwe", videoBweMap);
     allStatsMap.put("ssrc", ssrcMap);
-    allStatsMap.put("localCandidate", localCandidateMap);
-    allStatsMap.put("remoteCandidate", remoteCandidateMap);
+    allStatsMap.put("localcandidate", localCandidateMap);
+    allStatsMap.put("remotecandidate", remoteCandidateMap);
     allStatsMap.put("googTrack", googTrackMap);
     allStatsMap.put("googComponent", googComponentMap);
     allStatsMap.put("googCandidatePair", googCandidatePairMap);
@@ -83,6 +77,7 @@ public class MeetingPage extends BasePage {
                 switch (type) {
                   case "VideoBwe":
                     updateHashMap(videoBweMap, "videoBwe", data);
+                    break;
                   case "ssrc":
                     updateHashMap(ssrcMap, mapDataKey, data);
                     break;
@@ -113,8 +108,101 @@ public class MeetingPage extends BasePage {
           }
         }
       }
+      waitAround(intervalInSeconds * 1000);
     }
     return buildFinalStats(allStatsMap);
+  }
+
+  public JsonObject buildStatSummary(JsonObject rawStats) {
+    JsonObjectBuilder mainBuilder = Json.createObjectBuilder();
+    for (String type : rawStats.keySet()) {
+      JsonArray arr = rawStats.getJsonArray(type);
+      switch (type) {
+        case "VideoBwe":
+          mainBuilder.add(
+              "videoBwe",
+              extractData(
+                  arr,
+                  "googActualEncBitrate",
+                  "googAvailableSendBandwidth",
+                  "googTargetEncBitrate",
+                  "googTransmitBitrate"));
+          break;
+        case "ssrc":
+          JsonArray data =
+              extractData(
+                  arr,
+                  "id",
+                  "ssrc",
+                  "mediaType",
+                  "bytesSent",
+                  "framesEncoded",
+                  "googFrameRateInput",
+                  "googFrameRateSent",
+                  "googRtt",
+                  "packetsSent",
+                  "packetsReceived",
+                  "packetsLost",
+                  "qpSum",
+                  "elapsedTime",
+                  "audioInputLevel",
+                  "bytesReceived",
+                  "googFrameRateReceived",
+                  "googJitterReceived",
+                  "elapsedTime");
+          JsonObjectBuilder outerBuilder = Json.createObjectBuilder();
+          for (int i = 0; i < data.size(); i++) {
+            JsonObject json = data.getJsonObject(i);
+            JsonObjectBuilder innerBuilder = Json.createObjectBuilder();
+            long elapsedTime = Long.parseLong(json.getString("elapsedTime"));
+            int packetsLost = Integer.parseInt(json.getString("packetsLost"));
+            for (String key : json.keySet()) {
+              String value = json.getString(key);
+              if (key.equals("bytesSent") || key.equals("bytesReceived")) {
+                long bytes = Long.parseLong(value);
+                innerBuilder.add(key, value);
+                innerBuilder.add("bitrate", Long.toString(bytes* 8000 / elapsedTime));
+              } else if (key.equals("packetsSent") || key.equals("packetsReceived")) {
+                int packets = Integer.parseInt(value);
+                innerBuilder.add(key, value);
+                if (packets != 0) {
+                  innerBuilder.add("packetLoss", Float.toString((float) packetsLost / packets) + '%');
+                }
+              } else {
+                innerBuilder.add(key, value);
+              }
+            }
+            JsonObject innerJson = innerBuilder.build();
+            if(innerJson.getString("id").contains("recv")){
+              outerBuilder.add("remote[" + i + "]", innerJson );
+            }
+            else{
+              outerBuilder.add("local", innerJson);
+            }
+
+          }
+          mainBuilder.add("ssrc",outerBuilder.build());
+          break;
+      }
+    }
+    return mainBuilder.build();
+  }
+
+  private JsonArray extractData(JsonArray data, String... desiredKeys) {
+    JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+    for (int i = 0; i < data.size(); i++) {
+      JsonObject json = data.getJsonObject(i);
+      JsonObjectBuilder builder = Json.createObjectBuilder();
+      for (String desiredKey : desiredKeys) {
+        for (String key : json.keySet()) {
+          if (desiredKey.equals(key)) {
+            builder.add(key, json.getString(key));
+          }
+        }
+      }
+      arrayBuilder.add(builder.build());
+    }
+    return arrayBuilder.build();
   }
 
   private void printMap(HashMap<String, HashMap<String, JsonArrayBuilder>> map) {
@@ -134,7 +222,6 @@ public class MeetingPage extends BasePage {
     for (String mapKey : allStatsMap.keySet()) {
       HashMap<String, JsonArrayBuilder> map = allStatsMap.get(mapKey);
       JsonArrayBuilder innerBuilder = Json.createArrayBuilder();
-      JsonObject json = null;
       if (!map.isEmpty()) {
         HashMap<String, JsonObject> avgMap = avgValue(map);
         for (String key : avgMap.keySet()) {
@@ -184,11 +271,16 @@ public class MeetingPage extends BasePage {
           } else if (k.equals("timestamp")) {
             if (i == 0) {
               startTime = Long.parseLong(value);
-              builder.add("startTime", value);
-            } else if (i == arr.size() - 1) {
+            }
+            if (i == arr.size() - 1) {
               endTime = Long.parseLong(value);
-              builder.add("endTime", value);
-              builder.add("elapsedTime", Long.toString(endTime - startTime));
+              if (endTime == startTime) {
+                builder.add("timestamp", startTime);
+              } else {
+                builder.add("startTime", value);
+                builder.add("endTime", value);
+                builder.add("elapsedTime", Long.toString(endTime - startTime));
+              }
             }
           } else {
             if (i == arr.size() - 1) {

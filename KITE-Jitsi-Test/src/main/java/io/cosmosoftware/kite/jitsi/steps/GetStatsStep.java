@@ -14,7 +14,8 @@ public class GetStatsStep extends TestStep {
   private int intervalInSeconds;
   private JsonArray selectedStats;
 
-  public GetStatsStep(WebDriver webDriver, int durationInSeconds, int intervalInSeconds, JsonArray selectedStats) {
+  public GetStatsStep(
+      WebDriver webDriver, int durationInSeconds, int intervalInSeconds, JsonArray selectedStats) {
     super(webDriver);
     this.durationInSeconds = durationInSeconds;
     this.intervalInSeconds = intervalInSeconds;
@@ -29,12 +30,15 @@ public class GetStatsStep extends TestStep {
   @Override
   protected void step() throws KiteTestException {
     MeetingPage meetingPage = new MeetingPage(webDriver, logger);
-    try{
-    JsonObject stats =
-        meetingPage.getPCStatOverTime(webDriver, durationInSeconds, intervalInSeconds, selectedStats);
-      System.out.println(stats);
-        Reporter.getInstance().jsonAttachment(this.report, "Peer connection's stats", stats);
-    }catch(Exception e){
+    try {
+      JsonObject rawStats =
+          meetingPage.getPCStatOverTime(
+              webDriver, durationInSeconds, intervalInSeconds, selectedStats);
+      JsonObject formattedStats = meetingPage.buildStatSummary(rawStats);
+      System.out.println(formattedStats);
+      Reporter.getInstance().jsonAttachment(this.report, "Peer connection's stats", rawStats);
+      Reporter.getInstance().jsonAttachment(this.report, "Peer connection's stats", formattedStats);
+    } catch (Exception e) {
       e.printStackTrace();
     }
   }
