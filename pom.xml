@@ -109,5 +109,6 @@
     <module>KITE-Janus-Test</module>
     <module>KITE-Simulcast-Test</module>
     <module>KITE-Mediasoup-Test</module>
+    <module>KITE-Jitsi-Test</module>
   </modules>
 </project>
