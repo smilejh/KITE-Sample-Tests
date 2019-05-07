@@ -29,7 +29,6 @@ public class NWInstrumentationStep extends TestStep {
   
   @Override
   protected void step() throws KiteTestException {
-    String result;
       try {
         StringBuilder text = new StringBuilder();
         String command;
@@ -42,7 +41,7 @@ public class NWInstrumentationStep extends TestStep {
         Reporter.getInstance().textAttachment(report, "Commands for scenario " + scenario.getName(), text.toString(), "plain");
         waitAround(1000);
         if (this.clientId == scenario.getClientId()) {
-          result = scenario.runCommands();
+          String result = scenario.runCommands();
           Reporter.getInstance().textAttachment(report, "Result", result, "plain");
           if (result.contains("FAILURE")) {
             throw new KiteTestException("Failed to execute command.", Status.FAILED);

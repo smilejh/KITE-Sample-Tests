@@ -51,18 +51,20 @@
   </build>
 
   <dependencies>
+    <!--
     <dependency>
       <groupId>com.github.CoSMoSoftware.KITE-Extras</groupId>
       <artifactId>kite-extras</artifactId>
       <version>${kite.extras.version}</version>
     </dependency>
-    <!-- Uncomment this and comment out the above dependency to use your local maven repo for KITE-Extras
+    -->
+    <!-- Uncomment this and comment out the above dependency to use your local maven repo for KITE-
+    -->
     <dependency>
       <groupId>io.cosmosoftware.kite</groupId>
       <artifactId>kite-extras</artifactId>
       <version>${kite.extras.version}</version>
     </dependency>
-    -->
     <dependency>
       <groupId>org.webrtc.kite</groupId>
       <artifactId>kite-framework</artifactId>

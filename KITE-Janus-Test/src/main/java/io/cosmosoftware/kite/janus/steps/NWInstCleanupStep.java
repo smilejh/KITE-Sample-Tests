@@ -30,10 +30,9 @@ public class NWInstCleanupStep extends TestStep {
 
   @Override
   protected void step() throws KiteTestException {
-    String result;
       try {
         if (this.clientId == scenario.getClientId()) {
-          result = this.scenario.cleanUp();
+          String result = this.scenario.cleanUp();
           logger.info("Cleaning up scenario for " + this.scenario.getName());
           Reporter.getInstance().textAttachment(report, "NW Instrumentation CleanUp for " + scenario.getName(), "Commands executed : " + result, "plain");
           if (result.contains("FAILURE")) {
