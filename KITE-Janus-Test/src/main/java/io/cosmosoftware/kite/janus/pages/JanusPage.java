@@ -94,15 +94,6 @@ public class JanusPage extends BasePage {
     String split_2_1 = ", \"" + testId + "\"" + split2[1];
     String getStatsScript = split[0] + split1[0] + split_1_1 + split2[0] + split_2_1;
 
-
-    //String res_1 = ", \"JANUS\"" + res[1]; //replace with testName variable
-    //String res_2 = ", \"JANUS\"" + res[2]; //replace with testName variable
-    //String[] res1 = res_1.split(", KITETestId");
-    //String res_1_1 = ", \"1234\"" + res1[1]; //replace with testId variable
-    //String res_2_1 = ", \"1234\"" + res2[1]; //replace with testId variable
-    //String[] res2 = res_2.split(", KITETestId");
-    //System.out.println(getStatsScript); //testing value of newGetStatsString
-
     System.out.println("Converted to string");
     return getStatsScript;
   }

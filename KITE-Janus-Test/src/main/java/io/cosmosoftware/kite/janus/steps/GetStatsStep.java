@@ -10,12 +10,11 @@ import javax.json.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static io.cosmosoftware.kite.util.ReportUtils.getStackTrace;
 import static org.webrtc.kite.stats.StatsUtils.extractStats;
 import static org.webrtc.kite.stats.StatsUtils.getPCStatOvertime;
 
 public class GetStatsStep extends TestStep {
-
-
 
 
   private final int numberOfParticipants;
@@ -63,7 +62,7 @@ public class GetStatsStep extends TestStep {
       Reporter.getInstance().jsonAttachment(report, "getStatsRaw", builder.build());
       Reporter.getInstance().jsonAttachment(report, "getStatsSummary", json);
     } catch (Exception e) {
-      e.printStackTrace();
+      logger.error(getStackTrace(e));
       throw new KiteTestException("Failed to getStats", Status.BROKEN, e);
     }
   }
