@@ -30,21 +30,28 @@ public class NWInstrumentationStep extends TestStep {
   
   @Override
   protected void step() throws KiteTestException {
-    try {
-      Reporter.getInstance().textAttachment(report, "Command on gw " + scenario.getGateway(),
-          scenario.getCommand(), "plain");
-      waitAround(1000);
-      if (this.clientId == scenario.getClientId()) {
-        result = scenario.runCommands();
-        Reporter.getInstance().textAttachment(report, "Result", result, "plain");
-        if (result.contains("FAILURE")) {
-          throw new KiteTestException("Failed to execute command.", Status.FAILED);
+      try {
+        String command = "";
+        String text = "";
+        for (String gw : this.scenario.getCommandList().keySet()) {
+          command += this.scenario.getCommandList().get(gw);
+          if (command != "") {
+            text += "Executing command " + command + " on gateway " + gw + "\n\n";
+          }
         }
-      }
-      waitAround(scenario.getDuration());
-    } catch (Exception e) {
-      logger.error(getStackTrace(e));
-      throw new KiteTestException("Failed to execute command ", Status.BROKEN, e);
+        Reporter.getInstance().textAttachment(report, "Commands for scenario " + scenario.getName(), text, "plain");
+        waitAround(1000);
+        if (this.clientId == scenario.getClientId()) {
+          result = scenario.runCommands();
+          Reporter.getInstance().textAttachment(report, "Result", result, "plain");
+          if (result.contains("FAILURE")) {
+            throw new KiteTestException("Failed to execute command.", Status.FAILED);
+          }
+        }
+        waitAround(scenario.getDuration());
+      } catch (Exception e) {
+        logger.error(getStackTrace(e));
+        throw new KiteTestException("Failed to execute command ", Status.BROKEN, e);
     }
   }
 
