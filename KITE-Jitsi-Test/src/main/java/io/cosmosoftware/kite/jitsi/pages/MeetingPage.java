@@ -161,27 +161,26 @@ public class MeetingPage extends BasePage {
               if (key.equals("bytesSent") || key.equals("bytesReceived")) {
                 long bytes = Long.parseLong(value);
                 innerBuilder.add(key, value);
-                innerBuilder.add("bitrate", Long.toString(bytes* 8000 / elapsedTime));
+                innerBuilder.add("bitrate", Long.toString(bytes * 8000 / elapsedTime));
               } else if (key.equals("packetsSent") || key.equals("packetsReceived")) {
                 int packets = Integer.parseInt(value);
                 innerBuilder.add(key, value);
                 if (packets != 0) {
-                  innerBuilder.add("packetLoss", Float.toString((float) packetsLost / packets) + '%');
+                  innerBuilder.add(
+                      "packetLoss", Float.toString((float) packetsLost / packets) + '%');
                 }
               } else {
                 innerBuilder.add(key, value);
               }
             }
             JsonObject innerJson = innerBuilder.build();
-            if(innerJson.getString("id").contains("recv")){
-              outerBuilder.add("remote[" + i + "]", innerJson );
+            if (innerJson.getString("id").contains("recv")) {
+              outerBuilder.add("remoteTrack[" + i + "]", innerJson);
+            } else {
+              outerBuilder.add("localTrack", innerJson);
             }
-            else{
-              outerBuilder.add("local", innerJson);
-            }
-
           }
-          mainBuilder.add("ssrc",outerBuilder.build());
+          mainBuilder.add("ssrc", outerBuilder.build());
           break;
       }
     }

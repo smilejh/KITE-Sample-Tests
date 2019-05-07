@@ -25,4 +25,3 @@ public class ScreenshotStep extends TestStep {
             report, "ScreenshotStep_" + timestamp(), saveScreenshotPNG(webDriver));
   }
 }
-

@@ -4,17 +4,16 @@ import io.cosmosoftware.kite.exception.KiteTestException;
 import io.cosmosoftware.kite.jitsi.KiteJitsiTest;
 import io.cosmosoftware.kite.jitsi.pages.JoinPage;
 import io.cosmosoftware.kite.steps.TestStep;
-import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 
 public class JoinRoomStep extends TestStep {
   protected String roomId;
 
-  public JoinRoomStep(WebDriver webDriver){
+  public JoinRoomStep(WebDriver webDriver) {
     super(webDriver);
   }
 
-  public void setRoomId(String roomId){
+  public void setRoomId(String roomId) {
     this.roomId = roomId;
   }
 
@@ -26,6 +25,7 @@ public class JoinRoomStep extends TestStep {
   @Override
   protected void step() throws KiteTestException {
     JoinPage page = new JoinPage(webDriver, logger);
-    page.joinRoom(KiteJitsiTest.url.endsWith("/")? (KiteJitsiTest.url) : (KiteJitsiTest.url + "/") + roomId);
+    page.joinRoom(
+        KiteJitsiTest.url.endsWith("/") ? (KiteJitsiTest.url) : (KiteJitsiTest.url + "/") + roomId);
   }
 }

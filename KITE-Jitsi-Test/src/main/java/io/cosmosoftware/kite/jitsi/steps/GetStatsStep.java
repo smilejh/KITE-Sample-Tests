@@ -35,9 +35,8 @@ public class GetStatsStep extends TestStep {
           meetingPage.getPCStatOverTime(
               webDriver, durationInSeconds, intervalInSeconds, selectedStats);
       JsonObject formattedStats = meetingPage.buildStatSummary(rawStats);
-      System.out.println(formattedStats);
       Reporter.getInstance().jsonAttachment(this.report, "Peer connection's stats", rawStats);
-      Reporter.getInstance().jsonAttachment(this.report, "Peer connection's stats", formattedStats);
+      Reporter.getInstance().jsonAttachment(this.report, "Stats summary", formattedStats);
     } catch (Exception e) {
       e.printStackTrace();
     }
