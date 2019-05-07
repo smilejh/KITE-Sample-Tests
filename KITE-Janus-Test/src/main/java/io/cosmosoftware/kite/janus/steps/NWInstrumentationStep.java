@@ -14,7 +14,6 @@ public class NWInstrumentationStep extends TestStep {
 
   private final Scenario scenario;
   private final int clientId;
-  private String result;
 
   public NWInstrumentationStep(WebDriver webDriver, Scenario scenario, int clientId) {
     super(webDriver);
@@ -30,16 +29,17 @@ public class NWInstrumentationStep extends TestStep {
   
   @Override
   protected void step() throws KiteTestException {
+    String result;
       try {
-        String command = "";
-        String text = "";
+        StringBuilder text = new StringBuilder();
+        String command;
         for (String gw : this.scenario.getCommandList().keySet()) {
-          command += this.scenario.getCommandList().get(gw);
-          if (command != "") {
-            text += "Executing command " + command + " on gateway " + gw + "\n\n";
+          command = this.scenario.getCommandList().get(gw);
+          if (!command.equals("")) {
+            text.append("Executing command ").append(command).append("on gateway ").append(gw).append("\n\n");
           }
         }
-        Reporter.getInstance().textAttachment(report, "Commands for scenario " + scenario.getName(), text, "plain");
+        Reporter.getInstance().textAttachment(report, "Commands for scenario " + scenario.getName(), text.toString(), "plain");
         waitAround(1000);
         if (this.clientId == scenario.getClientId()) {
           result = scenario.runCommands();
