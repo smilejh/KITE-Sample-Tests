@@ -19,14 +19,14 @@ public class KiteJitsiTestTest extends TestCase {
     builder.add("statsCollectionTime", 10);
     builder.add("statsCollectionInterval", 1);
     arrayBuilder.add("ssrc");
-    arrayBuilder.add("videobwe");
-    arrayBuilder.add("googCertificate");
-    arrayBuilder.add("localcandidate");
-    arrayBuilder.add("remotecandidate");
-    arrayBuilder.add("googTrack");
-    arrayBuilder.add("googComponent");
     arrayBuilder.add("googCandidatePair");
-    arrayBuilder.add("googLibjingleSession");
+//    arrayBuilder.add("videobwe");
+//    arrayBuilder.add("googCertificate");
+//    arrayBuilder.add("localcandidate");
+//    arrayBuilder.add("remotecandidate");
+//    arrayBuilder.add("googTrack");
+//    arrayBuilder.add("googComponent");
+//    arrayBuilder.add("googLibjingleSession");
     builder.add("selectedStats",arrayBuilder.build());
     return builder.build();
   }

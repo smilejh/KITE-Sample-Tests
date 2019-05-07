@@ -5,12 +5,13 @@ import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.webrtc.kite.stats.RTCIceCandidatePairStats;
+import org.webrtc.kite.stats.RTCRTPStreamStats;
+import org.webrtc.kite.stats.RTCStatObject;
 
 import javax.json.*;
 import java.io.StringReader;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static io.cosmosoftware.kite.stats.GetStatsUtils.getStatsOnce;
 import static io.cosmosoftware.kite.util.TestUtils.executeJsScript;
@@ -37,7 +38,7 @@ public class MeetingPage extends BasePage {
     return "return APP.conference.getNumberOfParticipantsWithTracks();";
   }
 
-  public JsonObject getPCStatOverTime(
+  public JsonObject getPCStatOvertime1(
       WebDriver webDriver, int durationInSeconds, int intervalInSeconds, JsonArray selectedStats)
       throws Exception {
     String statString;
@@ -111,6 +112,151 @@ public class MeetingPage extends BasePage {
       waitAround(intervalInSeconds * 1000);
     }
     return buildFinalStats(allStatsMap);
+  }
+
+  public JsonObject getPCStatOvertime(
+      WebDriver webDriver, int durationInSeconds, int intervalInSeconds, JsonArray selectedStats) {
+    Map<String, Object> statMap = new HashMap<>();
+    try {
+      for (int timer = 0; timer < durationInSeconds; timer += intervalInSeconds) {
+        waitAround(intervalInSeconds);
+        Object stats = getStatsOnce("jitsi", webDriver);
+        stats = stats.toString().substring(1, stats.toString().length() - 1);
+        if (timer == 0) {
+          statMap.put("stats", new ArrayList<>());
+          ((List<Object>) statMap.get("stats")).add(stats);
+        } else if (timer + intervalInSeconds == durationInSeconds) {
+          ((List<Object>) statMap.get("stats")).add(stats);
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return buildPCStatObject(statMap, selectedStats).build();
+  }
+
+  private JsonObjectBuilder buildPCStatObject(
+      Map<String, Object> statMap, JsonArray selectedStats) {
+    try {
+      JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
+      List<Object> clientStatArray = (ArrayList) statMap.get("stats");
+      JsonArrayBuilder jsonClientStatArray = Json.createArrayBuilder();
+      for (Object stats : clientStatArray) {
+        JsonObjectBuilder jsonRTCStatObjectBuilder = buildSingleRTCStatObject(stats, selectedStats);
+        jsonClientStatArray.add(jsonRTCStatObjectBuilder);
+      }
+      jsonObjectBuilder.add("statsArray", jsonClientStatArray);
+      return jsonObjectBuilder;
+
+    } catch (ClassCastException e) {
+      e.printStackTrace();
+      return Json.createObjectBuilder();
+    }
+  }
+
+  public static JsonObjectBuilder buildSingleRTCStatObject(
+      Object statArray, JsonArray statsSelection) {
+    JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
+    Map<String, List<RTCStatObject>> statObjectMap = new HashMap<>();
+    if (statArray != null) {
+      statArray = stringToArr(statArray.toString());
+      for (Object map : (ArrayList) statArray) {
+        if (map != null) {
+          Map<Object, Object> statMap = stringToMap(map.toString());
+          System.out.println(statMap);
+          String type = (String) statMap.get("type");
+          System.out.println(type);
+          if (statsSelection == null || statsSelection.toString().contains(type)) {
+            RTCStatObject statObject = null;
+            switch (type) {
+              case "ssrc":
+                {
+                  String id = (String) statMap.get("id");
+                  if (id.contains("recv")) {
+                    type = "inbound-rtp";
+                    statObject = new RTCRTPStreamStats(statMap, true);
+                  } else {
+                    type = "outbound-rtp";
+                    statObject = new RTCRTPStreamStats(statMap, false);
+                  }
+                  break;
+                }
+
+              case "googCandidatePair":
+                {
+                  type = "candidate-pair";
+                  statObject = new RTCIceCandidatePairStats(statMap);
+                  break;
+                }
+                //              case "remotecandidate":
+                //                {
+                //
+                //                  statObject = new RTCIceCandidateStats(statMap);
+                //                  break;
+                //                }
+                //              case "localcandidate":
+                //                {
+                //                  statObject = new RTCIceCandidateStats(statMap);
+                //                  break;
+                //                }
+            }
+            if (statObject != null) {
+              if (statObjectMap.get(type) == null) {
+                statObjectMap.put(type, new ArrayList<RTCStatObject>());
+              }
+              statObjectMap.get(type).add(statObject);
+            }
+          }
+        }
+      }
+    }
+    if (!statObjectMap.isEmpty()) {
+      for (String type : statObjectMap.keySet()) {
+        //        JsonArrayBuilder tmp = Json.createArrayBuilder();
+        JsonObjectBuilder tmp = Json.createObjectBuilder();
+        for (RTCStatObject stat : statObjectMap.get(type)) {
+          tmp.add(stat.getId(), stat.getJsonObjectBuilder());
+          //          tmp.add(/*stat.getId(),*/ stat.getJsonObjectBuilder());
+        }
+        jsonObjectBuilder.add(type, tmp);
+      }
+    }
+    return jsonObjectBuilder;
+  }
+
+  private static ArrayList<String> stringToArr(String value) {
+    value = value.substring(1, value.length() - 1);
+    ArrayList<String> arr = new ArrayList<>();
+    String[] elements = value.split(",");
+    for (int i = 0; i < elements.length; i++) {
+      String r = "";
+      if (elements[i].trim().charAt(0) == '{') {
+        while (!elements[i].endsWith("}") && i < elements.length) {
+          r += elements[i].trim() + ",";
+          i++;
+        }
+        r += elements[i];
+        arr.add(r);
+      }
+    }
+    return arr;
+  }
+
+  private static Map<Object, Object> stringToMap(String value) {
+    value = value.substring(1, value.length() - 1);
+    String[] keyValuePairs = value.split(",");
+    Map<Object, Object> map = new HashMap<>();
+
+    for (String pair : keyValuePairs) {
+      if (pair.contains("=")) {
+        String[] entry = pair.split("=");
+        if (entry.length == 2) {
+          map.put(entry[0].trim(), entry[1].trim());
+        }
+
+      }
+    }
+    return map;
   }
 
   public JsonObject buildStatSummary(JsonObject rawStats) {

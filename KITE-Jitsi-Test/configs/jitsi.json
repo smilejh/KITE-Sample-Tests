@@ -12,7 +12,7 @@
     {
       "name": "JitSi Test %ts",
       "description": "Jitsi Test",
-      "tupleSize": 3,
+      "tupleSize": 2,
       "testImpl": "io.cosmosoftware.kite.jitsi.KiteJitsiTest",
       "payload": {
         "getStats" : true,
@@ -28,8 +28,7 @@
     {
       "browserName": "chrome",
       "version": "74",
-      "platform": "WINDOWS",
-      "focus": true
+      "platform": "WINDOWS"
     }
   ]
 }

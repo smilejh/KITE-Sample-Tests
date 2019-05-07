@@ -24,7 +24,7 @@
         "usersPerRoom": 2,
         "takeScreenshotForEachTest": true,
         "testTimeout": 20,
-        "getStats": false,
+        "getStats": true,
         "statsCollectionTime": 8,
         "statsCollectionInterval": 4,
         "selectedStats": [
