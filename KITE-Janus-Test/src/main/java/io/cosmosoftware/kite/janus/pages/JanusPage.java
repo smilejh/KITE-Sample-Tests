@@ -13,6 +13,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 
+import static io.cosmosoftware.kite.util.TestUtils.executeJsScript;
 import static io.cosmosoftware.kite.util.WebDriverUtils.loadPage;
 
 public class JanusPage extends BasePage {
@@ -72,6 +73,50 @@ public class JanusPage extends BasePage {
         loadPage(webDriver, url, 20);
       }
     }
+  }
+
+  /**
+   * Make GetStats script into executable string through executeJsScript
+   *
+   * @param getStatsFile
+   * @param testName
+   * @param testId
+   */
+
+  private String statsScriptToString (StringBuilder getStatsFile, String testName, String testId) {
+
+    String[] split = getStatsFile.toString().split(", KITETestName");
+    String split_1 = ", \"" + testName + "\"" + split[1];
+    String split_2 = ", \"" + testName + "\"" + split[2];
+    String[] split1 = split_1.split(", KITETestId");
+    String split_1_1 = ", \"" + testId + "\"" + split1[1];
+    String[] split2 = split_2.split(", KITETestId");
+    String split_2_1 = ", \"" + testId + "\"" + split2[1];
+    String getStatsScript = split[0] + split1[0] + split_1_1 + split2[0] + split_2_1;
+
+
+    //String res_1 = ", \"JANUS\"" + res[1]; //replace with testName variable
+    //String res_2 = ", \"JANUS\"" + res[2]; //replace with testName variable
+    //String[] res1 = res_1.split(", KITETestId");
+    //String res_1_1 = ", \"1234\"" + res1[1]; //replace with testId variable
+    //String res_2_1 = ", \"1234\"" + res2[1]; //replace with testId variable
+    //String[] res2 = res_2.split(", KITETestId");
+    //System.out.println(getStatsScript); //testing value of newGetStatsString
+
+    System.out.println("Converted to string");
+    return getStatsScript;
+  }
+
+  /**
+   * Load GetStats script into browser
+   *
+   * @param getStatsFile
+   * @param testName
+   * @param testId
+   */
+  public String loadGetStats (StringBuilder getStatsFile, String testName, String testId) {
+    System.out.println("Executing Javascript Script");
+    return (String) executeJsScript(webDriver, statsScriptToString(getStatsFile, testName, testId));
   }
 
   public void unpublish() throws KiteInteractionException {
