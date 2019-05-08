@@ -20,13 +20,19 @@ public class LoadGetStatsStep extends TestStep {
     private final String pathToGetStats;
     private final String testName;
     private final String testId;
+    private final String logstashUrl;
+    private final String sfu;
+    private final boolean defaultStatsConfig;
     private JanusPage janusPage;
 
-    public LoadGetStatsStep(WebDriver webDriver, String testName, String testId, String pathToGetStats) {
+    public LoadGetStatsStep(WebDriver webDriver, String testName, String testId, String logstashUrl, String sfu, boolean defaultStatsConfig, String pathToGetStats) {
         super(webDriver);
         this.pathToGetStats = pathToGetStats;
         this.testName = testName;
         this.testId = testId;
+        this.logstashUrl = logstashUrl;
+        this.sfu = sfu;
+        this.defaultStatsConfig = defaultStatsConfig;
         janusPage = new JanusPage(webDriver, logger);
     }
 
@@ -42,7 +48,7 @@ public class LoadGetStatsStep extends TestStep {
             StringBuilder getStatsFile = Files.lines(Paths.get(pathToGetStats), StandardCharsets.UTF_8).collect(StringBuilder::new, StringBuilder::append, StringBuilder::append);
             //System.out.println(getStatsFile);
 
-            janusPage.loadGetStats(getStatsFile, testName, testId);
+            janusPage.loadGetStats(getStatsFile, testName, testId, logstashUrl, sfu, defaultStatsConfig);
             System.out.println("Script loaded");
         } catch (IOException e) {
             e.printStackTrace();
@@ -50,6 +56,6 @@ public class LoadGetStatsStep extends TestStep {
         }
 
 
-        waitAround(100000);
+        waitAround(30000);
     }
 }

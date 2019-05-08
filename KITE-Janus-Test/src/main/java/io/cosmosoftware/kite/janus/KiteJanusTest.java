@@ -9,7 +9,7 @@ import io.cosmosoftware.kite.util.TestUtils;
 import org.openqa.selenium.WebDriver;
 import org.webrtc.kite.tests.KiteBaseTest;
 import org.webrtc.kite.tests.TestRunner;
-import org.webrtc.kite.tests.WaitForOthersStep;
+//import org.webrtc.kite.tests.WaitForOthersStep;
 
 import javax.json.JsonArray;
 
@@ -25,6 +25,10 @@ public class KiteJanusTest extends KiteBaseTest {
   private String audioDuration = null;
   private String testName;
   private String testId;
+  private String logstashUrl;
+  private String sfu;
+  private String pathToGetStatsSdk;
+  private boolean defaultStatsConfig;
 
   @Override
   protected void payloadHandling() {
@@ -33,6 +37,10 @@ public class KiteJanusTest extends KiteBaseTest {
     if (this.payload != null) {
       testName = this.payload.getString("testName", testName);
       testId = this.payload.getString("testId", testId);
+      logstashUrl = this.payload.getString("logstashUrl", logstashUrl);
+      sfu = this.payload.getString("sfu", sfu);
+      defaultStatsConfig = this.payload.getBoolean("defaultStatsConfig", defaultStatsConfig);
+      pathToGetStatsSdk = this.payload.getString("pathToGetStatsSdk", pathToGetStatsSdk);
       loadReachTime = this.payload.getInt("loadReachTime", loadReachTime);
       setExpectedTestDuration(Math.max(getExpectedTestDuration(), (loadReachTime + 300) / 60));
       JsonArray jsonArray = this.payload.getJsonArray("rooms");
@@ -59,7 +67,7 @@ public class KiteJanusTest extends KiteBaseTest {
         runner.addStep(new FirstVideoCheck(webDriver));
         runner.addStep(new AllVideoCheck(webDriver, getMaxUsersPerRoom()));
         if (this.getStats()) {
-          runner.addStep(new LoadGetStatsStep(webDriver, testName, testId, "C:\\Users\\Karen\\Documents\\KITE-getstats-sdk.js"));
+          runner.addStep(new LoadGetStatsStep(webDriver, testName, testId, logstashUrl, sfu, defaultStatsConfig, pathToGetStatsSdk));
           runner.addStep(
               new GetStatsStep(
                   webDriver,
@@ -75,7 +83,7 @@ public class KiteJanusTest extends KiteBaseTest {
           runner.addStep(new StayInMeetingStep(webDriver, loadReachTime));
         }
 
-        runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
+        /*runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
 
         for (Scenario scenario : scenarioArrayList ) {
           runner.addStep(new NWInstrumentationStep(webDriver, scenario, runner.getId()));
@@ -86,7 +94,7 @@ public class KiteJanusTest extends KiteBaseTest {
           runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
           runner.addStep(new NWInstCleanupStep(webDriver, scenario, runner.getId()));
           runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
-        }
+        }*/
 
         if (this.audioScoreWorkingDirectory != null) {
           if (runner.getId() == 0) {
