@@ -9,7 +9,7 @@ import io.cosmosoftware.kite.util.TestUtils;
 import org.openqa.selenium.WebDriver;
 import org.webrtc.kite.tests.KiteBaseTest;
 import org.webrtc.kite.tests.TestRunner;
-//import org.webrtc.kite.tests.WaitForOthersStep;
+import org.webrtc.kite.tests.WaitForOthersStep;
 
 import javax.json.JsonArray;
 
@@ -83,7 +83,7 @@ public class KiteJanusTest extends KiteBaseTest {
           runner.addStep(new StayInMeetingStep(webDriver, loadReachTime));
         }
 
-        /*runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
+        runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
 
         for (Scenario scenario : scenarioArrayList ) {
           runner.addStep(new NWInstrumentationStep(webDriver, scenario, runner.getId()));
@@ -94,7 +94,7 @@ public class KiteJanusTest extends KiteBaseTest {
           runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
           runner.addStep(new NWInstCleanupStep(webDriver, scenario, runner.getId()));
           runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
-        }*/
+        }
 
         if (this.audioScoreWorkingDirectory != null) {
           if (runner.getId() == 0) {
