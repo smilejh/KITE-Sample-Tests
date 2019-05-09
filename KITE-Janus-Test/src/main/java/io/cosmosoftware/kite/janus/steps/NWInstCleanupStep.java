@@ -35,7 +35,8 @@ public class NWInstCleanupStep extends TestStep {
       if (this.clientId == scenario.getClientId()) {
         cleanUpCommand = this.scenario.cleanUp();
         logger.info("Cleaning up scenario for " + this.scenario.getName());
-        Reporter.getInstance().textAttachment(report, "NW Instrumentation CleanUp for " + scenario.getName() + " on gateway " + scenario.getGateway(), "Command executed : " + cleanUpCommand, "plain");
+        Reporter.getInstance().textAttachment(report, "NW Instrumentation CleanUp for " + scenario.getName() 
+          + " on gateway " + scenario.getGateway(), "Command executed : " + cleanUpCommand, "plain");
         if (cleanUpCommand.contains("FAILURE")) {
           throw new KiteTestException("Failed to clean up.", Status.FAILED);
         }

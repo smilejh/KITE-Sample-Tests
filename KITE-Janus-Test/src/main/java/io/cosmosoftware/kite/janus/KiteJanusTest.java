@@ -28,12 +28,10 @@ public class KiteJanusTest extends KiteBaseTest {
   private String audioScoreWorkingDirectory = null;
   private String audioScoreTool = null;
   private String audioDuration = null;
-  private JsonObject getStatsSdk;
-  private String testName =  null;
   private String testId = "\"" + this.name + "_" + new SimpleDateFormat("yyyyMMdd_hhmmss").format(new Date()) + "\"";
-  private JsonValue logstashUrl =  null;
+  private String logstashUrl =  null;
   private String sfu = "Janus";
-  private JsonValue statsPublishingInterval;
+  private int statsPublishingInterval = 30000;
   private String pathToGetStatsSdk;
 
   @Override
@@ -42,13 +40,14 @@ public class KiteJanusTest extends KiteBaseTest {
     String[] rooms = null;
     if (this.payload != null) {
 
-      getStatsSdk = this.payload.getJsonObject("getStatsSdk");
-      testName = this.name;
-      testId = getStatsSdk.get("testId").toString();
-      logstashUrl = getStatsSdk.get("logstashUrl");
-      sfu = getStatsSdk.get("sfu").toString();
-      statsPublishingInterval = getStatsSdk.get("statsPublishingInterval");
-      pathToGetStatsSdk = this.payload.getString("pathToGetStatsSdk", pathToGetStatsSdk);
+      JsonObject getStatsSdk = this.payload.getJsonObject("getStatsSdk");
+      if (getStatsSdk != null) {
+        testId = getStatsSdk.getString("testId", testId);
+        logstashUrl = getStatsSdk.getString("logstashUrl");
+        sfu = getStatsSdk.getString("sfu", sfu);
+        statsPublishingInterval = getStatsSdk.getInt("statsPublishingInterval", statsPublishingInterval);
+        pathToGetStatsSdk = this.payload.getString("pathToGetStatsSdk", pathToGetStatsSdk);
+      }
 
       loadReachTime = this.payload.getInt("loadReachTime", loadReachTime);
       setExpectedTestDuration(Math.max(getExpectedTestDuration(), (loadReachTime + 300) / 60));
@@ -72,8 +71,8 @@ public class KiteJanusTest extends KiteBaseTest {
       WebDriver webDriver = runner.getWebDriver();
       String roomUrl = getRoomManager().getRoomUrl()  + "&username=user" + TestUtils.idToString(runner.getId());
       runner.addStep(new JoinVideoCallStep(webDriver, roomUrl));
-      if (this.sfu != null) {
-        runner.addStep(new LoadGetStatsStep(webDriver, testName, testId, logstashUrl, sfu, statsPublishingInterval, pathToGetStatsSdk));
+      if (this.logstashUrl != null) {
+        runner.addStep(new LoadGetStatsStep(webDriver, this.name, testId, logstashUrl, sfu, statsPublishingInterval, pathToGetStatsSdk));
       }
       if (!this.fastRampUp()) {
         runner.addStep(new FirstVideoCheck(webDriver));
