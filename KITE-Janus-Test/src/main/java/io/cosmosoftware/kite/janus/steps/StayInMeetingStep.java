@@ -1,5 +1,6 @@
 package io.cosmosoftware.kite.janus.steps;
 
+import io.cosmosoftware.kite.exception.KiteTestException;
 import io.cosmosoftware.kite.steps.TestStep;
 import org.openqa.selenium.WebDriver;
 
@@ -21,7 +22,7 @@ public class StayInMeetingStep extends TestStep {
   }
   
   @Override
-  protected void step() {
+  protected void step() throws KiteTestException {
     waitAround(meetingDuration * 1000);
   }
 }

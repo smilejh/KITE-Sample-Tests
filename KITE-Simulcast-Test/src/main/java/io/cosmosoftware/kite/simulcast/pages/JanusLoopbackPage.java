@@ -1,6 +1,7 @@
 package io.cosmosoftware.kite.simulcast.pages;
 
 import io.cosmosoftware.kite.entities.Timeouts;
+import io.cosmosoftware.kite.exception.KiteTestException;
 import io.cosmosoftware.kite.simulcast.LoopbackStats;
 import io.cosmosoftware.kite.util.TestUtils;
 import org.apache.log4j.Logger;
@@ -153,7 +154,7 @@ public class JanusLoopbackPage extends SimulcastPageBase {
    * Set the bitrate cap (in bps)
    * @param str the bitrate cap in bps
    */
-  public void setBitrateCap(String str) {
+  public void setBitrateCap(String str) throws KiteTestException {
     String command = "$('#cap').html('" + str + "');echotest.send({message: {bitrate:" + str + "}})";
     executeJsScript(webDriver, command);
     logger.info("bitrate cap set to " + str + "bps");

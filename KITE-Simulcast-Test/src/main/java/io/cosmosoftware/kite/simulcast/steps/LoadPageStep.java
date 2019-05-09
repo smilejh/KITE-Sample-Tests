@@ -1,5 +1,6 @@
 package io.cosmosoftware.kite.simulcast.steps;
 
+import io.cosmosoftware.kite.exception.KiteTestException;
 import io.cosmosoftware.kite.simulcast.pages.JanusLoopbackPage;
 import io.cosmosoftware.kite.steps.TestStep;
 import org.openqa.selenium.WebDriver;
@@ -24,7 +25,7 @@ public class LoadPageStep extends TestStep {
   }
   
   @Override
-  protected void step() {
+  protected void step() throws KiteTestException {
     loadPage(webDriver, url, 20);
     waitAround(ONE_SECOND_INTERVAL);
     if (url.contains("meetecho")) {

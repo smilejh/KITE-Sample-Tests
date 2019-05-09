@@ -1,5 +1,6 @@
 package io.cosmosoftware.kite.janus.steps;
 
+import io.cosmosoftware.kite.exception.KiteTestException;
 import io.cosmosoftware.kite.instrumentation.Scenario;
 import io.cosmosoftware.kite.report.Reporter;
 import io.cosmosoftware.kite.steps.TestStep;
@@ -26,7 +27,7 @@ public class ScreenshotStep extends TestStep {
   }
   
   @Override
-  protected void step() {
+  protected void step() throws KiteTestException {
     Reporter.getInstance().screenshotAttachment(report,
       "ScreenshotStep_" + timestamp(), saveScreenshotPNG(webDriver));
   }

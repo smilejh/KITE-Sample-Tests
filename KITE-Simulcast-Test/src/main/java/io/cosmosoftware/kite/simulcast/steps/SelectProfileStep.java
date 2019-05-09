@@ -1,5 +1,6 @@
 package io.cosmosoftware.kite.simulcast.steps;
 
+import io.cosmosoftware.kite.exception.KiteTestException;
 import io.cosmosoftware.kite.simulcast.pages.SimulcastPageBase;
 import io.cosmosoftware.kite.steps.TestStep;
 import org.openqa.selenium.WebDriver;
@@ -27,7 +28,7 @@ public class SelectProfileStep extends TestStep {
   }
   
   @Override
-  protected void step() {
+  protected void step() throws KiteTestException {
     loopbackPage.clickButton(rid, tid);
     waitAround(3 * ONE_SECOND_INTERVAL);
   }

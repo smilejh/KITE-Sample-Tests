@@ -31,8 +31,9 @@ public class NWInstrumentationStep extends TestStep {
   @Override
   protected void step() throws KiteTestException {
     try {
-      Reporter.getInstance().textAttachment(report, "Command on gw " + scenario.getGateway(),
-          scenario.getCommand(), "plain");
+      //XXX todo fix scenario.getGateway()
+//      Reporter.getInstance().textAttachment(report, "Command on gw " + scenario.getGateway(),
+//          scenario.getCommand(), "plain");
       waitAround(1000);
       if (this.clientId == scenario.getClientId()) {
         result = scenario.runCommands();
