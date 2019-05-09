@@ -36,7 +36,7 @@ public class AllVideoCheck extends TestStep {
       //wait a while to allow all videos to load.;
       List<WebElement> videos = janusPage.getVideoElements();
       int waitingTime = 0;
-      while(videos.size() < numberOfParticipants || waitingTime < 10*numberOfParticipants) {
+      while(videos.size() < numberOfParticipants && waitingTime < 10*numberOfParticipants) {
         waitAround(ONE_SECOND_INTERVAL);
         videos = janusPage.getVideoElements();
         waitingTime += 1;
