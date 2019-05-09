@@ -33,10 +33,14 @@ public class AllVideoCheck extends TestStep {
   protected void step() throws KiteTestException {
     try {
       final JanusPage janusPage = new JanusPage(this.webDriver, logger);
-      //wait a while to allow all videos to load.
-      waitAround(numberOfParticipants * 3 * ONE_SECOND_INTERVAL);
-      logger.info("Looking for video elements");
+      //wait a while to allow all videos to load.;
       List<WebElement> videos = janusPage.getVideoElements();
+      int waitingTime = 0;
+      while(videos.size() < numberOfParticipants || waitingTime < 10*numberOfParticipants) {
+        waitAround(ONE_SECOND_INTERVAL);
+        videos = janusPage.getVideoElements();
+        waitingTime += 1;
+      }
       if (videos.size() < numberOfParticipants) {
         throw new KiteTestException(
             "Unable to find " + numberOfParticipants + " <video> element on the page. No video found = "
