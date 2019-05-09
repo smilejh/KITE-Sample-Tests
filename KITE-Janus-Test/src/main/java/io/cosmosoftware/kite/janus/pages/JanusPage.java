@@ -76,53 +76,6 @@ public class JanusPage extends BasePage {
     }
   }
 
-  /**
-   * Make GetStats script into executable string through executeJsScript
-   *
-   * @param getStatsFile
-   * @param testName
-   * @param testId
-   */
-
-  private String statsScriptToString (StringBuilder getStatsFile, String testName, String testId, String logstashUrl, String sfu, boolean defaultStatsConfig) {
-
-    /*String[] split = getStatsFile.toString().split(", KITETestName");
-    String split_1 = ", \"" + testName + "\"" + split[1];
-    String split_2 = ", \"" + testName + "\"" + split[2];
-    String[] split1 = split_1.split(", KITETestId");
-    String split_1_1 = ", \"" + testId + "\"" + split1[1];
-    String[] split2 = split_2.split(", KITETestId");
-    String split_2_1 = ", \"" + testId + "\"" + split2[1];
-    String getStatsScript = split[0] + split1[0] + split_1_1 + split2[0] + split_2_1;*/
-
-    String[] sendSplit = getStatsFile.toString().split("KITETestName, KITETestId");
-    sendSplit[1] = "\"" + testName + "\", \"" + testId + "\"" + sendSplit[1];
-    sendSplit[2] = "\"" + testName + "\", \"" + testId + "\"" + sendSplit[2];
-    String getStatsScript = sendSplit[0] + sendSplit[1] + sendSplit[2];
-
-    if (!defaultStatsConfig) {
-      String[] initSplit = getStatsScript.split("testStats.init.* pc, ");
-      System.out.println("Returning non-default init");
-
-      return initSplit[0] + "testStats.init(\"" + logstashUrl + "\", " + "username, myroom, \"" + sfu + "\", pc, " + initSplit[1];
-    }
-
-    System.out.println("Converted to string");
-    return getStatsScript;
-  }
-
-  /**
-   * Load GetStats script into browser
-   *
-   * @param getStatsFile
-   * @param testName
-   * @param testId
-   */
-  public String loadGetStats (StringBuilder getStatsFile, String testName, String testId, String logstashUrl, String sfu, boolean defaultStatsConfig) {
-    System.out.println("Executing Javascript Script");
-    return (String) executeJsScript(webDriver, statsScriptToString(getStatsFile, testName, testId, logstashUrl, sfu, defaultStatsConfig));
-  }
-
   public void unpublish() throws KiteInteractionException {
     click(unpublish);
   }

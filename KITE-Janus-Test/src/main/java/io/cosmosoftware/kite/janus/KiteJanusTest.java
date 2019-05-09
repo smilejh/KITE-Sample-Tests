@@ -12,6 +12,11 @@ import org.webrtc.kite.tests.TestRunner;
 import org.webrtc.kite.tests.WaitForOthersStep;
 
 import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.json.JsonValue;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static org.webrtc.kite.Utils.getStackTrace;
 
@@ -23,24 +28,28 @@ public class KiteJanusTest extends KiteBaseTest {
   private String audioScoreWorkingDirectory = null;
   private String audioScoreTool = null;
   private String audioDuration = null;
-  private String testName;
-  private String testId;
-  private String logstashUrl;
-  private String sfu;
+  private JsonObject getStatsSdk;
+  private String testName =  null;
+  private String testId = "\"" + this.name + "_" + new SimpleDateFormat("yyyyMMdd_hhmmss").format(new Date()) + "\"";
+  private JsonValue logstashUrl =  null;
+  private String sfu = "Janus";
+  private JsonValue statsPublishingInterval;
   private String pathToGetStatsSdk;
-  private boolean defaultStatsConfig;
 
   @Override
   protected void payloadHandling() {
     super.payloadHandling();
     String[] rooms = null;
     if (this.payload != null) {
-      testName = this.payload.getString("testName", testName);
-      testId = this.payload.getString("testId", testId);
-      logstashUrl = this.payload.getString("logstashUrl", logstashUrl);
-      sfu = this.payload.getString("sfu", sfu);
-      defaultStatsConfig = this.payload.getBoolean("defaultStatsConfig", defaultStatsConfig);
+
+      getStatsSdk = this.payload.getJsonObject("getStatsSdk");
+      testName = this.name;
+      testId = getStatsSdk.get("testId").toString();
+      logstashUrl = getStatsSdk.get("logstashUrl");
+      sfu = getStatsSdk.get("sfu").toString();
+      statsPublishingInterval = getStatsSdk.get("statsPublishingInterval");
       pathToGetStatsSdk = this.payload.getString("pathToGetStatsSdk", pathToGetStatsSdk);
+
       loadReachTime = this.payload.getInt("loadReachTime", loadReachTime);
       setExpectedTestDuration(Math.max(getExpectedTestDuration(), (loadReachTime + 300) / 60));
       JsonArray jsonArray = this.payload.getJsonArray("rooms");
@@ -63,11 +72,13 @@ public class KiteJanusTest extends KiteBaseTest {
       WebDriver webDriver = runner.getWebDriver();
       String roomUrl = getRoomManager().getRoomUrl()  + "&username=user" + TestUtils.idToString(runner.getId());
       runner.addStep(new JoinVideoCallStep(webDriver, roomUrl));
+      if (this.sfu != null) {
+        runner.addStep(new LoadGetStatsStep(webDriver, testName, testId, logstashUrl, sfu, statsPublishingInterval, pathToGetStatsSdk));
+      }
       if (!this.fastRampUp()) {
         runner.addStep(new FirstVideoCheck(webDriver));
         runner.addStep(new AllVideoCheck(webDriver, getMaxUsersPerRoom()));
         if (this.getStats()) {
-          runner.addStep(new LoadGetStatsStep(webDriver, testName, testId, logstashUrl, sfu, defaultStatsConfig, pathToGetStatsSdk));
           runner.addStep(
               new GetStatsStep(
                   webDriver,
