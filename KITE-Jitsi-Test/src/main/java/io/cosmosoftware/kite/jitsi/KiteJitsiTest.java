@@ -14,7 +14,6 @@ public class KiteJitsiTest extends KiteBaseTest {
   final Random rand = new Random(System.currentTimeMillis());
   final String roomId = String.valueOf(Math.abs(rand.nextLong()));
 
-
   @Override
   protected void populateTestSteps(TestRunner runner) {
     JoinRoomStep joinRoomStep = new JoinRoomStep(runner.getWebDriver());
@@ -27,10 +26,8 @@ public class KiteJitsiTest extends KiteBaseTest {
               runner.getWebDriver(),
               getStatsCollectionTime(),
               getStatsCollectionInterval(),
-              getSelectedStats()
-              ));
+              getSelectedStats()));
     }
     runner.addStep(new ScreenshotStep(runner.getWebDriver()));
-    
   }
 }
