@@ -35,10 +35,20 @@ public class AllVideoCheck extends TestStep {
       final JanusPage janusPage = new JanusPage(this.webDriver, logger);
       //wait a while to allow all videos to load.;
       List<WebElement> videos = janusPage.getVideoElements();
+      boolean flag = true;
+      for (int i = 1; i < numberOfParticipants; i++) {
+        String v2 = videoCheck(webDriver, i);
+        flag = flag && "video".equalsIgnoreCase(v2);
+      }
       int waitingTime = 0;
-      while(videos.size() < numberOfParticipants && waitingTime < 10*numberOfParticipants) {
+      while((videos.size() < numberOfParticipants || !flag) && waitingTime < 10*numberOfParticipants) {
+        flag = true;
         waitAround(ONE_SECOND_INTERVAL);
         videos = janusPage.getVideoElements();
+        for (int i = 1; i < numberOfParticipants; i++) {
+          String v2 = videoCheck(webDriver, i);
+          flag = flag && "video".equalsIgnoreCase(v2);
+        }
         waitingTime += 1;
       }
       if (videos.size() < numberOfParticipants) {
