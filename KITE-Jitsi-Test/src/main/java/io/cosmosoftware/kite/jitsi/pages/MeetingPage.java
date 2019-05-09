@@ -32,10 +32,10 @@ public class MeetingPage extends BasePage {
   }
 
   public String getPeerConnectionScript() {
-    return "window.peerConnections = [];"
+    return "window.pc = [];"
         + "map = APP.conference._room.rtc.peerConnections;"
         + "for(var key of map.keys()){"
-        + "  window.peerConnections.push(map.get(key).peerconnection);"
+        + "  window.pc.push(map.get(key).peerconnection);"
         + "}";
   }
 }
