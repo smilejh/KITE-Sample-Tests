@@ -35,15 +35,15 @@ public class GetStatsStep extends TestStep {
   protected void step() throws KiteTestException {
     MeetingPage meetingPage = new MeetingPage(webDriver, logger);
     ((JavascriptExecutor) webDriver).executeScript(meetingPage.getPeerConnectionScript());
-    JsonObject stats =
+    JsonObject rawStats =
         getPCStatOvertime(
             webDriver,
             "window.peerConnections[0]",
             statsCollectionTime,
             statsCollectionInterval,
             selectedStats);
-    JsonObject statsSummary = extractStats(stats, "both").build();
-    Reporter.getInstance().jsonAttachment(report, "getStatsRaw", stats);
+    JsonObject statsSummary = extractStats(rawStats, "both").build();
+    Reporter.getInstance().jsonAttachment(report, "getStatsRaw", rawStats);
     Reporter.getInstance().jsonAttachment(report, "getStatsSummary", statsSummary);
   }
 }

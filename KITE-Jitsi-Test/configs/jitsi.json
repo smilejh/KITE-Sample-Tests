@@ -12,7 +12,7 @@
     {
       "name": "JitSi Test %ts",
       "description": "Jitsi Test",
-      "tupleSize": 3,
+      "tupleSize": 2,
       "testImpl": "io.cosmosoftware.kite.jitsi.KiteJitsiTest",
       "payload": {
         "getStats" : true,
@@ -20,7 +20,7 @@
         "testTimeout": 20,
         "statsCollectionTime": 10,
         "statsCollectionInterval": 1,
-        "selectedStats" : ["videobwe", "ssrc"]
+        "selectedStats" : ["inbound-rtp", "outbound-rtp", "candidate-pair"]
       }
     }
   ],
@@ -28,7 +28,14 @@
     {
       "browserName": "chrome",
       "version": "74",
-      "platform": "WINDOWS"
+      "platform": "WINDOWS",
+      "focus": true
+    },
+    {
+      "browserName": "firefox",
+      "version": "66",
+      "platform": "WINDOWS",
+      "focus": true
     }
   ]
 }
