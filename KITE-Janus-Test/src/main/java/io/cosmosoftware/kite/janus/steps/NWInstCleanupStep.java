@@ -14,7 +14,6 @@ public class NWInstCleanupStep extends TestStep {
 
   private final Scenario scenario;
   private final int clientId;
-  private String cleanUpCommand;
 
   public NWInstCleanupStep(WebDriver webDriver, Scenario scenario, int clientId) {
     super(webDriver);
@@ -31,22 +30,20 @@ public class NWInstCleanupStep extends TestStep {
 
   @Override
   protected void step() throws KiteTestException {
-    try {
-      if (this.clientId == scenario.getClientId()) {
-        cleanUpCommand = this.scenario.cleanUp();
-        logger.info("Cleaning up scenario for " + this.scenario.getName());
-        //XXX todo fix scenario.getGateway()
-        Reporter.getInstance().textAttachment(report, "NW Instrumentation CleanUp for " + scenario.getName() 
-          + " on gateway " + "scenario.getGateway()", "Command executed : " + cleanUpCommand, "plain");
-        if (cleanUpCommand.contains("FAILURE")) {
-          throw new KiteTestException("Failed to clean up.", Status.FAILED);
+      try {
+        if (this.clientId == scenario.getClientId()) {
+          String result = this.scenario.cleanUp();
+          logger.info("Cleaning up scenario for " + this.scenario.getName());
+          Reporter.getInstance().textAttachment(report, "NW Instrumentation CleanUp for " + scenario.getName(), "Commands executed : " + result, "plain");
+          if (result.contains("FAILURE")) {
+            throw new KiteTestException("Failed to clean up.", Status.FAILED);
+          }
         }
+        waitAround(1000);
+        logger.info("cleanUp() done.");
+      } catch (Exception e) {
+        logger.error(getStackTrace(e));
+        throw new KiteTestException("Failed to clean up ", Status.BROKEN, e);
       }
-      waitAround(1000);
-      logger.info("cleanUp() done.");
-    } catch (Exception e) {
-      logger.error(getStackTrace(e));
-      throw new KiteTestException("Failed to clean up ", Status.BROKEN, e);
-    }
   }
 }
