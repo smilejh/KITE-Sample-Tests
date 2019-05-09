@@ -36,12 +36,10 @@ public class GetStatsStep extends TestStep {
   protected void step() throws KiteTestException {
     MeetingPage meetingPage = new MeetingPage(webDriver, logger);
     ((JavascriptExecutor) webDriver).executeScript(meetingPage.getPeerConnectionScript());
-    Object s = StatsUtils.getPCStatOnce(webDriver, "window.pc[0]");
-    System.out.println(s);
     JsonObject rawStats =
         getPCStatOvertime(
             webDriver,
-            "window.peerConnections[0]",
+            "window.pc[0]",
             statsCollectionTime,
             statsCollectionInterval,
             selectedStats);
