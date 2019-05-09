@@ -14,7 +14,6 @@ public class NWInstrumentationStep extends TestStep {
 
   private final Scenario scenario;
   private final int clientId;
-  private String result;
 
   public NWInstrumentationStep(WebDriver webDriver, Scenario scenario, int clientId) {
     super(webDriver);
@@ -30,21 +29,28 @@ public class NWInstrumentationStep extends TestStep {
   
   @Override
   protected void step() throws KiteTestException {
-    try {
-      Reporter.getInstance().textAttachment(report, "Command on gw " + scenario.getGateway(),
-          scenario.getCommand(), "plain");
-      waitAround(1000);
-      if (this.clientId == scenario.getClientId()) {
-        result = scenario.runCommands();
-        Reporter.getInstance().textAttachment(report, "Result", result, "plain");
-        if (result.contains("FAILURE")) {
-          throw new KiteTestException("Failed to execute command.", Status.FAILED);
+      try {
+        StringBuilder text = new StringBuilder();
+        String command;
+        for (String gw : this.scenario.getCommandList().keySet()) {
+          command = this.scenario.getCommandList().get(gw);
+          if (!command.equals("")) {
+            text.append("Executing command ").append(command).append("on gateway ").append(gw).append("\n\n");
+          }
         }
-      }
-      waitAround(scenario.getDuration());
-    } catch (Exception e) {
-      logger.error(getStackTrace(e));
-      throw new KiteTestException("Failed to execute command ", Status.BROKEN, e);
+        Reporter.getInstance().textAttachment(report, "Commands for scenario " + scenario.getName(), text.toString(), "plain");
+        waitAround(1000);
+        if (this.clientId == scenario.getClientId()) {
+          String result = scenario.runCommands();
+          Reporter.getInstance().textAttachment(report, "Result", result, "plain");
+          if (result.contains("FAILURE")) {
+            throw new KiteTestException("Failed to execute command.", Status.FAILED);
+          }
+        }
+        waitAround(scenario.getDuration());
+      } catch (Exception e) {
+        logger.error(getStackTrace(e));
+        throw new KiteTestException("Failed to execute command ", Status.BROKEN, e);
     }
   }
 

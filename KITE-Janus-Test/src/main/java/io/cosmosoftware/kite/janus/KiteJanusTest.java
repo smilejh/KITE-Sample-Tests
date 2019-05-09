@@ -70,9 +70,8 @@ public class KiteJanusTest extends KiteBaseTest {
           runner.addStep(new StayInMeetingStep(webDriver, loadReachTime));
         }
 
-        runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
-
         for (Scenario scenario : scenarioArrayList ) {
+          runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
           runner.addStep(new NWInstrumentationStep(webDriver, scenario, runner.getId()));
           runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
           runner.addStep(new GetStatsStep(webDriver, getMaxUsersPerRoom(),
@@ -80,7 +79,6 @@ public class KiteJanusTest extends KiteBaseTest {
           runner.addStep(new ScreenshotStep(webDriver, scenario));
           runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
           runner.addStep(new NWInstCleanupStep(webDriver, scenario, runner.getId()));
-          runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
         }
 
         if (this.audioScoreWorkingDirectory != null) {
