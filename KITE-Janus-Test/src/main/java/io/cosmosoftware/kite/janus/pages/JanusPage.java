@@ -13,6 +13,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 
+import static io.cosmosoftware.kite.util.TestUtils.executeJsScript;
+import static io.cosmosoftware.kite.util.TestUtils.waitAround;
 import static io.cosmosoftware.kite.util.WebDriverUtils.loadPage;
 
 public class JanusPage extends BasePage {

@@ -12,6 +12,11 @@ import org.webrtc.kite.tests.TestRunner;
 import org.webrtc.kite.tests.WaitForOthersStep;
 
 import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.json.JsonValue;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static org.webrtc.kite.Utils.getStackTrace;
 
@@ -23,12 +28,27 @@ public class KiteJanusTest extends KiteBaseTest {
   private String audioScoreWorkingDirectory = null;
   private String audioScoreTool = null;
   private String audioDuration = null;
+  private String testId = "\"" + this.name + "_" + new SimpleDateFormat("yyyyMMdd_hhmmss").format(new Date()) + "\"";
+  private String logstashUrl =  null;
+  private String sfu = "Janus";
+  private int statsPublishingInterval = 30000;
+  private String pathToGetStatsSdk;
 
   @Override
   protected void payloadHandling() {
     super.payloadHandling();
     String[] rooms = null;
     if (this.payload != null) {
+
+      JsonObject getStatsSdk = this.payload.getJsonObject("getStatsSdk");
+      if (getStatsSdk != null) {
+        testId = getStatsSdk.getString("testId", testId);
+        logstashUrl = getStatsSdk.getString("logstashUrl");
+        sfu = getStatsSdk.getString("sfu", sfu);
+        statsPublishingInterval = getStatsSdk.getInt("statsPublishingInterval", statsPublishingInterval);
+        pathToGetStatsSdk = this.payload.getString("pathToGetStatsSdk", pathToGetStatsSdk);
+      }
+
       loadReachTime = this.payload.getInt("loadReachTime", loadReachTime);
       setExpectedTestDuration(Math.max(getExpectedTestDuration(), (loadReachTime + 300) / 60));
       JsonArray jsonArray = this.payload.getJsonArray("rooms");
@@ -51,6 +71,9 @@ public class KiteJanusTest extends KiteBaseTest {
       WebDriver webDriver = runner.getWebDriver();
       String roomUrl = getRoomManager().getRoomUrl()  + "&username=user" + TestUtils.idToString(runner.getId());
       runner.addStep(new JoinVideoCallStep(webDriver, roomUrl));
+      if (this.logstashUrl != null) {
+        runner.addStep(new LoadGetStatsStep(webDriver, this.name, testId, logstashUrl, sfu, statsPublishingInterval, pathToGetStatsSdk));
+      }
       if (!this.fastRampUp()) {
         runner.addStep(new FirstVideoCheck(webDriver));
         runner.addStep(new AllVideoCheck(webDriver, getMaxUsersPerRoom()));
