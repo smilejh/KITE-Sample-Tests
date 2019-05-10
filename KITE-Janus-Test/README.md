@@ -1,13 +1,12 @@
 #  KITE-Janus-Test
 
-This sample test script is designed for load testing. It creates **N** meeting rooms on Janus SFU server and connect **K** users to each room.
-It tests against a modified Janus videoroom plugin web app.
+
+To be updated.
 
 ## Test Script
 
 
-1.	Open URL https://lbclient.cosmosoftware.io/videoroomtest_videoanalysis.html?roomId=meetingID&username=userID
-Meeting ID will be provided by the RoomManager. Every **K** participants, depending on the model in the config file.
+1.	Open Janus demo URL
 2.	Check the published video
 3.	Check received videos from all participants
 4.	GetStats on all the peerConnections
