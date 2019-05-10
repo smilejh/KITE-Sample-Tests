@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ /*
+  ~  * Copyright (C) CoSMo Software Consulting Pte. Ltd. - All Rights Reserved
+  ~  */
+  ~
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+
+  <parent>
+    <groupId>org.webrtc.kite</groupId>
+    <artifactId>kite-sample-tests</artifactId>
+    <version>2.0.2</version>
+  </parent>
+
+  <artifactId>jitsi-test</artifactId>
+  <name>jitsi-test</name>
+  <version>0.2.1</version>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${kite.test.mvn.compiler.version}</version>
+        <configuration>
+          <source>${kite.java.version}</source>
+          <target>${kite.java.version}</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.github.eirslett</groupId>
+        <artifactId>frontend-maven-plugin</artifactId>
+        <version>1.6</version>
+        <configuration>
+          <workingDirectory>js/</workingDirectory>
+          <installDirectory>../</installDirectory>
+        </configuration>
+        <executions>
+          <execution>
+            <id>npm install</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <!-- Optional configuration which provides for running any npm command -->
+            <configuration>
+              <arguments>install</arguments>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.github.CoSMoSoftware.KITE-Extras</groupId>
+      <artifactId>kite-extras</artifactId>
+      <version>${kite.extras.version}</version>
+    </dependency>
+    <!-- Uncomment this and comment out the above dependency to use your local maven repo for KITE-Extras
+    <dependency>
+      <groupId>io.cosmosoftware.kite</groupId>
+      <artifactId>kite-extras</artifactId>
+      <version>${kite.extras.version}</version>
+    </dependency>
+    -->
+    <dependency>
+      <groupId>org.webrtc.kite</groupId>
+      <artifactId>kite-framework</artifactId>
+      <version>${kite.framework.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.json</groupId>
+      <artifactId>javax.json-api</artifactId>
+      <version>1.1.4</version>
+    </dependency>
+  </dependencies>
+
+</project>
