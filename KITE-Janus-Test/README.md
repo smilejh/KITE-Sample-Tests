@@ -19,43 +19,6 @@ To be updated.
 You'll need KITE to run these sample tests.  
 To setup KITE, please follow these [instructions](https://github.com/webrtc/KITE/blob/master/README.md).   
 
-## Compile
-
-To compile, cd to the KITE-Janus-Test and enter `c all` to compile the entire project or `c` to compile only this module:
-```
-cd %KITE_HOME%\KITE-Janus-Test
-c all
-```
-
-## Run KITE-Janus-Test
-
-Edit the file `./KITE-Janus-Test/configs/local.janus.config.json` with your favorite text editor.  
-You will need to change __`version`__ and __`platform`__ according to what is installed on your local grid.
-
-To run the Janus test:
-```
-cd %KITE_HOME%\KITE-Janus-Test
-r local.janus.config.json
-```
-
-Alternatively, you can launch the test with the full command.
-On Windows:  
-```
--Dkite.firefox.profile="%KITE_HOME%"/third_party/ -cp "%KITE_HOME%/KITE-Engine/target/kite-jar-with-dependencies.jar;target/*" org.webrtc.kite.Engine configs/local.janus.config.json
-```
-On Linux/Mac:  
-```
--Dkite.firefox.profile="$KITE_HOME"/third_party/ -cp "$KITE_HOME/KITE-Engine/target/kite-jar-with-dependencies.jar:target/*" org.webrtc.kite.Engine configs/local.janus.config.json
-```
-
-## Open the dashboard
-
-After running the test, you can open the Allure dashboard with the command `a`.
-```
-cd %KITE_HOME%\KITE-AppRTC-Test
-a
-```
-
 ## Config
  
  A sample config file is provided at  
@@ -72,7 +35,7 @@ Set your Chrome version and OS according to what is available on your Grid. The 
 "browsers": [
     {
       "browserName": "chrome",
-      "version": "72",
+      "version": "74",
       "platform": "WINDOWS",
       "headless": false
     }
@@ -113,28 +76,95 @@ You should not need to change any other parameter.
 
 ## Compile
 
-Under the root directory:  
-``` 
-mvn -DskipTests clean install 
-``` 
+
+__On Windows:__  
+    Just type `c` (which will execute `mvn clean install -DskipTests`). 
+    
+    ```
+    cd %KITE_HOME%
+    c
+    ```
+
+If you are within a test folder, for example in KITE-AppRTC-Test, you can type __`c`__ to compile the test module
+only or __`c all`__ to recompile the entire project:
+
+    ```
+    cd %KITE_HOME%\KITE-AppRTC-Test  
+    c all
+    ```  
+    
+__On Linux:__  
+Just type `./c` (which will execute `mvn clean install -DskipTests`). 
+
+    ```
+    cd $KITE_HOME
+    ./c
+    ```
+If you are within a test folder, for example in KITE-AppRTC-Test, you can type __`./c`__ to compile the test module
+only or __`./c all`__ to recompile the entire project:  
+
+    ```
+    cd $KITE_HOME/KITE-AppRTC-Test 
+    ./c all
+    ```
+    
+__On Mac:__  
+Just type `c` (which will execute `mvn clean install -DskipTests`).
+    ```
+    cd $KITE_HOME
+    c
+    ```
+If you are within a test folder, for example in KITE-AppRTC-Test, you can type __`c`__ to compile the test module
+ only or __`c all`__ to recompile the entire project:  
+
+    ```
+    cd $KITE_HOME/KITE-AppRTC-Test
+    c all
+    ```
+
 
 ## Run
 
-Under the KITE-Janus-Test/ folder, execute:  
+__On Windows:__  
 ```
-java -cp ../KITE-Engine/target/kite-jar-with-dependencies.jar;../KITE-Common/target/kite-extras-1.0-SNAPSHOT.jar;../KITE-Engine-IF/target/kite-if-1.0-SNAPSHOT.jar;../KITE-Engine/target/kite-engine-1.0-SNAPSHOT.jar;target/Janus-test-1.0-SNAPSHOT.jar org.webrtc.kite.Engine configs/local.janus.config.json
+cd %KITE_HOME%\KITE-Janus-Test
+r configs\local.janus.config.json
 ```
+__On Linux:__  
+```
+cd $KITE_HOME/KITE-Janus-Test
+./r configs/local.janus.config.json
+```
+__On Mac:__  
+```
+cd $KITE_HOME/KITE-Janus-Test
+r configs/local.janus.config.json
+```
+
 
 
 ## Test output
 
-Each will generate allure report found in `kite-allure-report/` folder.
-To run Allure:
+Each will generate allure report found in `kite-allure-report/` folder.  
+After running the test, you can open the Allure dashboard with the command `a`.
+
+__On Windows:__  
+```
+cd %KITE_HOME%\KITE-AppRTC-Test
+a
+```
+__On Linux:__  
+```
+cd $KITE_HOME/KITE-AppRTC-Test
+./a
+```
+__On Mac:__  
+```
+cd $KITE_HOME/KITE-AppRTC-Test
+a
+```
+
+Alternatively, the full command to launch the Allure dashboard is:  
 ```
 allure serve kite-allure-reports
 ```
-
-
-
-
-
