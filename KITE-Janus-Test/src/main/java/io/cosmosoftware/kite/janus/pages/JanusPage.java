@@ -1,6 +1,5 @@
 package io.cosmosoftware.kite.janus.pages;
 
-import io.cosmosoftware.kite.exception.KiteInteractionException;
 import io.cosmosoftware.kite.pages.BasePage;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
@@ -13,8 +12,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 
-import static io.cosmosoftware.kite.util.TestUtils.executeJsScript;
-import static io.cosmosoftware.kite.util.TestUtils.waitAround;
 import static io.cosmosoftware.kite.util.WebDriverUtils.loadPage;
 
 public class JanusPage extends BasePage {
