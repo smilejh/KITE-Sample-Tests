@@ -45,7 +45,6 @@ public class GetStatsStep extends TestStep {
       JsonObject sentStats =
         getPCStatOvertime(webDriver, "window.pc", statsCollectionTime, statsCollectionInterval,
           selectedStats);
-      System.out.println(sentStats);
       JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
       List<JsonObject> receivedStats = new ArrayList<>();
       for (int i = 1; i < numberOfParticipants; i++) {

@@ -9,8 +9,8 @@ public class JoinPage extends BasePage {
     super(webDriver, logger);
   }
 
-  public void joinRoom(String roomId) {
+  public void joinRoom(String url) {
     webDriver.manage().window().maximize();
-    webDriver.get(roomId);
+    webDriver.get(url);
   }
 }
