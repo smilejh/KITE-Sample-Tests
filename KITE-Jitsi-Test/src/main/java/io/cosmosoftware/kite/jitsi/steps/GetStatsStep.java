@@ -6,7 +6,6 @@ import io.cosmosoftware.kite.report.Reporter;
 import io.cosmosoftware.kite.steps.TestStep;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.webrtc.kite.stats.StatsUtils;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;
@@ -38,12 +37,10 @@ public class GetStatsStep extends TestStep {
     ((JavascriptExecutor) webDriver).executeScript(meetingPage.getPeerConnectionScript());
     JsonObject rawStats =
         getPCStatOvertime(
-            webDriver,
-            "window.pc[0]",
-            statsCollectionTime,
-            statsCollectionInterval,
-            selectedStats);
+            webDriver, "window.pc[0]", statsCollectionTime, statsCollectionInterval, selectedStats);
     JsonObject statsSummary = extractStats(rawStats, "both").build();
+    System.out.println(rawStats);
+    System.out.println(statsSummary);
     Reporter.getInstance().jsonAttachment(report, "getStatsRaw", rawStats);
     Reporter.getInstance().jsonAttachment(report, "getStatsSummary", statsSummary);
   }

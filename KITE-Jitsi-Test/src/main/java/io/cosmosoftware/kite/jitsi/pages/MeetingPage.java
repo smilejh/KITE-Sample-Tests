@@ -54,5 +54,7 @@ public class MeetingPage extends BasePage {
   public int getNumberOfParticipants() {
     return this.numberOfParticipants;
   }
+
+  public List<WebElement> getVideoElements(){ return videos;}
   
 }

@@ -6,11 +6,16 @@ import io.cosmosoftware.kite.jitsi.pages.JoinPage;
 import io.cosmosoftware.kite.steps.TestStep;
 import org.openqa.selenium.WebDriver;
 
+import static io.cosmosoftware.kite.util.TestUtils.waitAround;
+
 public class JoinRoomStep extends TestStep {
+  protected  String url;
   protected String roomId;
 
-  public JoinRoomStep(WebDriver webDriver) {
+  public JoinRoomStep(WebDriver webDriver, String url, String roomId) {
     super(webDriver);
+    this.url = url;
+    this.roomId = roomId;
   }
 
   public void setRoomId(String roomId) {
@@ -26,6 +31,6 @@ public class JoinRoomStep extends TestStep {
   protected void step() throws KiteTestException {
     JoinPage page = new JoinPage(webDriver, logger);
     page.joinRoom(
-        KiteJitsiTest.url.endsWith("/") ? (KiteJitsiTest.url) : (KiteJitsiTest.url + "/") + roomId);
+        url.endsWith("/") ? url : (url + "/") + roomId);
   }
 }
