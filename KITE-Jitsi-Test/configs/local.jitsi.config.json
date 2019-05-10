@@ -1,0 +1,41 @@
+{
+  "type": 1,
+  "name": "Jitsi Test",
+  "permute": false,
+  "remotes": [
+    {
+      "type": "local",
+      "remoteAddress": "http://localhost:4444/wd/hub"
+    }
+  ],
+  "tests": [
+    {
+      "name": "JitSi Test %ts",
+      "description": "Jitsi Test",
+      "tupleSize": 1,
+      "testImpl": "io.cosmosoftware.kite.jitsi.KiteJitsiTest",
+      "payload": {
+        "getStats" : true,
+        "url": "https://meet.jit.si",
+        "testTimeout": 20,
+        "statsCollectionTime": 10,
+        "statsCollectionInterval": 1,
+        "selectedStats" : ["inbound-rtp", "outbound-rtp", "candidate-pair"]
+      }
+    }
+  ],
+  "browsers": [
+    {
+      "browserName": "chrome",
+      "version": "74",
+      "platform": "WINDOWS",
+      "focus": true
+    },
+    {
+      "browserName": "firefox",
+      "version": "66",
+      "platform": "WINDOWS",
+      "focus": true
+    }
+  ]
+}
