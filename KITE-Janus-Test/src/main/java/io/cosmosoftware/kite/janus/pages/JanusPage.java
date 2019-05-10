@@ -27,9 +27,6 @@ public class JanusPage extends BasePage {
   @FindBy(xpath=PUBLISHING)
   private WebElement publishing;
 
-  @FindBy(id="unpublish")
-  private WebElement unpublish;
-
   public JanusPage(WebDriver webDriver, Logger logger) {
     super(webDriver, logger);
   }
@@ -74,10 +71,6 @@ public class JanusPage extends BasePage {
         loadPage(webDriver, url, 20);
       }
     }
-  }
-
-  public void unpublish() throws KiteInteractionException {
-    click(unpublish);
   }
 
 }

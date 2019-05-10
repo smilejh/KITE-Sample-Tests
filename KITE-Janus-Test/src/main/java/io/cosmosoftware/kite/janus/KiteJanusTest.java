@@ -23,42 +23,16 @@ import static org.webrtc.kite.Utils.getStackTrace;
 
 public class KiteJanusTest extends KiteBaseTest {
   
-
-  private int loadReachTime = 0;
-  private String audioScoreWorkingDirectory = null;
-  private String audioScoreTool = null;
-  private String audioDuration = null;
-  private String testId = "\"" + this.name + "_" + new SimpleDateFormat("yyyyMMdd_hhmmss").format(new Date()) + "\"";
-  private String logstashUrl =  null;
-  private String sfu = "Janus";
-  private int statsPublishingInterval = 30000;
-  private String pathToGetStatsSdk;
-
   @Override
   protected void payloadHandling() {
     super.payloadHandling();
     String[] rooms = null;
     if (this.payload != null) {
-
-      JsonObject getStatsSdk = this.payload.getJsonObject("getStatsSdk");
-      if (getStatsSdk != null) {
-        testId = getStatsSdk.getString("testId", testId);
-        logstashUrl = getStatsSdk.getString("logstashUrl");
-        sfu = getStatsSdk.getString("sfu", sfu);
-        statsPublishingInterval = getStatsSdk.getInt("statsPublishingInterval", statsPublishingInterval);
-        pathToGetStatsSdk = this.payload.getString("pathToGetStatsSdk", pathToGetStatsSdk);
-      }
-
-      loadReachTime = this.payload.getInt("loadReachTime", loadReachTime);
-      setExpectedTestDuration(Math.max(getExpectedTestDuration(), (loadReachTime + 300) / 60));
       JsonArray jsonArray = this.payload.getJsonArray("rooms");
       rooms = new String[jsonArray.size()];
       for (int i = 0; i < jsonArray.size(); i++) {
         rooms[i] = jsonArray.getString(i);
       }
-      audioScoreWorkingDirectory = this.payload.getString("audioScoreWorkingDirectory", audioScoreWorkingDirectory);
-      audioScoreTool = this.payload.getString("audioScoreTool", audioScoreTool);
-      audioDuration = this.payload.getString("audioDuration", audioDuration);
     }
     if (rooms != null) {
       getRoomManager().setRoomNames(rooms);
@@ -71,48 +45,20 @@ public class KiteJanusTest extends KiteBaseTest {
       WebDriver webDriver = runner.getWebDriver();
       String roomUrl = getRoomManager().getRoomUrl()  + "&username=user" + TestUtils.idToString(runner.getId());
       runner.addStep(new JoinVideoCallStep(webDriver, roomUrl));
-      if (this.logstashUrl != null) {
-        runner.addStep(new LoadGetStatsStep(webDriver, this.name, testId, logstashUrl, sfu, statsPublishingInterval, pathToGetStatsSdk));
+      runner.addStep(new FirstVideoCheck(webDriver));
+      runner.addStep(new AllVideoCheck(webDriver, getMaxUsersPerRoom()));
+      if (this.getStats()) {
+        runner.addStep(
+            new GetStatsStep(
+                webDriver,
+                getMaxUsersPerRoom(),
+                getStatsCollectionTime(),
+                getStatsCollectionInterval(),
+                getSelectedStats()));
       }
-      if (!this.fastRampUp()) {
-        runner.addStep(new FirstVideoCheck(webDriver));
-        runner.addStep(new AllVideoCheck(webDriver, getMaxUsersPerRoom()));
-        if (this.getStats()) {
-          runner.addStep(
-              new GetStatsStep(
-                  webDriver,
-                  getMaxUsersPerRoom(),
-                  getStatsCollectionTime(),
-                  getStatsCollectionInterval(),
-                  getSelectedStats()));
-        }
-        if (this.takeScreenshotForEachTest()) {
-          runner.addStep(new ScreenshotStep(webDriver));
-        }
-        if (this.loadReachTime > 0) {
-          runner.addStep(new StayInMeetingStep(webDriver, loadReachTime));
-        }
-
-        for (Scenario scenario : scenarioArrayList ) {
-          runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
-          runner.addStep(new NWInstrumentationStep(webDriver, scenario, runner.getId()));
-          runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
-          runner.addStep(new GetStatsStep(webDriver, getMaxUsersPerRoom(),
-                  getStatsCollectionTime(), getStatsCollectionInterval(), getSelectedStats()));
-          runner.addStep(new ScreenshotStep(webDriver, scenario));
-          runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
-          runner.addStep(new NWInstCleanupStep(webDriver, scenario, runner.getId()));
-        }
-
-        if (this.audioScoreWorkingDirectory != null) {
-          if (runner.getId() == 0) {
-            runner.addStep(new UnpublishStep(webDriver));
-          } else {
-            runner.addStep(new AudioCheck(webDriver, this.sessionData.get(webDriver), audioScoreWorkingDirectory,
-              audioScoreTool, audioDuration));
-          }
-        }
-      }
+      if (this.takeScreenshotForEachTest()) {
+        runner.addStep(new ScreenshotStep(webDriver));
+      }        
     } catch (Exception e) {
       logger.error(getStackTrace(e));
     }

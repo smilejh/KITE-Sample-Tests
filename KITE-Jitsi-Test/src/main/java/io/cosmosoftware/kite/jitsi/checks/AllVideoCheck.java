@@ -27,23 +27,23 @@ public class AllVideoCheck extends TestStep {
     try {
       final MeetingPage meetingPage = new MeetingPage(this.webDriver, logger);
       // wait a while to allow all videos to load.
-      waitAround(meetingPage.numberOfParticipants * 3 * ONE_SECOND_INTERVAL);
-      meetingPage.manyTilesVideoToggle.click();
+      waitAround(meetingPage.getNumberOfParticipants() * 3 * ONE_SECOND_INTERVAL);
+      meetingPage.clickVideoToggle();
       logger.info("Looking for video elements");
-      if (meetingPage.videos.size() < meetingPage.numberOfParticipants) {
+      if (meetingPage.numberOfVideos() < meetingPage.getNumberOfParticipants()) {
         throw new KiteTestException(
             "Unable to find "
-                + meetingPage.numberOfParticipants
+                + meetingPage.getNumberOfParticipants()
                 + " <video> element on the page. No video found = "
-                + meetingPage.videos.size(),
+                + meetingPage.numberOfVideos(),
             Status.FAILED);
       }
       String videoCheck = "";
       boolean error = false;
-      for (int i = 1; i < meetingPage.numberOfParticipants; i++) {
+      for (int i = 1; i < meetingPage.getNumberOfParticipants(); i++) {
         String v = videoCheck(webDriver, i);
         videoCheck += v;
-        if (i < meetingPage.numberOfParticipants - 1) {
+        if (i < meetingPage.getNumberOfParticipants() - 1) {
           videoCheck += "|";
         }
         if (!"video".equalsIgnoreCase(v)) {
