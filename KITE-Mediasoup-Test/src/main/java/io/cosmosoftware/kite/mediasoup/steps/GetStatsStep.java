@@ -52,7 +52,6 @@ public class GetStatsStep extends TestStep {
       arrayBuilder.add(receivedObject);
 
       JsonObject json = StatsUtils.extractStats(sentStats, receivedStats);
-      System.out.println(json);
       JsonObjectBuilder builder = Json.createObjectBuilder();
       builder.add("local", sentStats);
       builder.add("remote", arrayBuilder);

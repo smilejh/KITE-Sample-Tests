@@ -46,8 +46,8 @@ public class KiteMediasoupTest extends KiteBaseTest {
   public void populateTestSteps(TestRunner runner) {
     try {
       WebDriver webDriver = runner.getWebDriver();
-      int id = 1;
-      String roomUrl = getRoomManager().getRoomUrl()  + "&username=user" + TestUtils.idToString(id++);
+      int id = runner.getId();
+      String roomUrl = getRoomManager().getRoomUrl()  + "&username=user" + TestUtils.idToString(id);
       runner.addStep(new JoinVideoCallStep(webDriver, roomUrl));
       if (!this.fastRampUp()) {
         runner.addStep(new FirstVideoCheck(webDriver));
