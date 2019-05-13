@@ -12,7 +12,7 @@
     {
       "name": "Mediasoup Local Grid %ts",
       "description":"interop test for Mediasoup",
-      "tupleSize": 3,
+      "tupleSize": 4,
       "testImpl": "io.cosmosoftware.kite.mediasoup.KiteMediasoupTest",
       "payload": {
         "url": "https://v3demo.mediasoup.org/?roomId=",
@@ -37,7 +37,7 @@
           "outbound-rtp",
           "candidate-pair"
         ],
-        "loadReachTime": 5
+        "loadReachTime": 0
       }
     }
   ],
@@ -55,8 +55,8 @@
       "platform": "WINDOWS",
       "headless": false,
       "focus": true
-
     }
+
   ],
   "_browsers_list": [
     {
