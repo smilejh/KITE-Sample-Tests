@@ -2,10 +2,7 @@ package io.cosmosoftware.kite.mediasoup;
 
 import io.cosmosoftware.kite.mediasoup.checks.AllVideoCheck;
 import io.cosmosoftware.kite.mediasoup.checks.FirstVideoCheck;
-import io.cosmosoftware.kite.mediasoup.steps.GetStatsStep;
-import io.cosmosoftware.kite.mediasoup.steps.JoinVideoCallStep;
-import io.cosmosoftware.kite.mediasoup.steps.ScreenshotStep;
-import io.cosmosoftware.kite.mediasoup.steps.StayInMeetingStep;
+import io.cosmosoftware.kite.mediasoup.steps.*;
 import org.webrtc.kite.tests.KiteBaseTest;
 import org.webrtc.kite.tests.TestRunner;
 import io.cosmosoftware.kite.util.TestUtils;
@@ -14,6 +11,10 @@ import org.openqa.selenium.WebDriver;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;
+import javax.json.JsonValue;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static org.webrtc.kite.Utils.getStackTrace;
 
@@ -21,6 +22,13 @@ import static org.webrtc.kite.Utils.getStackTrace;
 public class KiteMediasoupTest extends KiteBaseTest {
 
   private int loadReachTime = 0;
+  private JsonObject getStatsSdk;
+  private String testName =  null;
+  private String testId = "\"" + this.name + "_" + new SimpleDateFormat("yyyyMMdd_hhmmss").format(new Date()) + "\"";
+  private JsonValue logstashUrl =  null;
+  private String sfu = "Mediasoup";
+  private JsonValue statsPublishingInterval;
+  private String pathToGetStatsSdk;
 
   
   @Override
@@ -29,6 +37,14 @@ public class KiteMediasoupTest extends KiteBaseTest {
     JsonObject jsonPayload = (JsonObject) this.payload;
     String[] rooms = null;
     if (jsonPayload != null) {
+      getStatsSdk = this.payload.getJsonObject("getStatsSdk");
+      testName = this.name;
+      testId = getStatsSdk.get("testId").toString();
+      logstashUrl = getStatsSdk.get("logstashUrl");
+      sfu = getStatsSdk.get("sfu").toString();
+      statsPublishingInterval = getStatsSdk.get("statsPublishingInterval");
+      pathToGetStatsSdk = this.payload.getString("pathToGetStatsSdk", pathToGetStatsSdk);
+
       loadReachTime = jsonPayload.getInt("loadReachTime", loadReachTime);
       setExpectedTestDuration(Math.max(getExpectedTestDuration(), (loadReachTime + 300)/60));
       JsonArray jsonArray = jsonPayload.getJsonArray("rooms");
@@ -62,6 +78,8 @@ public class KiteMediasoupTest extends KiteBaseTest {
         if (this.loadReachTime > 0) {
           runner.addStep(new StayInMeetingStep(webDriver, loadReachTime));
         }
+      } if (this.sfu != null) {
+        runner.addStep(new LoadGetStatsStep(runner.getWebDriver(), getMaxUsersPerRoom(), testName, testId, logstashUrl, sfu, statsPublishingInterval, pathToGetStatsSdk));
       }
     } catch (Exception e) {
       logger.error(getStackTrace(e));

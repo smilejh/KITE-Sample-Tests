@@ -1,0 +1,68 @@
+{
+  "type": 1,
+  "name": "Mediasoup Interop Local",
+  "permute": false,
+  "remotes": [
+    {
+      "type": "local",
+      "remoteAddress": "http://localhost:4444/wd/hub"
+    }
+  ],
+  "tests": [
+    {
+      "name": "Mediasoup Local Grid %ts",
+      "description":"interop test for Mediasoup",
+      "tupleSize": 3,
+      "testImpl": "io.cosmosoftware.kite.mediasoup.KiteMediasoupTest",
+      "payload": {
+        "url": "https://v3demo.mediasoup.org/?roomId=",
+        "rooms": [
+          "hackathonRoom_01",
+          "hackathonRoom_02",
+          "hackathonRoom_03"
+        ],
+        "getStatsSdk": {
+          "testId": "MediasoupTestId",
+          "sfu" : "Mediasoup",
+          "logstashUrl": "//logstash.cosmosoftware.io:5000",
+          "statsPublishingInterval": 15000
+        },
+        "pathToGetStatsSdk": "KITE-getstats-sdk.js",
+        "usersPerRoom": 3,
+        "takeScreenshotForEachTest": true,
+        "testTimeout": 20,
+        "getStats": false,
+        "statsCollectionTime": 8,
+        "statsCollectionInterval": 4,
+        "selectedStats": [
+          "inbound-rtp",
+          "outbound-rtp",
+          "candidate-pair"
+        ],
+        "loadReachTime": 5
+      }
+    }
+  ],
+  "browsers": [
+    {
+      "browserName": "chrome",
+      "version": "74",
+      "platform": "WINDOWS",
+      "headless": false
+    }
+  ],
+  "_browsers_list": [
+    {
+      "browserName": "chrome",
+      "version": "74",
+      "platform": "MAC",
+      "headless": true
+    },
+    {
+      "browserName": "firefox",
+      "version": "66",
+      "platform": "LINUX",
+      "headless": true
+    }
+  ]
+}
