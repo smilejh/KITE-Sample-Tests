@@ -39,8 +39,6 @@ public class GetStatsStep extends TestStep {
         getPCStatOvertime(
             webDriver, "window.pc[0]", statsCollectionTime, statsCollectionInterval, selectedStats);
     JsonObject statsSummary = extractStats(rawStats, "both").build();
-    System.out.println(rawStats);
-    System.out.println(statsSummary);
     Reporter.getInstance().jsonAttachment(report, "getStatsRaw", rawStats);
     Reporter.getInstance().jsonAttachment(report, "getStatsSummary", statsSummary);
   }
