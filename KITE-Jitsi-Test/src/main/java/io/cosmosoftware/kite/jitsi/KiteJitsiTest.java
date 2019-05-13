@@ -12,19 +12,12 @@ import org.webrtc.kite.tests.TestRunner;
 import static org.webrtc.kite.Utils.getStackTrace;
 
 public class KiteJitsiTest extends KiteBaseTest {
-  private String roomId = generateRoomId();
 
   @Override
   protected void populateTestSteps(TestRunner runner) {
     try {
       WebDriver webDriver = runner.getWebDriver();
-      if(getMaxUsersPerRoom() == 0){
-        //no need generate room Number
-      }
-      else if (runner.getId() % getMaxUsersPerRoom() == 0) {
-        generateRoomId();
-      }
-      runner.addStep(new JoinRoomStep(webDriver, url, roomId));
+      runner.addStep(new JoinRoomStep(webDriver, getRoomManager().getRoomUrl()));
       runner.addStep(new FirstVideoCheck(webDriver));
       runner.addStep(new AllVideoCheck(webDriver));
       if (this.getStats()) {
@@ -43,15 +36,4 @@ public class KiteJitsiTest extends KiteBaseTest {
       logger.error(getStackTrace(e));
     }
   }
-
-  private String generateRoomId() {
-    String number = Integer.toString(getRandomInt(1000000));
-    roomId = number;
-    return number;
-  }
-
-  private int getRandomInt(int max) {
-    return (int) Math.floor(Math.random() * Math.floor(max));
-  }
-
 }

@@ -10,27 +10,9 @@ import org.openqa.selenium.WebDriver;
 import org.webrtc.kite.tests.KiteBaseTest;
 import org.webrtc.kite.tests.TestRunner;
 
-import javax.json.JsonArray;
-
 import static org.webrtc.kite.Utils.getStackTrace;
 
 public class KiteJanusTest extends KiteBaseTest {
-
-  @Override
-  protected void payloadHandling() {
-    super.payloadHandling();
-    String[] rooms = null;
-    if (this.payload != null) {
-      JsonArray jsonArray = this.payload.getJsonArray("rooms");
-      rooms = new String[jsonArray.size()];
-      for (int i = 0; i < jsonArray.size(); i++) {
-        rooms[i] = jsonArray.getString(i);
-      }
-    }
-    if (rooms != null) {
-      getRoomManager().setRoomNames(rooms);
-    }
-  }
 
   @Override
   public void populateTestSteps(TestRunner runner) {

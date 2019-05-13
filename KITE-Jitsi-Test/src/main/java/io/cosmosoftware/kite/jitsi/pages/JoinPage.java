@@ -13,9 +13,7 @@ public class JoinPage extends BasePage {
 
   public void joinRoom(String url) {
     webDriver.manage().window().maximize();
-    loadPage(webDriver,url,10);
+    loadPage(webDriver, url, 10);
     logger.info("Open " + url);
   }
-
-
 }

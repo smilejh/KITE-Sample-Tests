@@ -13,7 +13,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.List;
 
 import static io.cosmosoftware.kite.util.TestUtils.executeJsScript;
-import static io.cosmosoftware.kite.util.WebDriverUtils.loadPage;
 
 public class MeetingPage extends BasePage {
 
@@ -31,10 +30,10 @@ public class MeetingPage extends BasePage {
   public MeetingPage(WebDriver webDriver, Logger logger) throws KiteTestException {
     super(webDriver, logger);
     this.numberOfParticipants =
-      Integer.parseInt(executeJsScript(webDriver, getNumberOfParticipantScript()).toString()) + 1;
+        Integer.parseInt(executeJsScript(webDriver, getNumberOfParticipantScript()).toString()) + 1;
   }
-  
-  public String getNumberOfParticipantScript() {    
+
+  public String getNumberOfParticipantScript() {
     return "return APP.conference.getNumberOfParticipantsWithTracks();";
   }
 
@@ -45,7 +44,7 @@ public class MeetingPage extends BasePage {
         + "  window.pc.push(map.get(key).peerconnection);"
         + "}";
   }
-  
+
   public void clickVideoToggle() {
     manyTilesVideoToggle.click();
   }
@@ -55,15 +54,15 @@ public class MeetingPage extends BasePage {
     wait.until(ExpectedConditions.visibilityOf(videos.get(0)));
   }
 
-
   public int numberOfVideos() {
     return videos.size();
   }
-  
+
   public int getNumberOfParticipants() {
     return this.numberOfParticipants;
   }
 
-  public List<WebElement> getVideoElements(){ return videos;}
-  
+  public List<WebElement> getVideoElements() {
+    return videos;
+  }
 }
