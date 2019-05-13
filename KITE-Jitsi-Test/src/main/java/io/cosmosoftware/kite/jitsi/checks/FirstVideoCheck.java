@@ -10,6 +10,7 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
+import static io.cosmosoftware.kite.entities.Timeouts.ONE_SECOND_INTERVAL;
 import static io.cosmosoftware.kite.util.TestUtils.videoCheck;
 import static io.cosmosoftware.kite.util.TestUtils.waitAround;
 
@@ -27,8 +28,9 @@ public class FirstVideoCheck extends TestStep {
   @Override
   protected void step() throws KiteTestException {
     try {
-      waitAround(5000);
+      waitAround(ONE_SECOND_INTERVAL);
       final MeetingPage meetingPage = new MeetingPage(this.webDriver, logger);
+      meetingPage.videoIsPublishing(10);
       logger.info("Looking for video object");
       List<WebElement> videos = meetingPage.getVideoElements();
       if (videos.isEmpty()) {

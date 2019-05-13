@@ -3,13 +3,17 @@ package io.cosmosoftware.kite.jitsi.pages;
 import io.cosmosoftware.kite.exception.KiteTestException;
 import io.cosmosoftware.kite.pages.BasePage;
 import org.apache.log4j.Logger;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 
 import static io.cosmosoftware.kite.util.TestUtils.executeJsScript;
+import static io.cosmosoftware.kite.util.WebDriverUtils.loadPage;
 
 public class MeetingPage extends BasePage {
 
@@ -45,8 +49,13 @@ public class MeetingPage extends BasePage {
   public void clickVideoToggle() {
     manyTilesVideoToggle.click();
   }
-  
-  
+
+  public void videoIsPublishing(int timeout) throws TimeoutException {
+    WebDriverWait wait = new WebDriverWait(webDriver, timeout);
+    wait.until(ExpectedConditions.visibilityOf(videos.get(0)));
+  }
+
+
   public int numberOfVideos() {
     return videos.size();
   }
