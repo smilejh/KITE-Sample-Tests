@@ -1,5 +1,6 @@
 package io.cosmosoftware.kite.mediasoup.checks;
 
+import io.cosmosoftware.kite.entities.Timeouts;
 import io.cosmosoftware.kite.exception.KiteTestException;
 import io.cosmosoftware.kite.mediasoup.pages.MediasoupPage;
 import io.cosmosoftware.kite.report.Reporter;
@@ -10,6 +11,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
+
+import static io.cosmosoftware.kite.util.TestUtils.waitAround;
 
 public class FirstVideoCheck extends TestStep {
 
@@ -27,6 +30,7 @@ public class FirstVideoCheck extends TestStep {
   @Override
   protected void step() throws KiteTestException {
     try {
+      waitAround(3* Timeouts.ONE_SECOND_INTERVAL);
       final MediasoupPage mediasoupPage = new MediasoupPage(this.webDriver, logger);
       logger.info("Looking for video object");
       List<WebElement> videos = mediasoupPage.getVideoElements();

@@ -13,48 +13,46 @@ import java.util.List;
 
 public class GetStatsStep extends TestStep {
 
-
-
-
   private final int numberOfParticipants;
   private final int statsCollectionTime;
   private final int statsCollectionInterval;
   private final JsonArray selectedStats;
 
-  public GetStatsStep(WebDriver webDriver, int numberOfParticipants, int statsCollectionTime,
-                      int statsCollectionInterval, JsonArray selectedStats) {
+  public GetStatsStep(
+      WebDriver webDriver,
+      int numberOfParticipants,
+      int statsCollectionTime,
+      int statsCollectionInterval,
+      JsonArray selectedStats) {
     super(webDriver);
     this.numberOfParticipants = numberOfParticipants;
     this.statsCollectionTime = statsCollectionTime;
     this.statsCollectionInterval = statsCollectionInterval;
     this.selectedStats = selectedStats;
   }
-  
-  
+
   @Override
   public String stepDescription() {
     return "GetStats";
   }
-  
+
   @Override
   protected void step() throws KiteTestException {
     logger.info("Getting WebRTC stats via getStats");
     try {
       JsonObject sentStats =
-        StatsUtils.getPCStatOvertime(webDriver, "window.pc", statsCollectionTime, statsCollectionInterval,
-          selectedStats);
+          StatsUtils.getPCStatOvertime(
+              webDriver, "window.PC1", statsCollectionTime, statsCollectionInterval, selectedStats);
       JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
       List<JsonObject> receivedStats = new ArrayList<>();
-      for (int i = 1; i < numberOfParticipants; i++) {
-        JsonObject receivedObject = StatsUtils.getPCStatOvertime(webDriver,
-          "window.remotePc[" + (i-1) + "]",
-          statsCollectionTime,
-          statsCollectionInterval,
-          selectedStats);
-        receivedStats.add(receivedObject);
-        arrayBuilder.add(receivedObject);
-      }
+      JsonObject receivedObject =
+          StatsUtils.getPCStatOvertime(
+              webDriver, "window.PC2", statsCollectionTime, statsCollectionInterval, selectedStats);
+      receivedStats.add(receivedObject);
+      arrayBuilder.add(receivedObject);
+
       JsonObject json = StatsUtils.extractStats(sentStats, receivedStats);
+      System.out.println(json);
       JsonObjectBuilder builder = Json.createObjectBuilder();
       builder.add("local", sentStats);
       builder.add("remote", arrayBuilder);
