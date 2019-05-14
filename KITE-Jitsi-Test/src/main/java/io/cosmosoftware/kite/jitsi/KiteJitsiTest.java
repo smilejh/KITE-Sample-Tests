@@ -21,7 +21,7 @@ public class KiteJitsiTest extends KiteBaseTest {
     try {
       WebDriver webDriver = runner.getWebDriver();
       runner.addStep(new JoinRoomStep(webDriver, getRoomManager().getRoomUrl()));
-      runner.addStep(new SetUserId(webDriver, null));
+      runner.addStep(new SetUserId(webDriver, "user" + runner.getId()));
       runner.addStep(new FirstVideoCheck(webDriver));
       runner.addStep(new AllVideoCheck(webDriver));
       if (this.getStats()) {
