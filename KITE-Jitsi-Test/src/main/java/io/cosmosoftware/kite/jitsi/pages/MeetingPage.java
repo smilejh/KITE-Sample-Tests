@@ -3,6 +3,7 @@ package io.cosmosoftware.kite.jitsi.pages;
 import io.cosmosoftware.kite.exception.KiteTestException;
 import io.cosmosoftware.kite.pages.BasePage;
 import org.apache.log4j.Logger;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -65,4 +66,13 @@ public class MeetingPage extends BasePage {
   public List<WebElement> getVideoElements() {
     return videos;
   }
+
+  public void setUserId(){
+    ((JavascriptExecutor)webDriver).executeScript("APP.conference.changeLocalDisplayName(APP.conference.getMyUserId())");
+  }
+
+  public void setCustomUserId(String userId){
+    ((JavascriptExecutor) webDriver).executeScript("APP.conference.changeLocalDisplayName(\""+ userId +"\")");
+  }
+
 }

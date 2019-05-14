@@ -12,7 +12,7 @@
     {
       "name": "JitSi Test %ts",
       "description": "Jitsi Test",
-      "tupleSize": 4,
+      "tupleSize": 2,
       "testImpl": "io.cosmosoftware.kite.jitsi.KiteJitsiTest",
       "payload": {
         "getStats" : true,
