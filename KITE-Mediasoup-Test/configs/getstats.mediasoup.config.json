@@ -27,7 +27,7 @@
           "logstashUrl": "enterLogstashUrl",
           "statsPublishingInterval": 15000
         },
-        "pathToGetStatsSdk": "KITE-getstats-sdk.js",
+        "pathToGetStatsSdk": "getstats-sdk.js",
         "usersPerRoom": 3,
         "takeScreenshotForEachTest": true,
         "testTimeout": 20,
