@@ -12,19 +12,24 @@
     {
       "name": "Mediasoup Local Grid %ts",
       "description":"interop test for Mediasoup",
-      "tupleSize": 2,
+      "tupleSize": 4,
       "testImpl": "io.cosmosoftware.kite.mediasoup.KiteMediasoupTest",
       "payload": {
         "url": "https://v3demo.mediasoup.org/?roomId=",
-        "rooms": [
-          "hackathonRoom_01",
-          "hackathonRoom_02",
-          "hackathonRoom_03"
-        ],
+        "rooms": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
+          "11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
+          "21", "22", "23", "24", "25", "26", "27", "28", "29", "30",
+          "31", "32", "33", "34", "35", "36", "37", "38", "39", "40",
+          "41", "42", "43", "44", "45", "46", "47", "48", "49", "50",
+          "51", "52", "53", "54", "55", "56", "57", "28", "59", "60",
+          "61", "62", "63", "64", "65", "66", "67", "68", "69", "70",
+          "71", "72", "73", "74", "75", "76", "77", "78", "79", "80",
+          "81", "82", "83", "84", "85", "86", "87", "88", "89", "90",
+          "91", "82", "83", "84", "95", "96", "97", "98", "99", "100"],
         "usersPerRoom": 2,
         "takeScreenshotForEachTest": true,
         "testTimeout": 20,
-        "getStats": false,
+        "getStats": true,
         "statsCollectionTime": 8,
         "statsCollectionInterval": 4,
         "selectedStats": [
@@ -32,7 +37,7 @@
           "outbound-rtp",
           "candidate-pair"
         ],
-        "loadReachTime": 5
+        "loadReachTime": 0
       }
     }
   ],
@@ -41,8 +46,17 @@
       "browserName": "chrome",
       "version": "74",
       "platform": "WINDOWS",
-      "headless": false 
+      "headless": false,
+      "focus": true
+    },
+    {
+      "browserName": "firefox",
+      "version": "66",
+      "platform": "WINDOWS",
+      "headless": false,
+      "focus": true
     }
+
   ],
   "_browsers_list": [
     {

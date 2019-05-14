@@ -6,7 +6,10 @@ import io.cosmosoftware.kite.mediasoup.pages.MediasoupPage;
 import io.cosmosoftware.kite.report.Reporter;
 import io.cosmosoftware.kite.report.Status;
 import io.cosmosoftware.kite.steps.TestStep;
-import io.cosmosoftware.kite.util.TestUtils;
+
+import static io.cosmosoftware.kite.util.TestUtils.videoCheck;
+import static io.cosmosoftware.kite.util.TestUtils.waitAround;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -32,7 +35,7 @@ public class AllVideoCheck extends TestStep {
     final MediasoupPage mediasoupPage = new MediasoupPage(this.webDriver, logger);
     try {
       //wait a while to allow all videos to load.
-      TestUtils.waitAround(numberOfParticipants * 3 * Timeouts.ONE_SECOND_INTERVAL);
+      waitAround(numberOfParticipants * 3 * Timeouts.ONE_SECOND_INTERVAL);
       logger.info("Looking for video elements");
       List<WebElement> videos = mediasoupPage.getVideoElements();
       if (videos.size() < numberOfParticipants) {
@@ -43,7 +46,7 @@ public class AllVideoCheck extends TestStep {
       String videoCheck = "";
       boolean error = false;
       for (int i = 1; i < numberOfParticipants; i++) {
-        String v = TestUtils.videoCheck(webDriver, i);
+        String v = videoCheck(webDriver, i);
         videoCheck += v;
         if (i < numberOfParticipants - 1) {
           videoCheck += "|";
