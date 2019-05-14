@@ -40,18 +40,29 @@ public class GetStatsStep extends TestStep {
   @Override
   protected void step() throws KiteTestException {
     logger.info("Getting WebRTC stats via getStats");
+    String pcName = "echotest.webrtcStuff.pc";
     try {
+//      JsonObject sentStats =
+//        getPCStatOvertime(webDriver, "window.pc", statsCollectionTime, statsCollectionInterval,
+//          selectedStats);
       JsonObject sentStats =
-        getPCStatOvertime(webDriver, "window.pc", statsCollectionTime, statsCollectionInterval,
+      getPCStatOvertime(webDriver, pcName, statsCollectionTime, statsCollectionInterval,
           selectedStats);
       JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
       List<JsonObject> receivedStats = new ArrayList<>();
       for (int i = 1; i < numberOfParticipants; i++) {
+//        JsonObject receivedObject = getPCStatOvertime(webDriver,
+//          "window.remotePc[" + (i-1) + "]",
+//          statsCollectionTime,
+//          statsCollectionInterval,
+//          selectedStats);
+//        receivedStats.add(receivedObject);
+//        arrayBuilder.add(receivedObject);
         JsonObject receivedObject = getPCStatOvertime(webDriver,
-          "window.remotePc[" + (i-1) + "]",
-          statsCollectionTime,
-          statsCollectionInterval,
-          selectedStats);
+            "echotest.webrtcStuff.remoteStream",
+            statsCollectionTime,
+            statsCollectionInterval,
+            selectedStats);
         receivedStats.add(receivedObject);
         arrayBuilder.add(receivedObject);
       }

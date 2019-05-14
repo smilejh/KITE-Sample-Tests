@@ -10,7 +10,11 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
+import static io.cosmosoftware.kite.entities.Timeouts.ONE_SECOND_INTERVAL;
+import static io.cosmosoftware.kite.util.ReportUtils.saveScreenshotPNG;
+import static io.cosmosoftware.kite.util.ReportUtils.timestamp;
 import static io.cosmosoftware.kite.util.TestUtils.videoCheck;
+import static io.cosmosoftware.kite.util.TestUtils.waitAround;
 
 public class FirstVideoCheck extends TestStep {
 
@@ -27,8 +31,10 @@ public class FirstVideoCheck extends TestStep {
   protected void step() throws KiteTestException {
     try {
       final JanusPage janusPage = new JanusPage(this.webDriver, logger);
+      janusPage.waitForLocalStreamHeaderVisibility(3);
       logger.info("Looking for video object");
       List<WebElement> videos = janusPage.getVideoElements();
+
       if (videos.isEmpty()) {
         throw new KiteTestException(
             "Unable to find any <video> element on the page", Status.FAILED);

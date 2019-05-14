@@ -1,22 +1,14 @@
 package io.cosmosoftware.kite.janus;
 
-import io.cosmosoftware.kite.instrumentation.Scenario;
 import io.cosmosoftware.kite.janus.checks.AllVideoCheck;
-import io.cosmosoftware.kite.janus.checks.AudioCheck;
 import io.cosmosoftware.kite.janus.checks.FirstVideoCheck;
 import io.cosmosoftware.kite.janus.steps.*;
 import io.cosmosoftware.kite.util.TestUtils;
 import org.openqa.selenium.WebDriver;
 import org.webrtc.kite.tests.KiteBaseTest;
 import org.webrtc.kite.tests.TestRunner;
-import org.webrtc.kite.tests.WaitForOthersStep;
 
 import javax.json.JsonArray;
-import javax.json.JsonObject;
-import javax.json.JsonValue;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import static org.webrtc.kite.Utils.getStackTrace;
 
@@ -44,7 +36,7 @@ public class KiteJanusTest extends KiteBaseTest {
     try {
       WebDriver webDriver = runner.getWebDriver();
       String roomUrl = getRoomManager().getRoomUrl()  + "&username=user" + TestUtils.idToString(runner.getId());
-      runner.addStep(new JoinVideoCallStep(webDriver, roomUrl));
+      runner.addStep(new StartDemoStep(webDriver, roomUrl));
       runner.addStep(new FirstVideoCheck(webDriver));
       runner.addStep(new AllVideoCheck(webDriver, getMaxUsersPerRoom()));
       if (this.getStats()) {

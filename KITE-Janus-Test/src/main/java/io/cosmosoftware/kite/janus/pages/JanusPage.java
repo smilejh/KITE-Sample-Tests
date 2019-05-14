@@ -1,11 +1,9 @@
 package io.cosmosoftware.kite.janus.pages;
 
+import io.cosmosoftware.kite.exception.KiteInteractionException;
 import io.cosmosoftware.kite.pages.BasePage;
 import org.apache.log4j.Logger;
-import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -17,6 +15,11 @@ import static io.cosmosoftware.kite.util.WebDriverUtils.loadPage;
 public class JanusPage extends BasePage {
 
   private final String PUBLISHING = "//b[text()='Publishing...']";
+
+
+  //not used for now
+  @FindBy(xpath = "//a[@class='dropdown-toggle']")
+  private WebElement demosListDropdown;
   
   @FindBy(tagName="video")
   private List<WebElement> videos;
@@ -24,9 +27,44 @@ public class JanusPage extends BasePage {
   @FindBy(xpath=PUBLISHING)
   private WebElement publishing;
 
+  @FindBy(id="start")
+  private WebElement startStopButton;
+
+  @FindBy(xpath = "//h3[contains(text(),'Local Stream')]")
+  private WebElement localStreamHeader;
+
+  @FindBy(id="curbitrate")
+  private WebElement currentBitRatePrint;
+
+  @FindBy(id="curres")
+  private WebElement currentResolutionPrint;
+
   public JanusPage(WebDriver webDriver, Logger logger) {
     super(webDriver, logger);
   }
+
+  //not needed for now
+  public void openDemosListDropdown() throws KiteInteractionException {
+    waitUntilVisibilityOf(demosListDropdown, 2);
+    click(demosListDropdown);
+
+  }
+
+  public void startDemo () throws KiteInteractionException {
+    waitUntilVisibilityOf(startStopButton, 2);
+    click(startStopButton);
+  }
+
+  /**
+   *  ensure that the demo page is displayed
+    * @param timeoutInSeconds
+   * @throws KiteInteractionException if the element is not visible within the timeout
+   */
+  public void waitForLocalStreamHeaderVisibility (int timeoutInSeconds) throws KiteInteractionException {
+    waitUntilVisibilityOf(localStreamHeader, timeoutInSeconds);
+
+  }
+
 
 
   /**
