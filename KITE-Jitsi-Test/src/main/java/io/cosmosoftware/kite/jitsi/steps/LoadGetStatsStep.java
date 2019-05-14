@@ -72,9 +72,11 @@ public class LoadGetStatsStep extends TestStep {
 
     public String loadGetStats (StringBuilder getStatsFile, String testName, String testId, JsonValue logstashUrl, String sfu, JsonValue statsPublishingInterval, String username, String room) throws KiteTestException {
         String[] sendSplit = getStatsFile.toString().split("KITETestName, KITETestId");
-        sendSplit[1] = "\"" + testName + "\", " + testId + sendSplit[1];
-        sendSplit[2] = "\"" + testName + "\", " + testId + sendSplit[2];
-        String getStatsScript = sendSplit[0] + sendSplit[1] + sendSplit[2];
+        String getStatsScript = sendSplit[0];
+        for (int i = 1; i <= 2; i++) {
+            sendSplit[i] = "\"" + testName + "\", " + testId + sendSplit[i];
+            getStatsScript = getStatsScript + sendSplit[i];
+        }
 
         String[] initSplit = getStatsScript.split("testStats.init.* pc, ");
         System.out.println("Returning non-default init");
