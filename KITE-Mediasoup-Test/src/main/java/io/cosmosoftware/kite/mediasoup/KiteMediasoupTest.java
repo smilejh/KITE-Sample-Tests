@@ -79,7 +79,7 @@ public class KiteMediasoupTest extends KiteBaseTest {
           runner.addStep(new StayInMeetingStep(webDriver, loadReachTime));
         }
       } if (this.sfu != null) {
-        runner.addStep(new LoadGetStatsStep(runner.getWebDriver(), getMaxUsersPerRoom(), testName, testId, logstashUrl, sfu, statsPublishingInterval, pathToGetStatsSdk));
+        runner.addStep(new LoadGetStatsStep(runner.getWebDriver(), testName, testId, logstashUrl, sfu, statsPublishingInterval, pathToGetStatsSdk));
       }
     } catch (Exception e) {
       logger.error(getStackTrace(e));

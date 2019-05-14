@@ -17,7 +17,6 @@ import static io.cosmosoftware.kite.util.TestUtils.executeJsScript;
 import static io.cosmosoftware.kite.util.TestUtils.waitAround;
 
 public class LoadGetStatsStep extends TestStep {
-    private final int numberOfParticipants;
     private final String pathToGetStats;
     private final String testName;
     private final String testId;
@@ -27,9 +26,8 @@ public class LoadGetStatsStep extends TestStep {
     private final String username;
     private final String room;
 
-    public LoadGetStatsStep(WebDriver webDriver, int numberOfParticipants, String testName, String testId, JsonValue logstashUrl, String sfu, JsonValue statsPublishingInterval, String pathToGetStats) {
+    public LoadGetStatsStep(WebDriver webDriver, String testName, String testId, JsonValue logstashUrl, String sfu, JsonValue statsPublishingInterval, String pathToGetStats) {
         super(webDriver);
-        this.numberOfParticipants = numberOfParticipants;
         this.pathToGetStats = pathToGetStats;
         this.testName = testName;
         this.testId = testId;
