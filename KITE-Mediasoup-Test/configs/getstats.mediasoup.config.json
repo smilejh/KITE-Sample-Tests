@@ -24,7 +24,7 @@
         "getStatsSdk": {
           "testId": "MediasoupTestId",
           "sfu" : "Mediasoup",
-          "logstashUrl": "//logstash.cosmosoftware.io:5000",
+          "logstashUrl": "enterLogstashUrl",
           "statsPublishingInterval": 15000
         },
         "pathToGetStatsSdk": "KITE-getstats-sdk.js",
