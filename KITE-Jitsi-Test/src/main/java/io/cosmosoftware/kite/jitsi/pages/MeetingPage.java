@@ -3,9 +3,12 @@ package io.cosmosoftware.kite.jitsi.pages;
 import io.cosmosoftware.kite.exception.KiteTestException;
 import io.cosmosoftware.kite.pages.BasePage;
 import org.apache.log4j.Logger;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 
@@ -27,10 +30,10 @@ public class MeetingPage extends BasePage {
   public MeetingPage(WebDriver webDriver, Logger logger) throws KiteTestException {
     super(webDriver, logger);
     this.numberOfParticipants =
-      Integer.parseInt(executeJsScript(webDriver, getNumberOfParticipantScript()).toString()) + 1;
+        Integer.parseInt(executeJsScript(webDriver, getNumberOfParticipantScript()).toString()) + 1;
   }
-  
-  public String getNumberOfParticipantScript() {    
+
+  public String getNumberOfParticipantScript() {
     return "return APP.conference.getNumberOfParticipantsWithTracks();";
   }
 
@@ -41,18 +44,25 @@ public class MeetingPage extends BasePage {
         + "  window.pc.push(map.get(key).peerconnection);"
         + "}";
   }
-  
+
   public void clickVideoToggle() {
     manyTilesVideoToggle.click();
   }
-  
-  
+
+  public void videoIsPublishing(int timeout) throws TimeoutException {
+    WebDriverWait wait = new WebDriverWait(webDriver, timeout);
+    wait.until(ExpectedConditions.visibilityOf(videos.get(0)));
+  }
+
   public int numberOfVideos() {
     return videos.size();
   }
-  
+
   public int getNumberOfParticipants() {
     return this.numberOfParticipants;
   }
-  
+
+  public List<WebElement> getVideoElements() {
+    return videos;
+  }
 }

@@ -11,7 +11,7 @@ import static org.webrtc.kite.Utils.getEndPointList;
 import static org.webrtc.kite.Utils.getPayload;
 
 public class KiteJitsiTestTest extends TestCase {
-  private static final String CONFIG_FILE = "configs/jitsi.json";
+  private static final String CONFIG_FILE = "configs/local.jitsi.config.json";
   List<EndPoint> endPointList = new ArrayList<>(getEndPointList(CONFIG_FILE, "browsers"));
 
   public void testTestScript() throws Exception {
