@@ -67,12 +67,17 @@ public class MeetingPage extends BasePage {
     return videos;
   }
 
-  public void setUserId(){
-    ((JavascriptExecutor)webDriver).executeScript("APP.conference.changeLocalDisplayName(APP.conference.getMyUserId())");
+  public String getUserID() {
+    return "return APP.conference.getMyUserId()";
   }
 
-  public void setCustomUserId(String userId){
-    ((JavascriptExecutor) webDriver).executeScript("APP.conference.changeLocalDisplayName(\""+ userId +"\")");
+  public void changeLocalDisplayName(String userId) {
+    if (userId == null) {
+      // default
+      ((JavascriptExecutor) webDriver)
+          .executeScript("APP.conference.changeLocalDisplayName(APP.conference.getMyUserId())");
+    }
+    ((JavascriptExecutor) webDriver)
+        .executeScript("APP.conference.changeLocalDisplayName(\"" + userId + "\")");
   }
-
 }

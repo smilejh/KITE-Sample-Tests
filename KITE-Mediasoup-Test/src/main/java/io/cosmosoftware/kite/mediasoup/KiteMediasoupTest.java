@@ -30,7 +30,7 @@ public class KiteMediasoupTest extends KiteBaseTest {
     try {
       WebDriver webDriver = runner.getWebDriver();
       runner.addStep(new JoinVideoCallStep(webDriver, getRoomManager().getRoomUrl()));
-      runner.addStep(new SetUserId(webDriver, "user" + runner.getId()));
+      runner.addStep(new SetUserIdStep(webDriver, "user" + runner.getId()));
       if (!this.fastRampUp()) {
         runner.addStep(new FirstVideoCheck(webDriver));
         runner.addStep(new AllVideoCheck(webDriver, getMaxUsersPerRoom()));
