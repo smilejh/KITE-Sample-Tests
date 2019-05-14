@@ -2,10 +2,7 @@ package io.cosmosoftware.kite.mediasoup;
 
 import io.cosmosoftware.kite.mediasoup.checks.AllVideoCheck;
 import io.cosmosoftware.kite.mediasoup.checks.FirstVideoCheck;
-import io.cosmosoftware.kite.mediasoup.steps.GetStatsStep;
-import io.cosmosoftware.kite.mediasoup.steps.JoinVideoCallStep;
-import io.cosmosoftware.kite.mediasoup.steps.ScreenshotStep;
-import io.cosmosoftware.kite.mediasoup.steps.StayInMeetingStep;
+import io.cosmosoftware.kite.mediasoup.steps.*;
 import org.openqa.selenium.WebDriver;
 import org.webrtc.kite.tests.KiteBaseTest;
 import org.webrtc.kite.tests.TestRunner;
@@ -33,6 +30,7 @@ public class KiteMediasoupTest extends KiteBaseTest {
     try {
       WebDriver webDriver = runner.getWebDriver();
       runner.addStep(new JoinVideoCallStep(webDriver, getRoomManager().getRoomUrl()));
+      runner.addStep(new SetUserId(webDriver, "user" + runner.getId()));
       if (!this.fastRampUp()) {
         runner.addStep(new FirstVideoCheck(webDriver));
         runner.addStep(new AllVideoCheck(webDriver, getMaxUsersPerRoom()));
