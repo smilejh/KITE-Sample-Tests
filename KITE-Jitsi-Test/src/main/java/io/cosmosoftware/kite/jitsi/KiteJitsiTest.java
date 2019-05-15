@@ -16,10 +16,8 @@ import static org.webrtc.kite.Utils.getStackTrace;
 import javax.json.JsonObject;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Random;
 
 public class KiteJitsiTest extends KiteBaseTest {
-  final Random rand = new Random(System.currentTimeMillis());
   private JsonObject getStatsSdk;
   private String testName =  null;
   private String testId = "\"" + this.name + "_" + new SimpleDateFormat("yyyyMMdd_hhmmss").format(new Date()) + "\"";
@@ -64,10 +62,7 @@ public class KiteJitsiTest extends KiteBaseTest {
       }
       if (this.takeScreenshotForEachTest()) {
         runner.addStep(new ScreenshotStep(webDriver));
-      }
-
-
-    } catch (Exception e) {
+      }    } catch (Exception e) {
       logger.error(getStackTrace(e));
     }
   }

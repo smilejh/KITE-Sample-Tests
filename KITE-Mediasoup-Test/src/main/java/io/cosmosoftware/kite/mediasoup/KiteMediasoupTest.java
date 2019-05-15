@@ -48,7 +48,7 @@ public class KiteMediasoupTest extends KiteBaseTest {
       setExpectedTestDuration(Math.max(getExpectedTestDuration(), (loadReachTime + 300) / 60));
     }
   }
-  @Override
+    @Override
   public void populateTestSteps(TestRunner runner) {
     try {
       WebDriver webDriver = runner.getWebDriver();

@@ -1,20 +1,16 @@
 package io.cosmosoftware.kite.jitsi.steps;
 
 import io.cosmosoftware.kite.exception.KiteTestException;
-import io.cosmosoftware.kite.jitsi.KiteJitsiTest;
 import io.cosmosoftware.kite.jitsi.pages.JoinPage;
 import io.cosmosoftware.kite.steps.TestStep;
 import org.openqa.selenium.WebDriver;
 
 public class JoinRoomStep extends TestStep {
-  protected String roomId;
+  protected String roomUrl;
 
-  public JoinRoomStep(WebDriver webDriver) {
+  public JoinRoomStep(WebDriver webDriver, String roomUrl) {
     super(webDriver);
-  }
-
-  public void setRoomId(String roomId) {
-    this.roomId = roomId;
+    this.roomUrl = roomUrl;
   }
 
   @Override
@@ -25,7 +21,6 @@ public class JoinRoomStep extends TestStep {
   @Override
   protected void step() throws KiteTestException {
     JoinPage page = new JoinPage(webDriver, logger);
-    page.joinRoom(
-        KiteJitsiTest.url.endsWith("/") ? (KiteJitsiTest.url) : (KiteJitsiTest.url + "/") + roomId);
+    page.joinRoom(roomUrl);
   }
 }
