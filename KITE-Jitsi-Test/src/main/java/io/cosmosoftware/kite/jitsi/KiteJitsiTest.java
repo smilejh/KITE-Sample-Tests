@@ -2,10 +2,7 @@ package io.cosmosoftware.kite.jitsi;
 
 import io.cosmosoftware.kite.jitsi.checks.AllVideoCheck;
 import io.cosmosoftware.kite.jitsi.checks.FirstVideoCheck;
-import io.cosmosoftware.kite.jitsi.steps.GetStatsStep;
-import io.cosmosoftware.kite.jitsi.steps.JoinRoomStep;
-import io.cosmosoftware.kite.jitsi.steps.ScreenshotStep;
-import io.cosmosoftware.kite.jitsi.steps.LoadGetStatsStep;
+import io.cosmosoftware.kite.jitsi.steps.*;
 import org.openqa.selenium.WebDriver;
 import org.webrtc.kite.tests.KiteBaseTest;
 import org.webrtc.kite.tests.TestRunner;
@@ -19,29 +16,14 @@ import java.util.Date;
 import java.util.Random;
 
 public class KiteJitsiTest extends KiteBaseTest {
-  public static String url = "https://meet.jit.si";
-  final Random rand = new Random(System.currentTimeMillis());
+  
   private JsonObject getStatsSdk;
-  private String testName =  null;
-  private String testId = "\"" + this.name + "_" + new SimpleDateFormat("yyyyMMdd_hhmmss").format(new Date()) + "\"";
-  private String logstashUrl =  null;
-  private String sfu = "Jitsi";
-  private int statsPublishingInterval = 30000;
-  private String pathToGetStatsSdk;
 
   @Override
   protected void payloadHandling() {
     super.payloadHandling();
     if (this.payload != null) {
-
       getStatsSdk = this.payload.getJsonObject("getStatsSdk");
-      testName = this.name;
-      testId = getStatsSdk.getString("testId");
-      logstashUrl = getStatsSdk.getString("logstashUrl");
-      sfu = getStatsSdk.getString("sfu");
-      statsPublishingInterval = getStatsSdk.getInt("statsPublishingInterval", statsPublishingInterval);
-      pathToGetStatsSdk = this.payload.getString("pathToGetStatsSdk", pathToGetStatsSdk);
-
     }
   }
 
@@ -51,6 +33,9 @@ public class KiteJitsiTest extends KiteBaseTest {
       WebDriver webDriver = runner.getWebDriver();
       runner.addStep(new JoinRoomStep(webDriver, getRoomManager().getRoomUrl()));
       runner.addStep(new FirstVideoCheck(webDriver));
+      if (this.getStatsSdk != null) {
+        runner.addStep(new StartGetStatsSDKStep(runner.getWebDriver(), this.name, getStatsSdk));
+      }
       runner.addStep(new AllVideoCheck(webDriver));
       if (this.getStats()) {
         runner.addStep(
@@ -60,11 +45,11 @@ public class KiteJitsiTest extends KiteBaseTest {
                         getStatsCollectionInterval(),
                         getSelectedStats()));
       }
-      if (this.sfu != null) {
-        runner.addStep(new LoadGetStatsStep(runner.getWebDriver(), testName, testId, logstashUrl, sfu, statsPublishingInterval, pathToGetStatsSdk));
-      }
       if (this.takeScreenshotForEachTest()) {
         runner.addStep(new ScreenshotStep(webDriver));
+      }
+      if (this.meetingDuration > 0) {
+        runner.addStep(new StayInMeetingStep(webDriver, meetingDuration));
       }
       
     } catch (Exception e) {

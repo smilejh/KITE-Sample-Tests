@@ -37,7 +37,7 @@
           "outbound-rtp",
           "candidate-pair"
         ],
-        "loadReachTime": 0
+        "meetingDuration": 20
       }
     }
   ],

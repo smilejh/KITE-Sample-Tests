@@ -2,7 +2,7 @@ package io.cosmosoftware.kite.mediasoup;
 
 import io.cosmosoftware.kite.mediasoup.checks.AllVideoCheck;
 import io.cosmosoftware.kite.mediasoup.checks.FirstVideoCheck;
-import io.cosmosoftware.kite.mediasoup.steps.LoadGetStatsStep;
+import io.cosmosoftware.kite.mediasoup.steps.StartGetStatsSDKStep;
 import io.cosmosoftware.kite.mediasoup.steps.GetStatsStep;
 import io.cosmosoftware.kite.mediasoup.steps.JoinVideoCallStep;
 import io.cosmosoftware.kite.mediasoup.steps.ScreenshotStep;
@@ -20,30 +20,13 @@ import static org.webrtc.kite.Utils.getStackTrace;
 
 public class KiteMediasoupTest extends KiteBaseTest {
 
-  private int loadReachTime = 0;
   private JsonObject getStatsSdk;
-  private String testName =  null;
-  private String testId = "\"" + this.name + "_" + new SimpleDateFormat("yyyyMMdd_hhmmss").format(new Date()) + "\"";
-  private String logstashUrl =  null;
-  private String sfu = "Mediasoup";
-  private int statsPublishingInterval = 30000;
-  private String pathToGetStatsSdk;
 
   @Override
   protected void payloadHandling() {
     super.payloadHandling();
-    JsonObject jsonPayload = this.payload;
-    if (jsonPayload != null) {
+    if (this.payload != null) {
       getStatsSdk = this.payload.getJsonObject("getStatsSdk");
-      testName = this.name;
-      testId = getStatsSdk.getString("testId");
-      logstashUrl = getStatsSdk.getString("logstashUrl");
-      sfu = getStatsSdk.getString("sfu");
-      statsPublishingInterval = getStatsSdk.getInt("statsPublishingInterval", statsPublishingInterval);
-      pathToGetStatsSdk = this.payload.getString("pathToGetStatsSdk", pathToGetStatsSdk);
-
-      loadReachTime = jsonPayload.getInt("loadReachTime", loadReachTime);
-      setExpectedTestDuration(Math.max(getExpectedTestDuration(), (loadReachTime + 300) / 60));
     }
   }
 
@@ -54,6 +37,9 @@ public class KiteMediasoupTest extends KiteBaseTest {
       runner.addStep(new JoinVideoCallStep(webDriver, getRoomManager().getRoomUrl()));
       if (!this.fastRampUp()) {
         runner.addStep(new FirstVideoCheck(webDriver));
+        if (this.getStatsSdk != null) {
+          runner.addStep(new StartGetStatsSDKStep(runner.getWebDriver(), this.name, this.getStatsSdk));
+        }
         runner.addStep(new AllVideoCheck(webDriver, getMaxUsersPerRoom()));
         if (this.getStats()) {
           runner.addStep(
@@ -64,14 +50,11 @@ public class KiteMediasoupTest extends KiteBaseTest {
                           getStatsCollectionInterval(),
                           getSelectedStats()));
         }
-        if (this.sfu != null) {
-          runner.addStep(new LoadGetStatsStep(runner.getWebDriver(), testName, testId, logstashUrl, sfu, statsPublishingInterval, pathToGetStatsSdk));
-        }
         if (this.takeScreenshotForEachTest()) {
           runner.addStep(new ScreenshotStep(webDriver));
         }
-        if (this.loadReachTime > 0) {
-          runner.addStep(new StayInMeetingStep(webDriver, loadReachTime));
+        if (this.meetingDuration > 0) {
+          runner.addStep(new StayInMeetingStep(webDriver, meetingDuration));
         }
       }
     } catch (Exception e) {

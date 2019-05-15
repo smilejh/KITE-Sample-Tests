@@ -25,6 +25,7 @@
         "getStats" : true,
         "url": "https://meet.jit.si",
         "testTimeout": 20,
+        "meetingDuration": 20,
         "statsCollectionTime": 10,
         "statsCollectionInterval": 1,
         "selectedStats" : ["inbound-rtp", "outbound-rtp", "candidate-pair"]
