@@ -30,7 +30,6 @@ public class KiteJitsiTest extends KiteBaseTest {
   protected void payloadHandling() {
     super.payloadHandling();
     if (this.payload != null) {
-
       getStatsSdk = this.payload.getJsonObject("getStatsSdk");
       testName = this.name;
       testId = getStatsSdk.getString("testId");
@@ -62,7 +61,8 @@ public class KiteJitsiTest extends KiteBaseTest {
       }
       if (this.takeScreenshotForEachTest()) {
         runner.addStep(new ScreenshotStep(webDriver));
-      }    } catch (Exception e) {
+      }
+    } catch (Exception e) {
       logger.error(getStackTrace(e));
     }
   }
