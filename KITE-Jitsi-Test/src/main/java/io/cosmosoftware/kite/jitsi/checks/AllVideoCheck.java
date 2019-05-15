@@ -12,7 +12,7 @@ import static io.cosmosoftware.kite.util.TestUtils.videoCheck;
 import static io.cosmosoftware.kite.util.TestUtils.waitAround;
 
 public class AllVideoCheck extends TestStep {
-  int numberOfParticipants;
+  private final int numberOfParticipants;
 
   public AllVideoCheck(WebDriver webDriver, int numberOfParticipants) {
     super(webDriver);

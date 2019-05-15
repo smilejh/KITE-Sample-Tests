@@ -54,7 +54,7 @@ public class FirstVideoCheck extends TestStep {
     long elapsedTime = 0;
     Object videoCurrentTime =
         ((JavascriptExecutor) webDriver).executeScript(getVideoCurrentTimeScript());
-    while (elapsedTime < timeoutInSeconds || (double)videoCurrentTime < 3) {
+    while (elapsedTime < timeoutInSeconds*1000 || (double)videoCurrentTime < 3) {
       elapsedTime = System.currentTimeMillis() - startTime;
       waitAround(500);
       videoCurrentTime =
