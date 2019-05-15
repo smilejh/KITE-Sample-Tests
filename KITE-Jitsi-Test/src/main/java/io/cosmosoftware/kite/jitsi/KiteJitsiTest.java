@@ -9,7 +9,6 @@ import org.webrtc.kite.tests.KiteBaseTest;
 import org.webrtc.kite.tests.TestRunner;
 
 import javax.json.JsonObject;
-import javax.json.JsonValue;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;

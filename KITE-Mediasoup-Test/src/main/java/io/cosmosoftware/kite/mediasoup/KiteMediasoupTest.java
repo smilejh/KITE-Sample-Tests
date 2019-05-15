@@ -6,12 +6,10 @@ import io.cosmosoftware.kite.mediasoup.steps.*;
 import org.webrtc.kite.tests.KiteBaseTest;
 import org.webrtc.kite.tests.TestRunner;
 import io.cosmosoftware.kite.util.TestUtils;
-import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;
-import javax.json.JsonValue;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
