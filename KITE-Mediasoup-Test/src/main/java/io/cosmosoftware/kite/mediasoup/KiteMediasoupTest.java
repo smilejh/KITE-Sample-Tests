@@ -9,7 +9,6 @@ import io.cosmosoftware.kite.mediasoup.steps.ScreenshotStep;
 import io.cosmosoftware.kite.mediasoup.steps.StayInMeetingStep;
 import org.webrtc.kite.tests.KiteBaseTest;
 import org.webrtc.kite.tests.TestRunner;
-import io.cosmosoftware.kite.util.TestUtils;
 import org.openqa.selenium.WebDriver;
 
 import javax.json.JsonArray;
@@ -64,15 +63,21 @@ public class KiteMediasoupTest extends KiteBaseTest {
   public void populateTestSteps(TestRunner runner) {
     try {
       WebDriver webDriver = runner.getWebDriver();
-      int id = 1;
-      String roomUrl = getRoomManager().getRoomUrl()  + "&username=user" + TestUtils.idToString(id++);
-      runner.addStep(new JoinVideoCallStep(webDriver, roomUrl));
+      runner.addStep(new JoinVideoCallStep(webDriver, getRoomManager().getRoomUrl()));
       if (!this.fastRampUp()) {
         runner.addStep(new FirstVideoCheck(webDriver));
         runner.addStep(new AllVideoCheck(webDriver, getMaxUsersPerRoom()));
         if (this.getStats()) {
-          runner.addStep(new GetStatsStep(webDriver, getMaxUsersPerRoom(), getStatsCollectionTime(),
-                  getStatsCollectionInterval(), getSelectedStats()));
+          runner.addStep(
+                  new GetStatsStep(
+                          webDriver,
+                          getMaxUsersPerRoom(),
+                          getStatsCollectionTime(),
+                          getStatsCollectionInterval(),
+                          getSelectedStats()));
+        }
+        if (this.sfu != null) {
+          runner.addStep(new LoadGetStatsStep(runner.getWebDriver(), testName, testId, logstashUrl, sfu, statsPublishingInterval, pathToGetStatsSdk));
         }
         if (this.takeScreenshotForEachTest()) {
           runner.addStep(new ScreenshotStep(webDriver));
@@ -80,8 +85,6 @@ public class KiteMediasoupTest extends KiteBaseTest {
         if (this.loadReachTime > 0) {
           runner.addStep(new StayInMeetingStep(webDriver, loadReachTime));
         }
-      } if (this.sfu != null) {
-        runner.addStep(new LoadGetStatsStep(runner.getWebDriver(), testName, testId, logstashUrl, sfu, statsPublishingInterval, pathToGetStatsSdk));
       }
     } catch (Exception e) {
       logger.error(getStackTrace(e));

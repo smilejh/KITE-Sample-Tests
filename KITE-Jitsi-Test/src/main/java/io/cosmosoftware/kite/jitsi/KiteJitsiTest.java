@@ -1,25 +1,25 @@
 package io.cosmosoftware.kite.jitsi;
 
 import io.cosmosoftware.kite.jitsi.checks.AllVideoCheck;
+import io.cosmosoftware.kite.jitsi.checks.FirstVideoCheck;
 import io.cosmosoftware.kite.jitsi.steps.GetStatsStep;
 import io.cosmosoftware.kite.jitsi.steps.JoinRoomStep;
-import io.cosmosoftware.kite.jitsi.steps.LoadGetStatsStep;
 import io.cosmosoftware.kite.jitsi.steps.ScreenshotStep;
+import io.cosmosoftware.kite.jitsi.steps.LoadGetStatsStep;
 import org.openqa.selenium.WebDriver;
 import org.webrtc.kite.tests.KiteBaseTest;
 import org.webrtc.kite.tests.TestRunner;
+
+import static org.webrtc.kite.Utils.getStackTrace;
 
 import javax.json.JsonObject;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 
-import static org.webrtc.kite.Utils.getStackTrace;
-
 public class KiteJitsiTest extends KiteBaseTest {
   public static String url = "https://meet.jit.si";
   final Random rand = new Random(System.currentTimeMillis());
-  final String roomId = String.valueOf(Math.abs(rand.nextLong()));
   private JsonObject getStatsSdk;
   private String testName =  null;
   private String testId = "\"" + this.name + "_" + new SimpleDateFormat("yyyyMMdd_hhmmss").format(new Date()) + "\"";
@@ -65,7 +65,6 @@ public class KiteJitsiTest extends KiteBaseTest {
       if (this.takeScreenshotForEachTest()) {
         runner.addStep(new ScreenshotStep(webDriver));
       }
-
     } catch (Exception e) {
       logger.error(getStackTrace(e));
     }
