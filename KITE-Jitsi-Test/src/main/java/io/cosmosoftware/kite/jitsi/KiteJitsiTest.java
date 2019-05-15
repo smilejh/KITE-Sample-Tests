@@ -23,7 +23,7 @@ public class KiteJitsiTest extends KiteBaseTest {
       runner.addStep(new JoinRoomStep(webDriver, getRoomManager().getRoomUrl()));
       runner.addStep(new SetUserIdStep(webDriver, "user" + runner.getId()));
       runner.addStep(new FirstVideoCheck(webDriver));
-      runner.addStep(new AllVideoCheck(webDriver));
+      runner.addStep(new AllVideoCheck(webDriver, getMaxUsersPerRoom()));
       if (this.getStats()) {
         runner.addStep(
             new GetStatsStep(

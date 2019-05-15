@@ -28,7 +28,6 @@ public class FirstVideoCheck extends TestStep {
   @Override
   protected void step() throws KiteTestException {
     try {
-      waitAround(ONE_SECOND_INTERVAL);
       final MeetingPage meetingPage = new MeetingPage(this.webDriver, logger);
       meetingPage.videoIsPublishing(10);
       logger.info("Looking for video object");

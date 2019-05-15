@@ -12,9 +12,11 @@ import static io.cosmosoftware.kite.util.TestUtils.videoCheck;
 import static io.cosmosoftware.kite.util.TestUtils.waitAround;
 
 public class AllVideoCheck extends TestStep {
+  int numberOfParticipants;
 
-  public AllVideoCheck(WebDriver webDriver) {
+  public AllVideoCheck(WebDriver webDriver, int numberOfParticipants) {
     super(webDriver);
+    this.numberOfParticipants = numberOfParticipants;
   }
 
   @Override
@@ -27,23 +29,23 @@ public class AllVideoCheck extends TestStep {
     try {
       final MeetingPage meetingPage = new MeetingPage(this.webDriver, logger);
       // wait a while to allow all videos to load.
-      waitAround(meetingPage.getNumberOfParticipants() * 3 * ONE_SECOND_INTERVAL);
+      waitAround(numberOfParticipants * 3 * ONE_SECOND_INTERVAL);
       meetingPage.clickVideoToggle();
       logger.info("Looking for video elements");
-      if (meetingPage.numberOfVideos() < meetingPage.getNumberOfParticipants()) {
+      if (meetingPage.numberOfVideos() < numberOfParticipants) {
         throw new KiteTestException(
             "Unable to find "
-                + meetingPage.getNumberOfParticipants()
+                + numberOfParticipants
                 + " <video> element on the page. No video found = "
                 + meetingPage.numberOfVideos(),
             Status.FAILED);
       }
       String videoCheck = "";
       boolean error = false;
-      for (int i = 1; i < meetingPage.getNumberOfParticipants(); i++) {
+      for (int i = 1; i < numberOfParticipants; i++) {
         String v = videoCheck(webDriver, i);
         videoCheck += v;
-        if (i < meetingPage.getNumberOfParticipants() - 1) {
+        if (i < numberOfParticipants - 1) {
           videoCheck += "|";
         }
         if (!"video".equalsIgnoreCase(v)) {

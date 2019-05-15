@@ -13,11 +13,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 
-import static io.cosmosoftware.kite.util.TestUtils.executeJsScript;
-
 public class MeetingPage extends BasePage {
-
-  private final int numberOfParticipants;
 
   @FindBy(id = "largeVideo")
   private WebElement mainVideo;
@@ -30,12 +26,6 @@ public class MeetingPage extends BasePage {
 
   public MeetingPage(WebDriver webDriver, Logger logger) throws KiteTestException {
     super(webDriver, logger);
-    this.numberOfParticipants =
-        Integer.parseInt(executeJsScript(webDriver, getNumberOfParticipantScript()).toString()) + 1;
-  }
-
-  public String getNumberOfParticipantScript() {
-    return "return APP.conference.getNumberOfParticipantsWithTracks();";
   }
 
   public String getPeerConnectionScript() {
@@ -59,16 +49,8 @@ public class MeetingPage extends BasePage {
     return videos.size();
   }
 
-  public int getNumberOfParticipants() {
-    return this.numberOfParticipants;
-  }
-
   public List<WebElement> getVideoElements() {
     return videos;
-  }
-
-  public String getUserID() {
-    return "return APP.conference.getMyUserId()";
   }
 
   public void changeLocalDisplayName(String userId) {
