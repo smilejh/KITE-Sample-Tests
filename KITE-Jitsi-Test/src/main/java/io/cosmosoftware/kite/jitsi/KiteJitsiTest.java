@@ -21,9 +21,9 @@ public class KiteJitsiTest extends KiteBaseTest {
   private JsonObject getStatsSdk;
   private String testName =  null;
   private String testId = "\"" + this.name + "_" + new SimpleDateFormat("yyyyMMdd_hhmmss").format(new Date()) + "\"";
-  private JsonValue logstashUrl =  null;
+  private String logstashUrl =  null;
   private String sfu = "Jitsi";
-  private JsonValue statsPublishingInterval;
+  private int statsPublishingInterval = 30000;
   private String pathToGetStatsSdk;
 
   @Override
@@ -33,10 +33,10 @@ public class KiteJitsiTest extends KiteBaseTest {
 
       getStatsSdk = this.payload.getJsonObject("getStatsSdk");
       testName = this.name;
-      testId = getStatsSdk.get("testId").toString();
-      logstashUrl = getStatsSdk.get("logstashUrl");
-      sfu = getStatsSdk.get("sfu").toString();
-      statsPublishingInterval = getStatsSdk.get("statsPublishingInterval");
+      testId = getStatsSdk.getString("testId");
+      logstashUrl = getStatsSdk.getString("logstashUrl");
+      sfu = getStatsSdk.getString("sfu");
+      statsPublishingInterval = getStatsSdk.getInt("statsPublishingInterval", statsPublishingInterval);
       pathToGetStatsSdk = this.payload.getString("pathToGetStatsSdk", pathToGetStatsSdk);
 
     }

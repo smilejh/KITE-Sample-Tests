@@ -19,13 +19,13 @@ public class LoadGetStatsStep extends TestStep {
     private final String pathToGetStats;
     private final String testName;
     private final String testId;
-    private final JsonValue logstashUrl;
+    private final String logstashUrl;
     private final String sfu;
-    private final JsonValue statsPublishingInterval;
-    private final String username;
-    private final String room;
+    private final int statsPublishingInterval;
+    private final String username = "APP.conference.getLocalDisplayName()";
+    private final String room = "APP.conference._room.options.name";
 
-    public LoadGetStatsStep(WebDriver webDriver, String testName, String testId, JsonValue logstashUrl, String sfu, JsonValue statsPublishingInterval, String pathToGetStats) {
+    public LoadGetStatsStep(WebDriver webDriver, String testName, String testId, String logstashUrl, String sfu, int statsPublishingInterval, String pathToGetStats) {
         super(webDriver);
         this.pathToGetStats = pathToGetStats;
         this.testName = testName;
@@ -33,8 +33,6 @@ public class LoadGetStatsStep extends TestStep {
         this.logstashUrl = logstashUrl;
         this.sfu = sfu;
         this.statsPublishingInterval = statsPublishingInterval;
-        this.username = "APP.conference.getLocalDisplayName()";
-        this.room = "APP.conference._room.options.name";
     }
 
     @Override
@@ -70,7 +68,7 @@ public class LoadGetStatsStep extends TestStep {
      * @param statsPublishingInterval
      */
 
-    public String loadGetStats (StringBuilder getStatsFile, String testName, String testId, JsonValue logstashUrl, String sfu, JsonValue statsPublishingInterval, String username, String room) throws KiteTestException {
+    public String loadGetStats (StringBuilder getStatsFile, String testName, String testId, String logstashUrl, String sfu, int statsPublishingInterval, String username, String room) throws KiteTestException {
         String[] sendSplit = getStatsFile.toString().split("KITETestName, KITETestId");
         String getStatsScript = sendSplit[0];
         for (int i = 1; i <= 2; i++) {

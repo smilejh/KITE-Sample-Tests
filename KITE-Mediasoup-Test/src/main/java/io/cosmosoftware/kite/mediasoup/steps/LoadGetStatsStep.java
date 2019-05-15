@@ -4,14 +4,11 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 
 import io.cosmosoftware.kite.exception.KiteTestException;
 import io.cosmosoftware.kite.report.Status;
 import io.cosmosoftware.kite.steps.TestStep;
 import org.openqa.selenium.WebDriver;
-
-import javax.json.JsonValue;
 
 import static io.cosmosoftware.kite.util.TestUtils.executeJsScript;
 import static io.cosmosoftware.kite.util.TestUtils.waitAround;
@@ -20,13 +17,13 @@ public class LoadGetStatsStep extends TestStep {
     private final String pathToGetStats;
     private final String testName;
     private final String testId;
-    private final JsonValue logstashUrl;
+    private final String logstashUrl;
     private final String sfu;
-    private final JsonValue statsPublishingInterval;
-    private final String username;
-    private final String room;
+    private final int statsPublishingInterval;
+    private final String username = "window.CC._displayName";
+    private final String room = "window.location.search.split(\"?roomId=\")[1]";
 
-    public LoadGetStatsStep(WebDriver webDriver, String testName, String testId, JsonValue logstashUrl, String sfu, JsonValue statsPublishingInterval, String pathToGetStats) {
+    public LoadGetStatsStep(WebDriver webDriver, String testName, String testId, String logstashUrl, String sfu, int statsPublishingInterval, String pathToGetStats) {
         super(webDriver);
         this.pathToGetStats = pathToGetStats;
         this.testName = testName;
@@ -34,8 +31,6 @@ public class LoadGetStatsStep extends TestStep {
         this.logstashUrl = logstashUrl;
         this.sfu = sfu;
         this.statsPublishingInterval = statsPublishingInterval;
-        this.username = "window.CC._displayName";
-        this.room = "window.location.search.split(\"?roomId=\")[1]";// not sure how to get roomId directly
     }
 
     @Override
@@ -71,7 +66,7 @@ public class LoadGetStatsStep extends TestStep {
      * @param statsPublishingInterval
      */
 
-    public String loadGetStats (StringBuilder getStatsFile, String testName, String testId, JsonValue logstashUrl, String sfu, JsonValue statsPublishingInterval, String username, String room) throws KiteTestException {
+    public String loadGetStats (StringBuilder getStatsFile, String testName, String testId, String logstashUrl, String sfu, int statsPublishingInterval, String username, String room) throws KiteTestException {
 
         String[] initSplit = getStatsFile.toString().split("testStats.init.* pc, ");
         System.out.println("Returning non-default init");
