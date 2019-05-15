@@ -12,6 +12,7 @@ import org.webrtc.kite.tests.TestRunner;
 
 import static org.webrtc.kite.Utils.getStackTrace;
 
+
 import javax.json.JsonObject;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -65,6 +66,7 @@ public class KiteJitsiTest extends KiteBaseTest {
       if (this.takeScreenshotForEachTest()) {
         runner.addStep(new ScreenshotStep(webDriver));
       }
+      
     } catch (Exception e) {
       logger.error(getStackTrace(e));
     }

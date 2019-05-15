@@ -57,6 +57,5 @@ public class KiteMediasoupTestTest extends TestCase {
     test.setPayload(getPayload(CONFIG_FILE, 0));
     test.setEndPointList(endPointList);
     JsonObject testResult = test.execute();
-    logger.info("Test result = \r\n" + TestHelper.jsonToString(testResult));
   }
 }
