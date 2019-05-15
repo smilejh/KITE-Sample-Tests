@@ -12,11 +12,11 @@
     {
       "name": "OpenVidu Local Grid %ts",
       "description":"interop test for OpenVidu",
-      "tupleSize": 4,
+      "tupleSize": 2,
       "testImpl": "io.cosmosoftware.kite.openvidu.KiteOpenViduTest",
       "payload": {
         "url": "https://demos.openvidu.io/openvidu-call/#/",
-        "rooms": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
+        "rooms": ["1qwe", "2qwe", "3", "4", "5", "6", "7", "8", "9", "10",
           "11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
           "21", "22", "23", "24", "25", "26", "27", "28", "29", "30",
           "31", "32", "33", "34", "35", "36", "37", "38", "39", "40",
@@ -26,7 +26,7 @@
           "71", "72", "73", "74", "75", "76", "77", "78", "79", "80",
           "81", "82", "83", "84", "85", "86", "87", "88", "89", "90",
           "91", "82", "83", "84", "95", "96", "97", "98", "99", "100"],
-        "usersPerRoom": 2,
+        "usersPerRoom": 4,
         "takeScreenshotForEachTest": true,
         "testTimeout": 20,
         "getStats": true,
@@ -46,28 +46,13 @@
       "browserName": "chrome",
       "version": "74",
       "platform": "WINDOWS",
-      "headless": false,
       "focus": true
     },
     {
       "browserName": "firefox",
       "version": "66",
       "platform": "WINDOWS",
-      "headless": true
-    }
-  ],
-  "_browsers_list": [
-    {
-      "browserName": "chrome",
-      "version": "74",
-      "platform": "MAC",
-      "headless": true
-    },
-    {
-      "browserName": "firefox",
-      "version": "66",
-      "platform": "LINUX",
-      "headless": true
+      "focus": true
     }
   ]
 }

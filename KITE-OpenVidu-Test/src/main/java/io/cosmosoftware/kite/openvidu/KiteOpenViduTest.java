@@ -1,5 +1,7 @@
 package io.cosmosoftware.kite.openvidu;
 
+import io.cosmosoftware.kite.openvidu.checks.AllVideoCheck;
+import io.cosmosoftware.kite.openvidu.checks.FirstVideoCheck;
 import io.cosmosoftware.kite.openvidu.steps.GoJoinPageStep;
 import io.cosmosoftware.kite.openvidu.steps.JoinRoomStep;
 import io.cosmosoftware.kite.openvidu.steps.ScreenshotStep;
@@ -17,15 +19,19 @@ public class KiteOpenViduTest extends KiteBaseTest {
 
   @Override
   protected void populateTestSteps(TestRunner runner) {
-    try{
+    try {
       WebDriver webDriver = runner.getWebDriver();
-    runner.addStep(new GoJoinPageStep(webDriver,getRoomManager().getRoomUrl()));
-    runner.addStep(new SetUserIdStep(webDriver, "user" + runner.getId()));
-    runner.addStep(new JoinRoomStep(webDriver));
+      runner.addStep(new GoJoinPageStep(webDriver, getRoomManager().getRoomUrl()));
+      runner.addStep(new SetUserIdStep(webDriver, "user" + runner.getId()));
+      runner.addStep(new JoinRoomStep(webDriver));
+      if (!fastRampUp()) {
+        runner.addStep(new FirstVideoCheck(webDriver));
+        runner.addStep(new AllVideoCheck(webDriver, getMaxUsersPerRoom()));
+      }
       if (takeScreenshotForEachTest()) {
         runner.addStep(new ScreenshotStep(webDriver));
-    }
-    }catch (Exception e){
+      }
+    } catch (Exception e) {
       logger.error(getStackTrace(e));
     }
   }
