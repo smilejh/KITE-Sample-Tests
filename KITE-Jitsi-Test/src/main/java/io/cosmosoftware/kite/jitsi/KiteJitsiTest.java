@@ -12,13 +12,13 @@ import org.webrtc.kite.tests.TestRunner;
 
 import static org.webrtc.kite.Utils.getStackTrace;
 
+
 import javax.json.JsonObject;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 
 public class KiteJitsiTest extends KiteBaseTest {
-  public static String url = "https://meet.jit.si";
   final Random rand = new Random(System.currentTimeMillis());
   private JsonObject getStatsSdk;
   private String testName =  null;
@@ -65,6 +65,8 @@ public class KiteJitsiTest extends KiteBaseTest {
       if (this.takeScreenshotForEachTest()) {
         runner.addStep(new ScreenshotStep(webDriver));
       }
+
+
     } catch (Exception e) {
       logger.error(getStackTrace(e));
     }

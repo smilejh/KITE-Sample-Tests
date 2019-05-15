@@ -7,18 +7,16 @@ import io.cosmosoftware.kite.mediasoup.steps.GetStatsStep;
 import io.cosmosoftware.kite.mediasoup.steps.JoinVideoCallStep;
 import io.cosmosoftware.kite.mediasoup.steps.ScreenshotStep;
 import io.cosmosoftware.kite.mediasoup.steps.StayInMeetingStep;
+import org.openqa.selenium.WebDriver;
 import org.webrtc.kite.tests.KiteBaseTest;
 import org.webrtc.kite.tests.TestRunner;
-import org.openqa.selenium.WebDriver;
 
-import javax.json.JsonArray;
 import javax.json.JsonObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static org.webrtc.kite.Utils.getStackTrace;
-
 
 public class KiteMediasoupTest extends KiteBaseTest {
 
@@ -31,34 +29,25 @@ public class KiteMediasoupTest extends KiteBaseTest {
   private int statsPublishingInterval = 30000;
   private String pathToGetStatsSdk;
 
-  
   @Override
   protected void payloadHandling() {
     super.payloadHandling();
-    JsonObject jsonPayload = (JsonObject) this.payload;
-    String[] rooms = null;
+    JsonObject jsonPayload = this.payload;
     if (jsonPayload != null) {
       getStatsSdk = this.payload.getJsonObject("getStatsSdk");
       testName = this.name;
-      testId = getStatsSdk.getString("testId");
-      logstashUrl = getStatsSdk.getString("logstashUrl");
-      sfu = getStatsSdk.getString("sfu");
-      statsPublishingInterval = getStatsSdk.getInt("statsPublishingInterval", statsPublishingInterval);
+      if (getStatsSdk != null) {
+        testId = getStatsSdk.getString("testId");
+        logstashUrl = getStatsSdk.getString("logstashUrl");
+        sfu = getStatsSdk.getString("sfu");
+        statsPublishingInterval = getStatsSdk.getInt("statsPublishingInterval", statsPublishingInterval);
+      }
       pathToGetStatsSdk = this.payload.getString("pathToGetStatsSdk", pathToGetStatsSdk);
 
       loadReachTime = jsonPayload.getInt("loadReachTime", loadReachTime);
-      setExpectedTestDuration(Math.max(getExpectedTestDuration(), (loadReachTime + 300)/60));
-      JsonArray jsonArray = jsonPayload.getJsonArray("rooms");
-      rooms = new String[jsonArray.size()];
-      for (int i = 0; i < jsonArray.size(); i++) {
-        rooms[i] = jsonArray.getString(i);
-      }
-    }
-    if (rooms != null) {
-      getRoomManager().setRoomNames(rooms);
+      setExpectedTestDuration(Math.max(getExpectedTestDuration(), (loadReachTime + 300) / 60));
     }
   }
-  
   @Override
   public void populateTestSteps(TestRunner runner) {
     try {
