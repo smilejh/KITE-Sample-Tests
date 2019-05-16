@@ -36,7 +36,7 @@
         "getStats": true,
         "statsCollectionTime" : 4,
         "statsCollectionInterval" : 2,
-        "loadReachTime" : 0,
+        "meetingDuration": 20,
         "reconnectionDelay" : 0,
         "reconnectionRandom" : 0,
         "chanceOfMeetingEnded": 0,
