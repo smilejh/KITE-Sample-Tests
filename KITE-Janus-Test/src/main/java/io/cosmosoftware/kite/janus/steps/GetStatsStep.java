@@ -42,9 +42,6 @@ public class GetStatsStep extends TestStep {
     logger.info("Getting WebRTC stats via getStats");
     String pcName = "echotest.webrtcStuff.pc";
     try {
-//      JsonObject sentStats =
-//        getPCStatOvertime(webDriver, "window.pc", statsCollectionTime, statsCollectionInterval,
-//          selectedStats);
       JsonObject sentStats =
       getPCStatOvertime(webDriver, pcName, statsCollectionTime, statsCollectionInterval,
           selectedStats);

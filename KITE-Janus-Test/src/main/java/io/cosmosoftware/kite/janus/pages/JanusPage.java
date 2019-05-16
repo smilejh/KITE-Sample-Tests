@@ -1,6 +1,7 @@
 package io.cosmosoftware.kite.janus.pages;
 
 import io.cosmosoftware.kite.exception.KiteInteractionException;
+import io.cosmosoftware.kite.janus.LoopbackStats;
 import io.cosmosoftware.kite.pages.BasePage;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.*;
@@ -9,6 +10,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
+import java.util.StringTokenizer;
 
 import static io.cosmosoftware.kite.util.WebDriverUtils.loadPage;
 
@@ -39,16 +41,75 @@ public class JanusPage extends BasePage {
   @FindBy(id="curres")
   private WebElement currentResolutionPrint;
 
+  @FindBy(id="sl-0")
+  private WebElement sl0Button;
+
+  @FindBy(id="sl-1")
+  private WebElement sl1Button;
+
+  @FindBy(id="sl-2")
+  private WebElement sl2Button;
+
+  @FindBy(id="tl-0")
+  private WebElement tl0Button;
+
+  @FindBy(id="tl-1")
+  private WebElement tl1Button;
+
+  @FindBy(id="tl-2")
+  private WebElement tl2Button;
+
+  @FindBy(id="streamset")
+  private WebElement streamSetButton;
+
+  @FindBy(id="watch")
+  private WebElement streamWatchButton;
+
+  @FindBy(id="1")
+  private WebElement streamVideoSet;
+
+  @FindBy(id="2")
+  private WebElement streamAudioSet;
+
+  @FindBy(id="3")
+  private WebElement streamVideoOnDemandSet;
+
+
+
+
+
   public JanusPage(WebDriver webDriver, Logger logger) {
     super(webDriver, logger);
   }
 
   //not needed for now
   public void openDemosListDropdown() throws KiteInteractionException {
-    waitUntilVisibilityOf(demosListDropdown, 2);
-    click(demosListDropdown);
+    waitUntilVisibilityOf(streamSetButton, 2);
+    click(streamSetButton);
 
   }
+
+
+  public void openStreamSetList() throws KiteInteractionException {
+    waitUntilVisibilityOf(streamSetButton, 2);
+    click(streamSetButton);
+  }
+
+  public void selectStreamSet(String streamSet) throws KiteInteractionException {
+    switch (streamSet) {
+      case "videoLive":
+        click(streamVideoSet);
+        break;
+      case "audioLive":
+        click(streamAudioSet);
+        break;
+      case "videoOnDemand":
+        click(streamVideoOnDemandSet);
+        break;
+    }
+  }
+
+
 
   public void startDemo () throws KiteInteractionException {
     waitUntilVisibilityOf(startStopButton, 2);
@@ -88,6 +149,42 @@ public class JanusPage extends BasePage {
 
 
   /**
+   *
+   * Click a button
+   *
+   * @param rid the rid
+   * @param tid the tid
+   */
+
+  public void clickButton(String rid, int tid) throws KiteInteractionException {
+    switch (rid) {
+      case "a":
+        click(sl2Button);
+        break;
+      case "b":
+        click(sl1Button);
+        break;
+      case "c":
+        click(sl0Button);
+        break;
+    }
+    switch (tid) {
+      case 0:
+        click(tl0Button);
+        break;
+      case 1:
+        click(tl1Button);
+        break;
+      case 2:
+        click(tl2Button);
+        break;
+      default:
+        break;
+    }
+  }
+
+  //should be removed or adapted for the test on demo version
+  /**
    * Load the web page at url
    * @param url the url of the page to load
    */
@@ -108,4 +205,12 @@ public class JanusPage extends BasePage {
     }
   }
 
+  public LoopbackStats getLoopbackStats() {
+    {
+      String r = currentResolutionPrint.getText();
+      StringTokenizer st = new StringTokenizer(r, "x");
+      return new LoopbackStats("1280", "720", "0", "0",
+          st.nextToken(), st.nextToken(), "0", "0");
+    }
+  }
 }
