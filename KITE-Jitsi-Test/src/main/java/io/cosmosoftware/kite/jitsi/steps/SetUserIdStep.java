@@ -6,7 +6,9 @@ import io.cosmosoftware.kite.steps.TestStep;
 import org.openqa.selenium.WebDriver;
 
 public class SetUserIdStep extends TestStep {
-  String userId;
+  
+  private final String userId;
+  
   public SetUserIdStep(WebDriver webDriver, String userId) {
     super(webDriver);
     this.userId = userId;
