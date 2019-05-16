@@ -19,8 +19,6 @@ import javax.json.JsonObject;
 public class KiteJanusTest extends KiteBaseTest {
 
 
-
-  private int loadReachTime = 0;
   private int bandwidthCheckDuration = 0;
   private boolean checkSimulcast = true;
 
@@ -33,9 +31,7 @@ public class KiteJanusTest extends KiteBaseTest {
     JsonObject jsonPayload = (JsonObject) this.payload;
     if (jsonPayload != null) {
       checkSimulcast = jsonPayload.getBoolean("checkSimulcast", checkSimulcast);
-      loadReachTime = jsonPayload.getInt("loadReachTime", loadReachTime);
-      bandwidthCheckDuration = jsonPayload.getInt("bandwidthCheckDuration", loadReachTime);
-      setExpectedTestDuration(Math.max(getExpectedTestDuration(), (loadReachTime + 300)/60));
+      bandwidthCheckDuration = jsonPayload.getInt("bandwidthCheckDuration", meetingDuration);
     }
   }
 

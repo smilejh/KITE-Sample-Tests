@@ -85,11 +85,11 @@ __On Windows:__
     c
     ```
 
-If you are within a test folder, for example in KITE-AppRTC-Test, you can type __`c`__ to compile the test module
+If you are within a test folder, for example in KITE-Janus-Test, you can type __`c`__ to compile the test module
 only or __`c all`__ to recompile the entire project:
 
     ```
-    cd %KITE_HOME%\KITE-AppRTC-Test  
+    cd %KITE_HOME%\KITE-Janus-Test  
     c all
     ```  
     
@@ -100,11 +100,11 @@ Just type `./c` (which will execute `mvn clean install -DskipTests`).
     cd $KITE_HOME
     ./c
     ```
-If you are within a test folder, for example in KITE-AppRTC-Test, you can type __`./c`__ to compile the test module
+If you are within a test folder, for example in KITE-Janus-Test, you can type __`./c`__ to compile the test module
 only or __`./c all`__ to recompile the entire project:  
 
     ```
-    cd $KITE_HOME/KITE-AppRTC-Test 
+    cd $KITE_HOME/KITE-Janus-Test 
     ./c all
     ```
     
@@ -114,11 +114,11 @@ Just type `c` (which will execute `mvn clean install -DskipTests`).
     cd $KITE_HOME
     c
     ```
-If you are within a test folder, for example in KITE-AppRTC-Test, you can type __`c`__ to compile the test module
+If you are within a test folder, for example in KITE-Janus-Test, you can type __`c`__ to compile the test module
  only or __`c all`__ to recompile the entire project:  
 
     ```
-    cd $KITE_HOME/KITE-AppRTC-Test
+    cd $KITE_HOME/KITE-Janus-Test
     c all
     ```
 
@@ -150,17 +150,17 @@ After running the test, you can open the Allure dashboard with the command `a`.
 
 __On Windows:__  
 ```
-cd %KITE_HOME%\KITE-AppRTC-Test
+cd %KITE_HOME%\KITE-Janus-Test
 a
 ```
 __On Linux:__  
 ```
-cd $KITE_HOME/KITE-AppRTC-Test
+cd $KITE_HOME/KITE-Janus-Test
 ./a
 ```
 __On Mac:__  
 ```
-cd $KITE_HOME/KITE-AppRTC-Test
+cd $KITE_HOME/KITE-Janus-Test
 a
 ```
 

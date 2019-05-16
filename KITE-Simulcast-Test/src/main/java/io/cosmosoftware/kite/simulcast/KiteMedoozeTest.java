@@ -17,23 +17,11 @@ import javax.json.JsonObject;
 
 public class KiteMedoozeTest extends KiteBaseTest {
 
-  private int loadReachTime = 0;
 
 
   private final String[] rids = {"a", "b", "c"};
   private final int[] tids = {0, 1, 2};
-  
-  @Override
-  protected void payloadHandling() {
-    super.payloadHandling();
-    JsonObject jsonPayload = (JsonObject) this.payload;
-    String[] rooms = null;
-    if (jsonPayload != null) {
-      loadReachTime = jsonPayload.getInt("loadReachTime", loadReachTime);
-      setExpectedTestDuration(Math.max(getExpectedTestDuration(), (loadReachTime + 300)/60));
-    }
-  }
-  
+    
   @Override
   public void populateTestSteps(TestRunner runner) {
     WebDriver webDriver = runner.getWebDriver();
