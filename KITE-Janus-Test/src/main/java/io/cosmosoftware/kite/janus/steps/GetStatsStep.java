@@ -19,7 +19,16 @@ public class GetStatsStep extends TestStep {
 
   private final JsonObject getStatsConfig;
 
-  public GetStatsStep(WebDriver webDriver, JsonObject getStatsConfig) {
+  /**
+   * demoName corresponds to the pluginHandle in the website source code (https://janus.conf.meetecho.com)
+   * list of pluginHandle/demoName (Plugin Demo name):
+   *      - echotest (Echo Test)
+   *      - streaming (Streaming)
+   *      - sfutest (Video Room)
+   *      - videocall (Video Call)
+   *      - ...
+   */
+
     super(webDriver);
     this.getStatsConfig = getStatsConfig;
   }
@@ -33,7 +42,7 @@ public class GetStatsStep extends TestStep {
   @Override
   protected void step() throws KiteTestException {
     logger.info("Getting WebRTC stats via getStats");
-    String pcName = "echotest.webrtcStuff.pc";
+
     try {
       List<JsonObject> stats = getPCStatOvertime(webDriver, getStatsConfig);
       JsonObject sentStats = stats.get(0);
@@ -54,7 +63,9 @@ public class GetStatsStep extends TestStep {
       JsonObject json = extractStats(sentStats, receivedStats);
       JsonObjectBuilder builder = Json.createObjectBuilder();
       builder.add("local", sentStats);
-      builder.add("remote", arrayBuilder);
+      if (numberOfParticipants>1) {
+        builder.add("remote", arrayBuilder);
+      }
       Reporter.getInstance().jsonAttachment(report, "getStatsRaw", builder.build());
       Reporter.getInstance().jsonAttachment(report, "getStatsSummary", json);
     } catch (Exception e) {

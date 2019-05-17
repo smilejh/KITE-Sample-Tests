@@ -27,7 +27,8 @@ public class StartDemoStep extends TestStep {
   @Override
   protected void step() throws KiteTestException {
     final JanusPage janusPage = new JanusPage(this.webDriver, this.logger);
-    loadPage(this.webDriver, url, 5);
+    loadPage(this.webDriver, url, 10);
+    waitAround(3*ONE_SECOND_INTERVAL);
     janusPage.startDemo();
 
   }
