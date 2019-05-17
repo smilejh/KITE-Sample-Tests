@@ -49,7 +49,7 @@
   "browsers": [
     {
       "browserName": "chrome",
-      "version": "75",
+      "version": "74",
       "platform": "WINDOWS",
       "windowSize": "1280,800",
       "fakeMediaFile": "D:\\Videos\\Samples\\y4m\\avenger_trailer.y4m",

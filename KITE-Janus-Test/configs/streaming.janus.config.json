@@ -1,0 +1,46 @@
+{
+  "type": 1,
+  "name": "Janus Echo Local",
+  "permute": true,
+  "remotes": [
+    {
+      "type": "local",
+      "remoteAddress": "http://localhost:4444/wd/hub"
+    }
+  ],
+  "tests": [
+    {
+      "name": "Janus Streaming Test Local Grid %ts",
+      "description":"echo test for Janus",
+      "tupleSize": 1,
+      "testImpl": "io.cosmosoftware.kite.janus.JanusEchoTest",
+      "payload":{
+        "url": "https://janus.conf.meetecho.com/streamingtest.html",
+        "rooms": ["1"],
+        "usersPerRoom": 1,
+        "testType": "1room",
+        "pageTitle": "Janus Streaming Test",
+        "takeScreenshotForEachTest": true,
+        "testTimeout": 20,
+        "getStats": true,
+        "statsCollectionTime" : 8,
+        "statsCollectionInterval" : 4,
+        "selectedStats": ["inbound-rtp", "outbound-rtp", "candidate-pair"]
+      }
+    }
+  ],
+  "browsers": [
+    {
+      "browserName": "chrome",
+      "version": "74",
+      "platform": "WINDOWS",
+      "headless": false
+    },
+    {
+      "browserName": "firefox",
+      "version": "66",
+      "platform": "WINDOWS",
+      "headless": false
+    }
+  ]
+}
