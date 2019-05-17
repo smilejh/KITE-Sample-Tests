@@ -23,8 +23,8 @@ public class StartGetStatsSDKStep extends TestStep {
     private final String logstashUrl;
     private final String sfu;
     private final int statsPublishingInterval;
-    private final String username = "window.CC._displayName";
-    private final String room = "window.location.search.split(\"?roomId=\")[1]";
+    private final String userNameCommand;
+    private final String roomNameCommand;
 
     public StartGetStatsSDKStep(WebDriver webDriver, String testName, JsonObject getStatsSdk) {
         super(webDriver);
@@ -33,8 +33,10 @@ public class StartGetStatsSDKStep extends TestStep {
         this.testId =  getStatsSdk.getString("testId", "\"" + testName + "_"
           + new SimpleDateFormat("yyyyMMdd_hhmmss").format(new Date()) + "\"");
         this.logstashUrl = getStatsSdk.getString("logstashUrl");
-        this.sfu = getStatsSdk.getString("sfu");
+        this.sfu = "\"" + getStatsSdk.getString("sfu") + "\"";
         this.statsPublishingInterval = getStatsSdk.getInt("statsPublishingInterval", 30000);
+        this.userNameCommand = getStatsSdk.getString("userNameCommand");
+        this.roomNameCommand = getStatsSdk.getString("roomNameCommand");
     }
 
     @Override
@@ -46,38 +48,33 @@ public class StartGetStatsSDKStep extends TestStep {
     protected void step() throws KiteTestException {
         logger.info("Attempting to load GetStats script");
         try {
-            StringBuilder getStatsFile = Files.lines(Paths.get(pathToGetStats), StandardCharsets.UTF_8).collect(StringBuilder::new, StringBuilder::append, StringBuilder::append);
-
-            loadGetStats(getStatsFile, testName, testId, logstashUrl, sfu, statsPublishingInterval, username, room);
+            StringBuilder getStatsFile = Files.lines(Paths.get(pathToGetStats), 
+              StandardCharsets.UTF_8).collect(StringBuilder::new, StringBuilder::append, StringBuilder::append);
+            loadGetStats(getStatsFile);
             logger.info("Script loaded");
         } catch (IOException e) {
             e.printStackTrace();
             throw new KiteTestException("Failed to load GetStats", Status.BROKEN, e);
         }
-
-
-        waitAround(30000);
+        waitAround(10000);
     }
 
     /**
      * Load GetStats script into browser
      *
      * @param getStatsFile
-     * @param testName
-     * @param testId
-     * @param logstashUrl
-     * @param sfu
-     * @param statsPublishingInterval
      */
 
-    public String loadGetStats (StringBuilder getStatsFile, String testName, String testId, String logstashUrl, String sfu, int statsPublishingInterval, String username, String room) throws KiteTestException {
+    private String loadGetStats (StringBuilder getStatsFile) throws KiteTestException {
 
         String[] initSplit = getStatsFile.toString().split("testStats.init.* pc, ");
         logger.info("Returning non-default init");
-        String getStatsScript = initSplit[0] + "testStats.init(" + logstashUrl + ", " + username + ", " + room + ", " + sfu + ", pc, " + initSplit[1];
+        String getStatsScript = initSplit[0] + "testStats.init(" + logstashUrl + ", " 
+          + this.userNameCommand + ", " + this.roomNameCommand + ", " + sfu + ", pc, " + initSplit[1];
 
         String[] publishingSplit = getStatsScript.split("testStats.startPublishing\\(15000\\)");
-        getStatsScript = publishingSplit[0] + "testStats.startPublishing(" + statsPublishingInterval + ")" + publishingSplit[1];
+        getStatsScript = publishingSplit[0] 
+          + "testStats.startPublishing(" + statsPublishingInterval + ")" + publishingSplit[1];
 
         String[] pcSplit = getStatsScript.split("window\\.pc");
         getStatsScript = pcSplit[0] + "window.PC1" + pcSplit[1] + "window.PC1" + pcSplit[2];

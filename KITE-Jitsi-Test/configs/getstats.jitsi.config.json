@@ -20,7 +20,9 @@
           "sfu" : "Jitsi",
           "logstashUrl": "enterLogstashUrl",
           "pathToGetStatsSdk": "getstats-sdk.js",
-          "statsPublishingInterval": 15000
+          "statsPublishingInterval": 15000,
+          "userNameCommand": "APP.conference.getLocalDisplayName()",
+          "roomNameCommand": "APP.conference._room.options.name"
         },
         "rooms": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
           "11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
@@ -33,13 +35,16 @@
           "81", "82", "83", "84", "85", "86", "87", "88", "89", "90",
           "91", "82", "83", "84", "95", "96", "97", "98", "99", "100"],
         "usersPerRoom": 2,
-        "getStats" : true,
         "url": "https://meet.jit.si/",
         "testTimeout": 20,
-        "meetingDuration": 20,
-        "statsCollectionTime": 10,
-        "statsCollectionInterval": 1,
-        "selectedStats" : ["inbound-rtp", "outbound-rtp", "candidate-pair"]
+        "meetingDuration": 120,
+        "getStats" : {
+          "enabled": true,
+          "statsCollectionTime": 2,
+          "statsCollectionInterval": 1,
+          "peerConnections": ["window.pc[0]"],
+          "selectedStats" : ["inbound-rtp", "outbound-rtp", "candidate-pair"]
+        }
       }
     }
   ],

@@ -6,3 +6,4 @@ logs
 /.idea
 kite-allure-reports
 *.iml
+/KITE-Jitsi-Test/configs/private.jitsi.config.json
