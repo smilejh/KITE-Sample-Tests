@@ -4,9 +4,9 @@ import io.cosmosoftware.kite.openvidu.checks.AllVideoCheck;
 import io.cosmosoftware.kite.openvidu.checks.FirstVideoCheck;
 import io.cosmosoftware.kite.openvidu.steps.GoJoinPageStep;
 import io.cosmosoftware.kite.openvidu.steps.JoinRoomStep;
-import io.cosmosoftware.kite.openvidu.steps.ScreenshotStep;
 import io.cosmosoftware.kite.openvidu.steps.SetUserIdStep;
 import org.openqa.selenium.WebDriver;
+import org.webrtc.kite.steps.ScreenshotStep;
 import org.webrtc.kite.tests.KiteBaseTest;
 import org.webrtc.kite.tests.TestRunner;
 
