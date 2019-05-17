@@ -1,5 +1,5 @@
-const {TestUtils, TestStep} = require('kite-common');
-
+const {TestStep} = require('kite-common');
+const {janusPage} = require('../pages')
 /**
  * Class: JoinVideoCallStep
  * Extends: TestStep
@@ -14,11 +14,11 @@ class JoinVideoCallStep extends TestStep {
   }
 
   stepDescription() {
-    return 'Open ' + this.url + ' and check the video';
+    return 'Open ' + this.url;
   }
 
   async step() {
-    await TestUtils.open(this);
+    await janusPage.open(this);
   }
 }
 

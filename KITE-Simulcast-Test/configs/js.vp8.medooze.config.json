@@ -9,10 +9,10 @@
   ],
   "tests": [
     {
-      "name": "Medooze Simulcast VP8 %ts",
-      "description":"Simulcast Test for Medooze with VP8 codec",
+      "name": "JS Medooze Simulcast VP8 %ts",
+      "description":"JS Simulcast Test for Medooze with VP8 codec",
       "tupleSize": 1,
-      "noOfThreads": 2,
+      "noOfThreads": 1,
       "testImpl": "Medooze.js",
       "payload":{
         "url": "https://playground.cosmosoftware.io/simulcast/index.html?codec=vp8",
@@ -29,6 +29,12 @@
     {
       "browserName": "chrome",
       "version": "74",
+      "platform": "WINDOWS",
+      "headless": false
+    },
+    {
+      "browserName": "firefox",
+      "version": "66",
       "platform": "WINDOWS",
       "headless": false
     }

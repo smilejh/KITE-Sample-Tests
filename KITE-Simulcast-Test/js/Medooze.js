@@ -23,9 +23,6 @@ class Medooze extends KiteBaseTest {
 
       let loadPageStep = new LoadPageStep(this);
       await loadPageStep.execute(this);
-
-      // wait for video
-      await TestUtils.waitAround(5000);
       
       let senderVideoCheck = new SenderVideoCheck(this);
       await senderVideoCheck.execute(this);
@@ -33,7 +30,6 @@ class Medooze extends KiteBaseTest {
       let receivedVideoCheck = new ReceivedVideoCheck(this);
       await receivedVideoCheck.execute(this);
 
-      await TestUtils.waitAround(5000);
       let getStatsStep = new GetStatsStep(this, 'pc');
       await getStatsStep.execute(this);
 
@@ -48,20 +44,15 @@ class Medooze extends KiteBaseTest {
           await gaugesCheck.execute(this);
         }
       }
-
-      this.report.setStopTimestamp();
     } catch (e) {
       console.log(e);
     } finally {
       await this.driver.quit();
     }
-    this.reporter.generateReportFiles();
-    let value = this.report.getJsonBuilder();
-    TestUtils.writeToFile(this.reportPath + "/result.json", JSON.stringify(value));
   }
 }
 
-module.exports= Medooze;
+module.exports = Medooze;
 
 let test = new Medooze('Medooze test', globalVariables, capabilities, payload);
-test.testScript();
+test.run();

@@ -18,7 +18,7 @@ class VideoCheck extends TestStep {
   }
 
   stepDescription() {
-    return "Check the first video is being sent OK";
+    return "Check the first video";
   }
 
   async step(direction) {

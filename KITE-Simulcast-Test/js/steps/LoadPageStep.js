@@ -14,11 +14,11 @@ class LoadPageStep extends TestStep {
   }
 
   stepDescription() {
-    return 'Open ' + this.url + ' wait for page to load';
+    return 'Open ' + this.url;
   }
 
   async step() {
-    await TestUtils.open(this);
+    await medoozePage.open(this);
   }
 }
 
