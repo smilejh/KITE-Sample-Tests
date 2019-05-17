@@ -7,22 +7,29 @@ import org.openqa.selenium.WebDriver;
 
 public class JoinVideoCallStep extends TestStep {
 
-  private final String url;
+  private final String callerName;
+  private final String peerName;
 
+  public JoinVideoCallStep(WebDriver webDriver, String callerName, String peerName) {
 
-  public JoinVideoCallStep(WebDriver webDriver, String url) {
     super(webDriver);
-    this.url = url;
+    this.callerName = callerName;
+    this.peerName = peerName;
+
   }
 
   @Override
   public String stepDescription() {
-    return "Open " + url;
+    return "Register the user on the call and call another user" ;
   }
 
   @Override
   protected void step() throws KiteTestException {
     final JanusPage janusPage = new JanusPage(this.webDriver, this.logger);
-    janusPage.load(url);
+    janusPage.fillCallerName(callerName);
+    janusPage.fillPeerName(peerName);
+    janusPage.registerUser();
+
+
   }
 }

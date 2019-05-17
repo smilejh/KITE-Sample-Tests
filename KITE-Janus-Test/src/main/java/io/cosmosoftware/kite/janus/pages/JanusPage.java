@@ -41,6 +41,12 @@ public class JanusPage extends BasePage {
   @FindBy(id="curres")
   private WebElement currentResolutionPrint;
 
+  /**
+   * Echo Test
+   */
+
+  //when simulcast=true
+
   @FindBy(id="sl-0")
   private WebElement sl0Button;
 
@@ -59,6 +65,10 @@ public class JanusPage extends BasePage {
   @FindBy(id="tl-2")
   private WebElement tl2Button;
 
+  /**
+   * Streaming Test
+   */
+
   @FindBy(id="streamset")
   private WebElement streamSetButton;
 
@@ -75,6 +85,21 @@ public class JanusPage extends BasePage {
   private WebElement streamVideoOnDemandSet;
 
 
+  /**
+   * VideoCall Test and VideoRoom Test
+   */
+
+  @FindBy(id="username")
+  private WebElement callerNameField;
+
+  @FindBy(id="peer")
+  private WebElement peerNameField;
+
+  @FindBy(id="register")
+  private WebElement userRegisterButton;
+
+  @FindBy(id="call")
+  private WebElement callHangupButton;
 
 
 
@@ -88,7 +113,6 @@ public class JanusPage extends BasePage {
     click(streamSetButton);
 
   }
-
 
   public void openStreamSetList() throws KiteInteractionException {
     waitUntilVisibilityOf(streamSetButton, 2);
@@ -109,7 +133,13 @@ public class JanusPage extends BasePage {
     }
   }
 
+  public void launchStreaming() throws KiteInteractionException {
+    click(streamWatchButton);
+  }
 
+  public void joinVideoCall() throws KiteInteractionException {
+    click(streamWatchButton);
+  }
 
   public void startDemo () throws KiteInteractionException {
     waitUntilVisibilityOf(startStopButton, 2);
@@ -212,5 +242,28 @@ public class JanusPage extends BasePage {
       return new LoopbackStats("1280", "720", "0", "0",
           st.nextToken(), st.nextToken(), "0", "0");
     }
+  }
+
+  public void fillCallerName(String userName) throws KiteInteractionException {
+    waitUntilVisibilityOf(callerNameField, 1);
+    sendKeys(callerNameField, userName);
+
+  }
+
+  public void fillPeerName(String userName) throws KiteInteractionException {
+    waitUntilVisibilityOf(callerNameField, 1);
+    sendKeys(callerNameField, userName);
+
+  }
+
+  public void registerUser() throws KiteInteractionException {
+    waitUntilVisibilityOf(userRegisterButton, 1);
+    click(userRegisterButton);
+
+  }
+
+  public String getVideoIdByIndex(int i) {
+    return videos.get(i).getAttribute("id");
+
   }
 }
