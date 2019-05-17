@@ -69,7 +69,7 @@ public class AllVideoCheck extends TestStep {
         }
       }
       if (error) {
-        Reporter.getInstance().textAttachment(report, "Reveived Videos", videoCheck, "plain");
+        Reporter.getInstance().textAttachment(report, "Received Videos", videoCheck, "plain");
         throw new KiteTestException("Some videos are still or blank: " + videoCheck, Status.FAILED);
       }
     } catch (KiteTestException e) {

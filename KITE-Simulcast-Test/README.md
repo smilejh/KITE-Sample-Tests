@@ -30,7 +30,7 @@ To run this test you will need a Selenium Grid with the browsers to be tested. T
 
 6.	Simucast check:
 To enable/disable this check, set `checkSimulcast` in the config file to `true`/`false`.
-For each of the 9 layers (3 FPS x 3 reesolution): click the button to set the resolution (SL2, SL1, SL0) and click the button to set the FPS (TL2, TL1, TL0), then check the received video resolution: if the sent video is 1280x720, the received resolution is expected to be respectively:
+For each of the 9 layers (3 FPS x 3 resolution): click the button to set the resolution (SL2, SL1, SL0) and click the button to set the FPS (TL2, TL1, TL0), then check the received video resolution: if the sent video is 1280x720, the received resolution is expected to be respectively:
 SL2: 1280x720
 SL1: 640x360
 SL0: 320x180
@@ -38,7 +38,7 @@ SL0: 320x180
 7. Bitrate bug check:
 
 There is a bug in Chrome when the bandwidth is limited where the lower bitrate exceeds the medium and/or high bitrate.
-To enable/disable this test, set `bandwidthCheckDuration` in the config file to a value > 0 (in seconds) or set it to 0 to disbale this check.
+To enable/disable this test, set `bandwidthCheckDuration` in the config file to a value > 0 (in seconds) or set it to 0 to disable this check.
 This step will compare the bitrate values every second for `bandwidthCheckDuration` seconds of low, medium and high and increment two counters `nbLowHigherThanMedium` and `nbMediumHigherThanHighwhenever` low > medium or medium > high respectively.
 
 

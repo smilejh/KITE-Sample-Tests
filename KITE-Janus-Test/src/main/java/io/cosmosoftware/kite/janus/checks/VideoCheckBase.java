@@ -16,39 +16,49 @@ import static io.cosmosoftware.kite.util.ReportUtils.timestamp;
 import static io.cosmosoftware.kite.util.TestUtils.videoCheck;
 import static io.cosmosoftware.kite.util.TestUtils.waitAround;
 
-public class FirstVideoCheck extends TestStep {
+public class VideoCheckBase extends TestStep {
 
-  public FirstVideoCheck(WebDriver webDriver) {
+  public VideoCheckBase(WebDriver webDriver) {
     super(webDriver);
   }
 
   @Override
-  public String stepDescription() {
-    return "Check the first video is being sent OK";
+  protected void step() throws KiteTestException {
+
   }
 
-  @Override
-  protected void step() throws KiteTestException {
+  protected void step(String direction) throws KiteTestException {
     try {
       final JanusPage janusPage = new JanusPage(this.webDriver, logger);
-      janusPage.waitForLocalStreamHeaderVisibility(5);
-      logger.info("Looking for video object");
       List<WebElement> videos = janusPage.getVideoElements();
-
       if (videos.isEmpty()) {
         throw new KiteTestException(
             "Unable to find any <video> element on the page", Status.FAILED);
       }
-
-      String videoCheck = videoCheck(webDriver, 0);
-      if (!"video".equalsIgnoreCase(videoCheck)) {
-        Reporter.getInstance().textAttachment(report, "Sent Video", videoCheck, "plain");
-        throw new KiteTestException("The first video is " + videoCheck, Status.FAILED);
+      String videoCheck = videoCheck(webDriver, "sent".equalsIgnoreCase(direction) ? 0 : 1);
+      int ct = 0;
+      while(!"video".equalsIgnoreCase(videoCheck) && ct < 3) {
+        videoCheck = videoCheck(webDriver, 1);
+        ct++;
+        waitAround(3 * ONE_SECOND_INTERVAL);
       }
+      if (!"video".equalsIgnoreCase(videoCheck)) {
+        Reporter.getInstance().textAttachment(report, direction +" video", videoCheck, "plain");
+        Reporter.getInstance().screenshotAttachment(report,
+            direction + "_video_" + timestamp(), saveScreenshotPNG(webDriver));
+        throw new KiteTestException("The " + direction + " video is " + videoCheck, Status.FAILED, null, true);
+      }
+      logger.info(direction + " video is OK");
     } catch (KiteTestException e) {
       throw e;
     } catch (Exception e) {
       throw new KiteTestException("Error looking for the video", Status.BROKEN, e);
     }
+
+  }
+
+  @Override
+  public String stepDescription() {
+    return "Check video is OK";
   }
 }
