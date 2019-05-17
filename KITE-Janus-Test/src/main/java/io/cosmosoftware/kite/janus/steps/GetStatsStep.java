@@ -29,6 +29,7 @@ public class GetStatsStep extends TestStep {
    *      - ...
    */
 
+  public GetStatsStep(WebDriver webDriver, JsonObject getStatsConfig) {
     super(webDriver);
     this.getStatsConfig = getStatsConfig;
   }
@@ -63,9 +64,7 @@ public class GetStatsStep extends TestStep {
       JsonObject json = extractStats(sentStats, receivedStats);
       JsonObjectBuilder builder = Json.createObjectBuilder();
       builder.add("local", sentStats);
-      if (numberOfParticipants>1) {
-        builder.add("remote", arrayBuilder);
-      }
+      builder.add("remote", arrayBuilder);
       Reporter.getInstance().jsonAttachment(report, "getStatsRaw", builder.build());
       Reporter.getInstance().jsonAttachment(report, "getStatsSummary", json);
     } catch (Exception e) {
