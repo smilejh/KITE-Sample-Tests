@@ -1,6 +1,6 @@
 {
   "type": 1,
-  "name": "Janus Streaming Test",
+  "name": "Janus Video Room Test",
   "permute": true,
   "remotes": [
     {
@@ -10,22 +10,22 @@
   ],
   "tests": [
     {
-      "name": "Janus Streaming Test Local Grid %ts",
-      "description":"Streaming Test for Janus",
-      "tupleSize": 1,
-      "testImpl": "io.cosmosoftware.kite.janus.JanusStreamingTest",
+      "name": "Janus Video Room Test %ts",
+      "description":"Video Room Test for Janus",
+      "tupleSize": 2,
+      "testImpl": "io.cosmosoftware.kite.janus.VideoRoomTest",
       "payload":{
-        "url": "https://janus.conf.meetecho.com/streamingtest.html",
+        "url": "https://janus.conf.meetecho.com/videoroomtest.html",
         "rooms": ["1"],
-        "usersPerRoom": 1,
-        "pageTitle": "Janus Streaming Test",
+        "usersPerRoom": 2,
+        "pageTitle": "Janus",
         "takeScreenshotForEachTest": true,
         "testTimeout": 20,
         "getStats" : {
           "enabled": true,
           "statsCollectionTime": 2,
           "statsCollectionInterval": 1,
-          "peerConnections": ["echotest.webrtcStuff.pc", "echotest.webrtcStuff.remoteStream"],
+          "peerConnections": ["sfutest.webrtcStuff.pc"],
           "selectedStats" : ["inbound-rtp", "outbound-rtp", "candidate-pair"]
         }
       }

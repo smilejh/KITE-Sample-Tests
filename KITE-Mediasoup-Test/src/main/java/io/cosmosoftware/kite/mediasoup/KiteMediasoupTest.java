@@ -2,19 +2,17 @@ package io.cosmosoftware.kite.mediasoup;
 
 import io.cosmosoftware.kite.mediasoup.checks.AllVideoCheck;
 import io.cosmosoftware.kite.mediasoup.checks.FirstVideoCheck;
-import io.cosmosoftware.kite.mediasoup.steps.StartGetStatsSDKStep;
 import io.cosmosoftware.kite.mediasoup.steps.GetStatsStep;
 import io.cosmosoftware.kite.mediasoup.steps.JoinVideoCallStep;
-import io.cosmosoftware.kite.mediasoup.steps.ScreenshotStep;
-import io.cosmosoftware.kite.mediasoup.steps.StayInMeetingStep;
+import io.cosmosoftware.kite.mediasoup.steps.SetUserIdStep;
+import io.cosmosoftware.kite.mediasoup.steps.StartGetStatsSDKStep;
 import org.openqa.selenium.WebDriver;
+import org.webrtc.kite.steps.ScreenshotStep;
+import org.webrtc.kite.steps.StayInMeetingStep;
 import org.webrtc.kite.tests.KiteBaseTest;
 import org.webrtc.kite.tests.TestRunner;
 
 import javax.json.JsonObject;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import static org.webrtc.kite.Utils.getStackTrace;
 
@@ -35,6 +33,7 @@ public class KiteMediasoupTest extends KiteBaseTest {
     try {
       WebDriver webDriver = runner.getWebDriver();
       runner.addStep(new JoinVideoCallStep(webDriver, getRoomManager().getRoomUrl()));
+      runner.addStep(new SetUserIdStep(webDriver, "user" + runner.getId()));
       if (!this.fastRampUp()) {
         runner.addStep(new FirstVideoCheck(webDriver));
         if (this.getStatsSdk != null) {
@@ -42,13 +41,7 @@ public class KiteMediasoupTest extends KiteBaseTest {
         }
         runner.addStep(new AllVideoCheck(webDriver, getMaxUsersPerRoom()));
         if (this.getStats()) {
-          runner.addStep(
-                  new GetStatsStep(
-                          webDriver,
-                          getMaxUsersPerRoom(),
-                          getStatsCollectionTime(),
-                          getStatsCollectionInterval(),
-                          getSelectedStats()));
+          runner.addStep(new GetStatsStep( webDriver, getStatsConfig));
         }
         if (this.takeScreenshotForEachTest()) {
           runner.addStep(new ScreenshotStep(webDriver));
