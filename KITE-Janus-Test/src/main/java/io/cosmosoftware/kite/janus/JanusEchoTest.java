@@ -7,9 +7,9 @@ import io.cosmosoftware.kite.janus.pages.JanusPage;
 import io.cosmosoftware.kite.janus.steps.GetStatsStep;
 import io.cosmosoftware.kite.janus.steps.SelectProfileStep;
 import io.cosmosoftware.kite.janus.steps.StartDemoStep;
-import io.cosmosoftware.kite.janus.steps.ScreenshotStep;
 import io.cosmosoftware.kite.simulcast.checks.ReceiverVideoCheck;
 import org.openqa.selenium.WebDriver;
+import org.webrtc.kite.steps.ScreenshotStep;
 import org.webrtc.kite.tests.KiteBaseTest;
 import org.webrtc.kite.tests.TestRunner;
 
@@ -31,13 +31,7 @@ public class JanusEchoTest extends KiteBaseTest {
       runner.addStep(new ReceiverVideoCheck(webDriver));
 
       if (this.getStats()) {
-        runner.addStep(
-            new GetStatsStep(
-                  webDriver,
-                  getMaxUsersPerRoom(),
-                  getStatsCollectionTime(),
-                  getStatsCollectionInterval(),
-                  getSelectedStats()));
+        runner.addStep(new GetStatsStep( webDriver, getStatsConfig));
       }
       if (this.takeScreenshotForEachTest()) {
         runner.addStep(new ScreenshotStep(webDriver));
@@ -51,7 +45,6 @@ public class JanusEchoTest extends KiteBaseTest {
             runner.addStep(new GaugesCheck(webDriver, janusPage, rid, tid));
           }
         }
-
       }
       } catch(Exception e){
         logger.error(getStackTrace(e));

@@ -17,18 +17,11 @@ import static org.webrtc.kite.stats.StatsUtils.getPCStatOvertime;
 public class GetStatsStep extends TestStep {
 
 
-  private final int numberOfParticipants;
-  private final int statsCollectionTime;
-  private final int statsCollectionInterval;
-  private final JsonArray selectedStats;
+  private final JsonObject getStatsConfig;
 
-  public GetStatsStep(WebDriver webDriver, int numberOfParticipants, int statsCollectionTime,
-                      int statsCollectionInterval, JsonArray selectedStats) {
+  public GetStatsStep(WebDriver webDriver, JsonObject getStatsConfig) {
     super(webDriver);
-    this.numberOfParticipants = numberOfParticipants;
-    this.statsCollectionTime = statsCollectionTime;
-    this.statsCollectionInterval = statsCollectionInterval;
-    this.selectedStats = selectedStats;
+    this.getStatsConfig = getStatsConfig;
   }
   
   
@@ -42,12 +35,11 @@ public class GetStatsStep extends TestStep {
     logger.info("Getting WebRTC stats via getStats");
     String pcName = "echotest.webrtcStuff.pc";
     try {
-      JsonObject sentStats =
-      getPCStatOvertime(webDriver, pcName, statsCollectionTime, statsCollectionInterval,
-          selectedStats);
+      List<JsonObject> stats = getPCStatOvertime(webDriver, getStatsConfig);
+      JsonObject sentStats = stats.get(0);
       JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
       List<JsonObject> receivedStats = new ArrayList<>();
-      for (int i = 1; i < numberOfParticipants; i++) {
+      for (int i = 1; i < stats.size(); i++) {
 //        JsonObject receivedObject = getPCStatOvertime(webDriver,
 //          "window.remotePc[" + (i-1) + "]",
 //          statsCollectionTime,
@@ -55,11 +47,7 @@ public class GetStatsStep extends TestStep {
 //          selectedStats);
 //        receivedStats.add(receivedObject);
 //        arrayBuilder.add(receivedObject);
-        JsonObject receivedObject = getPCStatOvertime(webDriver,
-            "echotest.webrtcStuff.remoteStream",
-            statsCollectionTime,
-            statsCollectionInterval,
-            selectedStats);
+        JsonObject receivedObject = stats.get(i);
         receivedStats.add(receivedObject);
         arrayBuilder.add(receivedObject);
       }

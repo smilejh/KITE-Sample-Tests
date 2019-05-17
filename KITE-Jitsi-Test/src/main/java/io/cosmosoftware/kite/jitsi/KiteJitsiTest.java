@@ -2,8 +2,13 @@ package io.cosmosoftware.kite.jitsi;
 
 import io.cosmosoftware.kite.jitsi.checks.AllVideoCheck;
 import io.cosmosoftware.kite.jitsi.checks.FirstVideoCheck;
-import io.cosmosoftware.kite.jitsi.steps.*;
+import io.cosmosoftware.kite.jitsi.steps.GetStatsStep;
+import io.cosmosoftware.kite.jitsi.steps.JoinRoomStep;
+import io.cosmosoftware.kite.jitsi.steps.SetUserIdStep;
+import io.cosmosoftware.kite.jitsi.steps.StartGetStatsSDKStep;
 import org.openqa.selenium.WebDriver;
+import org.webrtc.kite.steps.ScreenshotStep;
+import org.webrtc.kite.steps.StayInMeetingStep;
 import org.webrtc.kite.tests.KiteBaseTest;
 import org.webrtc.kite.tests.TestRunner;
 
