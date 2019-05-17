@@ -4,7 +4,6 @@ import io.cosmosoftware.kite.janus.checks.AudioCheck;
 import io.cosmosoftware.kite.janus.checks.FirstVideoCheck;
 import io.cosmosoftware.kite.janus.steps.GetStatsStep;
 import io.cosmosoftware.kite.janus.steps.JoinStreamingStep;
-import io.cosmosoftware.kite.janus.steps.ScreenshotStep;
 import io.cosmosoftware.kite.janus.steps.StartDemoStep;
 import org.openqa.selenium.WebDriver;
 import org.webrtc.kite.steps.ScreenshotStep;

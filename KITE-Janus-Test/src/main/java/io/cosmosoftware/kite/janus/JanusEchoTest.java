@@ -17,8 +17,6 @@ import static org.webrtc.kite.Utils.getStackTrace;
 
 public class JanusEchoTest extends KiteBaseTest {
 
-  private final String demoName = "echotest";
-
   private final String[] rids = {"a", "b", "c"};
   private final int[] tids = {0, 1, 2};
 

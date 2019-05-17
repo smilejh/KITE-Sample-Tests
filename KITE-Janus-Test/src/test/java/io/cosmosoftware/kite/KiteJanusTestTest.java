@@ -4,7 +4,7 @@
 
 package io.cosmosoftware.kite;
 
-import io.cosmosoftware.kite.janus.VideoRoomTest;
+import io.cosmosoftware.kite.janus.JanusVideoRoomTest;
 import org.webrtc.kite.tests.KiteBaseTest;
 import junit.framework.TestCase;
 import org.openqa.selenium.WebDriver;
@@ -45,7 +45,7 @@ public class KiteJanusTestTest extends TestCase {
   }
 
   public void testTestScript() {
-    KiteBaseTest test = new VideoRoomTest();
+    KiteBaseTest test = new JanusVideoRoomTest();
     test.setDescription(TEST_NAME);
     test.setPayload(getPayload(CONFIG_FILE, 0));
     test.setEndPointList(endPointList);
