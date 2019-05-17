@@ -11,24 +11,15 @@ import javax.json.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.webrtc.kite.stats.StatsUtils.getPCStatOvertime;
+
 public class GetStatsStep extends TestStep {
 
-  private final int numberOfParticipants;
-  private final int statsCollectionTime;
-  private final int statsCollectionInterval;
-  private final JsonArray selectedStats;
+  private final JsonObject getStatsConfig;
 
-  public GetStatsStep(
-      WebDriver webDriver,
-      int numberOfParticipants,
-      int statsCollectionTime,
-      int statsCollectionInterval,
-      JsonArray selectedStats) {
+  public GetStatsStep(WebDriver webDriver, JsonObject getStatsConfig) {
     super(webDriver);
-    this.numberOfParticipants = numberOfParticipants;
-    this.statsCollectionTime = statsCollectionTime;
-    this.statsCollectionInterval = statsCollectionInterval;
-    this.selectedStats = selectedStats;
+    this.getStatsConfig = getStatsConfig;
   }
 
   @Override
@@ -40,15 +31,13 @@ public class GetStatsStep extends TestStep {
   protected void step() throws KiteTestException {
     logger.info("Getting WebRTC stats via getStats");
     try {
-      JsonObject sentStats =
-          StatsUtils.getPCStatOvertime(
-              webDriver, "window.PC1", statsCollectionTime, statsCollectionInterval, selectedStats);
+      List<JsonObject> stats = getPCStatOvertime(webDriver, getStatsConfig);
+      JsonObject sentStats = stats.get(0);
+      JsonObject receivedObject = stats.get(1);
       JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
       List<JsonObject> receivedStats = new ArrayList<>();
-      JsonObject receivedObject =
-          StatsUtils.getPCStatOvertime(
-              webDriver, "window.PC2", statsCollectionTime, statsCollectionInterval, selectedStats);
-      receivedStats.add(receivedObject);
+      
+      receivedStats.add(stats.get(1));
       arrayBuilder.add(receivedObject);
 
       JsonObject json = StatsUtils.extractStats(sentStats, receivedStats);

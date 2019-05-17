@@ -1,7 +1,7 @@
-package io.cosmosoftware.kite.jitsi.checks;
+package io.cosmosoftware.kite.openvidu.checks;
 
 import io.cosmosoftware.kite.exception.KiteTestException;
-import io.cosmosoftware.kite.jitsi.pages.MeetingPage;
+import io.cosmosoftware.kite.openvidu.pages.MeetingPage;
 import io.cosmosoftware.kite.report.Reporter;
 import io.cosmosoftware.kite.report.Status;
 import io.cosmosoftware.kite.steps.TestStep;
@@ -30,7 +30,6 @@ public class AllVideoCheck extends TestStep {
       final MeetingPage meetingPage = new MeetingPage(this.webDriver, logger);
       // wait a while to allow all videos to load.
       waitAround(numberOfParticipants * 3 * ONE_SECOND_INTERVAL);
-      meetingPage.clickVideoToggle();
       logger.info("Looking for video elements");
       if (meetingPage.numberOfVideos() < numberOfParticipants) {
         throw new KiteTestException(

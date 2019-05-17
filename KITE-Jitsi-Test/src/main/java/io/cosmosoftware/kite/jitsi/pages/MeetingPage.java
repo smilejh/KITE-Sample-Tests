@@ -3,6 +3,7 @@ package io.cosmosoftware.kite.jitsi.pages;
 import io.cosmosoftware.kite.exception.KiteTestException;
 import io.cosmosoftware.kite.pages.BasePage;
 import org.apache.log4j.Logger;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -12,11 +13,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 
-import static io.cosmosoftware.kite.util.TestUtils.executeJsScript;
-
 public class MeetingPage extends BasePage {
-
-  private final int numberOfParticipants;
 
   @FindBy(id = "largeVideo")
   private WebElement mainVideo;
@@ -29,12 +26,6 @@ public class MeetingPage extends BasePage {
 
   public MeetingPage(WebDriver webDriver, Logger logger) throws KiteTestException {
     super(webDriver, logger);
-    this.numberOfParticipants =
-        Integer.parseInt(executeJsScript(webDriver, getNumberOfParticipantScript()).toString()) + 1;
-  }
-
-  public String getNumberOfParticipantScript() {
-    return "return APP.conference.getNumberOfParticipantsWithTracks();";
   }
 
   public String getPeerConnectionScript() {
@@ -58,11 +49,17 @@ public class MeetingPage extends BasePage {
     return videos.size();
   }
 
-  public int getNumberOfParticipants() {
-    return this.numberOfParticipants;
-  }
-
   public List<WebElement> getVideoElements() {
     return videos;
+  }
+
+  public void changeLocalDisplayName(String userId) {
+    if (userId == null) {
+      // default
+      ((JavascriptExecutor) webDriver)
+          .executeScript("APP.conference.changeLocalDisplayName(APP.conference.getMyUserId())");
+    }
+    ((JavascriptExecutor) webDriver)
+        .executeScript("APP.conference.changeLocalDisplayName(\"" + userId + "\")");
   }
 }

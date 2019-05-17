@@ -6,14 +6,11 @@ import io.cosmosoftware.kite.simulcast.checks.SenderVideoCheck;
 import io.cosmosoftware.kite.simulcast.pages.MedoozeLoopbackPage;
 import io.cosmosoftware.kite.simulcast.steps.GetStatsStep;
 import io.cosmosoftware.kite.simulcast.steps.LoadPageStep;
-import io.cosmosoftware.kite.simulcast.steps.ScreenshotStep;
 import io.cosmosoftware.kite.simulcast.steps.SelectProfileStep;
+import org.openqa.selenium.WebDriver;
+import org.webrtc.kite.steps.ScreenshotStep;
 import org.webrtc.kite.tests.KiteBaseTest;
 import org.webrtc.kite.tests.TestRunner;
-import org.apache.log4j.Logger;
-import org.openqa.selenium.WebDriver;
-
-import javax.json.JsonObject;
 
 public class KiteMedoozeTest extends KiteBaseTest {
 
@@ -31,13 +28,7 @@ public class KiteMedoozeTest extends KiteBaseTest {
       runner.addStep(new SenderVideoCheck(webDriver, page));
       runner.addStep(new ReceiverVideoCheck(webDriver, page));
       if (this.getStats()) {
-        runner.addStep(
-            new GetStatsStep(
-                webDriver,
-                getStatsCollectionTime(),
-                getStatsCollectionInterval(),
-                getSelectedStats(),
-              "pc"));
+        runner.addStep(new GetStatsStep(webDriver, getStatsConfig));
       }
       if (this.takeScreenshotForEachTest()) {
         runner.addStep(new ScreenshotStep(webDriver));

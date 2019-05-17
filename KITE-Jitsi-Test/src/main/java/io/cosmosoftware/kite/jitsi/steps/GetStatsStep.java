@@ -14,16 +14,12 @@ import static org.webrtc.kite.stats.StatsUtils.extractStats;
 import static org.webrtc.kite.stats.StatsUtils.getPCStatOvertime;
 
 public class GetStatsStep extends TestStep {
-  private int statsCollectionTime;
-  private int statsCollectionInterval;
-  private JsonArray selectedStats;
+  
+  private final JsonObject getStatsConfig;
 
-  public GetStatsStep(
-      WebDriver webDriver, int durationInSeconds, int intervalInSeconds, JsonArray selectedStats) {
+  public GetStatsStep(WebDriver webDriver, JsonObject getStatsConfig) {
     super(webDriver);
-    this.statsCollectionTime = durationInSeconds;
-    this.statsCollectionInterval = intervalInSeconds;
-    this.selectedStats = selectedStats;
+    this.getStatsConfig = getStatsConfig;
   }
 
   @Override
@@ -35,9 +31,7 @@ public class GetStatsStep extends TestStep {
   protected void step() throws KiteTestException {
     MeetingPage meetingPage = new MeetingPage(webDriver, logger);
     ((JavascriptExecutor) webDriver).executeScript(meetingPage.getPeerConnectionScript());
-    JsonObject rawStats =
-        getPCStatOvertime(
-            webDriver, "window.pc[0]", statsCollectionTime, statsCollectionInterval, selectedStats);
+    JsonObject rawStats = getPCStatOvertime(webDriver, getStatsConfig).get(0);
     JsonObject statsSummary = extractStats(rawStats, "both").build();
     Reporter.getInstance().jsonAttachment(report, "getStatsRaw", rawStats);
     Reporter.getInstance().jsonAttachment(report, "getStatsSummary", statsSummary);

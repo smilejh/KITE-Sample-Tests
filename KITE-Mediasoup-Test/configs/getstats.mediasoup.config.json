@@ -26,20 +26,21 @@
           "sfu" : "Mediasoup",
           "logstashUrl": "enterLogstashUrl",
           "pathToGetStatsSdk": "getstats-sdk.js",
-          "statsPublishingInterval": 15000
+          "statsPublishingInterval": 15000,
+          "userNameCommand": "window.CC._displayName",
+          "roomNameCommand": "window.location.search.split(\"?roomId=\")[1]"
         },
         "usersPerRoom": 3,
         "takeScreenshotForEachTest": true,
         "testTimeout": 20,
-        "getStats": false,
-        "statsCollectionTime": 8,
-        "statsCollectionInterval": 4,
-        "selectedStats": [
-          "inbound-rtp",
-          "outbound-rtp",
-          "candidate-pair"
-        ],
-        "meetingDuration": 20
+        "meetingDuration": 20,
+        "getStats" : {
+          "enabled": true,
+          "statsCollectionTime": 2,
+          "statsCollectionInterval": 1,
+          "peerConnections": ["window.PC1", "window.PC2"],
+          "selectedStats" : ["inbound-rtp", "outbound-rtp", "candidate-pair"]
+        }
       }
     }
   ],

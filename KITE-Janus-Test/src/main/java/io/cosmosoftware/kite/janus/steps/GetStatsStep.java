@@ -17,10 +17,7 @@ import static org.webrtc.kite.stats.StatsUtils.getPCStatOvertime;
 public class GetStatsStep extends TestStep {
 
 
-  private final int numberOfParticipants;
-  private final int statsCollectionTime;
-  private final int statsCollectionInterval;
-  private final JsonArray selectedStats;
+  private final JsonObject getStatsConfig;
 
   /**
    * demoName corresponds to the pluginHandle in the website source code (https://janus.conf.meetecho.com)
@@ -31,16 +28,9 @@ public class GetStatsStep extends TestStep {
    *      - videocall (Video Call)
    *      - ...
    */
-  private final String demoName;
 
-  public GetStatsStep(WebDriver webDriver, int numberOfParticipants, int statsCollectionTime,
-                      int statsCollectionInterval, JsonArray selectedStats, String demoName) {
     super(webDriver);
-    this.numberOfParticipants = numberOfParticipants;
-    this.statsCollectionTime = statsCollectionTime;
-    this.statsCollectionInterval = statsCollectionInterval;
-    this.selectedStats = selectedStats;
-    this.demoName = demoName;
+    this.getStatsConfig = getStatsConfig;
   }
   
   
@@ -52,19 +42,21 @@ public class GetStatsStep extends TestStep {
   @Override
   protected void step() throws KiteTestException {
     logger.info("Getting WebRTC stats via getStats");
-    String localPcName = demoName + ".webrtcStuff.pc";
-    String remotePcName = demoName + ".webrtcStuff.remoteStream"; //for echotest but not necessarily for other demo? not in echotest too
+
     try {
-      JsonObject sentStats =
-      getPCStatOvertime(webDriver, localPcName, statsCollectionTime, statsCollectionInterval,
-          selectedStats);
+      List<JsonObject> stats = getPCStatOvertime(webDriver, getStatsConfig);
+      JsonObject sentStats = stats.get(0);
       JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
       List<JsonObject> receivedStats = new ArrayList<>();
-      for (int i = 1; i < numberOfParticipants; i++) {
-        JsonObject receivedObject = getPCStatOvertime(webDriver, remotePcName,
-            statsCollectionTime,
-            statsCollectionInterval,
-            selectedStats);
+      for (int i = 1; i < stats.size(); i++) {
+//        JsonObject receivedObject = getPCStatOvertime(webDriver,
+//          "window.remotePc[" + (i-1) + "]",
+//          statsCollectionTime,
+//          statsCollectionInterval,
+//          selectedStats);
+//        receivedStats.add(receivedObject);
+//        arrayBuilder.add(receivedObject);
+        JsonObject receivedObject = stats.get(i);
         receivedStats.add(receivedObject);
         arrayBuilder.add(receivedObject);
       }
