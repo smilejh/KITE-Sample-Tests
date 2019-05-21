@@ -1,0 +1,45 @@
+{
+  "type": 1,
+  "name": "js.janus.echo.config.json %ts",
+  "remotes": [
+    {
+      "type": "local",
+      "remoteAddress": "http://localhost:4444/wd/hub"
+    }
+  ],
+  "tests": [
+    {
+      "name": "Janus Echo Test %ts",
+      "description":"Janus Echo Test",
+      "tupleSize": 1,
+      "noOfThreads": 1,
+      "testImpl": "JanusEcho.js",
+      "payload":{
+        "url": "https://janus.conf.meetecho.com/echotest.html",
+        "takeScreenshotForEachTest": true,
+        "testTimeout": 20,
+        "getStats" : {
+          "enabled": true,
+          "statsCollectionTime": 2,
+          "statsCollectionInterval": 1,
+          "peerConnections": ["echotest.webrtcStuff.pc", "echotest.webrtcStuff.remoteStream"],
+          "selectedStats" : ["inbound-rtp", "outbound-rtp", "candidate-pair"]
+        }
+      }
+    }
+  ],
+  "browsers": [
+    {
+      "browserName": "chrome",
+      "version": "74",
+      "platform": "WINDOWS",
+      "headless": false
+    },
+    {
+      "browserName": "firefox",
+      "version": "66",
+      "platform": "WINDOWS",
+      "headless": false
+    }
+  ]
+}

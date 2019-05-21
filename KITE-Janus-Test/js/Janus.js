@@ -1,6 +1,7 @@
 const {TestUtils, WebDriverFactory, KiteBaseTest} = require('kite-common');
-const {JoinVideoCallStep, ScreenshotStep, GetStatsStep} = require('./steps'); 
+const {JoinUrlStep, ScreenshotStep, GetStatsStep} = require('./steps'); 
 const {FirstVideoCheck, AllVideoCheck} = require('./checks');
+const {JanusPage} = require('./pages');
 
 const globalVariables = TestUtils.getGlobalVariables(process);
 
@@ -17,25 +18,27 @@ function getRoomUrl(id) {
   return payload.url + payload.rooms[roomid] + '&username=user' + Array(Math.max(3 - String(id).length + 1, 0)).join(0) + id;
 }
 
-function getPcArray(numberOfParticipant) {
-  let pcArray = [];
+function getPcArray(numberOfParticipant, peerConnections) {
   for(let i = 0; i < numberOfParticipant-1; i++) {
-    pcArray.push('window.remotePc[' + i + ']');
+    peerConnections.push('window.remotePc[' + i + ']');
   }
-  return pcArray;
+  return peerConnections;
 }
 
 class Janus extends KiteBaseTest{
   constructor(name, globalVariables, capabilities, payload) {
     super(name, globalVariables, capabilities, payload);
+    this.url = getRoomUrl(this.id);
+    // Modif
+    this.page = new JanusPage();
   }
 
   async testScript() {
     try {
       this.driver = await WebDriverFactory.getDriver(this.capabilities, this.capabilities.remoteAddress);
 
-      let joinVideoCallStep = new JoinVideoCallStep(this, getRoomUrl(this.id));
-      await joinVideoCallStep.execute(this);
+      let joinUrlStep = new JoinUrlStep(this);
+      await joinUrlStep.execute(this);
 
       let firstVideoCheck = new FirstVideoCheck(this);
       await firstVideoCheck.execute(this);
@@ -43,8 +46,11 @@ class Janus extends KiteBaseTest{
       let allVideoCheck = new AllVideoCheck(this);
       await allVideoCheck.execute(this);
 
-      let pcArray = getPcArray(this.numberOfParticipant);
-      let getStatsStep = new GetStatsStep(this, pcArray);
+      let peerConnections = [];
+      peerConnections.push("window.pc");
+
+      this.peerConnections = getPcArray(this.numberOfParticipant, peerConnections);
+      let getStatsStep = new GetStatsStep(this);
       await getStatsStep.execute(this);
       
       let screenshotStep = new ScreenshotStep(this);

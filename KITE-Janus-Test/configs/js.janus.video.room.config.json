@@ -1,0 +1,45 @@
+{
+  "type": 1,
+  "name": "js.janus.video.room.config.json %ts",
+  "remotes": [
+    {
+      "type": "local",
+      "remoteAddress": "http://localhost:4444/wd/hub"
+    }
+  ],
+  "tests": [
+    {
+      "name": "Janus Video Room Test %ts",
+      "description":"Janus Video Room Test",
+      "tupleSize": 2,
+      "noOfThreads": 1,
+      "testImpl": "JanusVideoRoom.js",
+      "payload":{
+        "url": "https://janus.conf.meetecho.com/videoroomtest.html",
+        "takeScreenshotForEachTest": true,
+        "testTimeout": 60,
+        "getStats" : {
+          "enabled": true,
+          "statsCollectionTime": 2,
+          "statsCollectionInterval": 1,
+          "peerConnections": ["sfutest.webrtcStuff.pc"],
+          "selectedStats" : ["inbound-rtp", "outbound-rtp", "candidate-pair"]
+        }
+      }
+    }
+  ],
+  "browsers": [
+    {
+      "browserName": "chrome",
+      "version": "74",
+      "platform": "WINDOWS",
+      "headless": false
+    },
+    {
+      "browserName": "firefox",
+      "version": "66",
+      "platform": "WINDOWS",
+      "headless": false
+    }
+  ]
+}
