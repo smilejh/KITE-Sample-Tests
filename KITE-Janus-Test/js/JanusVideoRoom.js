@@ -11,7 +11,6 @@ const payload = require(globalVariables.payloadPath);
 class JanusVideoRoom extends KiteBaseTest {
   constructor(name, globalVariables, capabilities, payload) {
     super(name, globalVariables, capabilities, payload);
-    // page
     this.page = new JanusVideoRoomPage();
   }
   
@@ -33,8 +32,10 @@ class JanusVideoRoom extends KiteBaseTest {
         await getStatsStep.execute(this);
       }
 
-      let screenshotStep = new ScreenshotStep(this);
-      await screenshotStep.execute(this);
+      if (this.takeScreenshot) {
+        let screenshotStep = new ScreenshotStep(this);
+        await screenshotStep.execute(this);
+      }
       
     } catch (e) {
       console.log(e);

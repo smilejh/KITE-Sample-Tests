@@ -24,7 +24,7 @@ class GetStatsStep extends TestStep {
       
       let receivedStats = [];
       for(let i = 1; i < this.pcArray.length; i++) {
-        let receivedObj = await TestUtils.getStats(this, 'kite', this.pc);
+        let receivedObj = await TestUtils.getStats(this, 'kite', this.pcArray[i]);
         receivedStats.push(receivedObj);
       }
 

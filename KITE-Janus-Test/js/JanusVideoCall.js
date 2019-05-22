@@ -11,7 +11,6 @@ const payload = require(globalVariables.payloadPath);
 class JanusVideoCall extends KiteBaseTest {
   constructor(name, globalVariables, capabilities, payload) {
     super(name, globalVariables, capabilities, payload);
-    // page
     this.page = new JanusVideoCallPage();
   }
   
@@ -28,12 +27,15 @@ class JanusVideoCall extends KiteBaseTest {
       let allVideoCheck = new AllVideoCheck(this);
       await allVideoCheck.execute(this);
 
-      // Peer connection ?
-      // let getStatsStep = new GetStatsStep(this);
-      // await getStatsStep.execute(this);
+      if (this.getStats) {
+        let getStatsStep = new GetStatsStep(this);
+        await getStatsStep.execute(this);
+      }
 
-      let screenshotStep = new ScreenshotStep(this);
-      await screenshotStep.execute(this);
+      if (this.takeScreenshot) {
+        let screenshotStep = new ScreenshotStep(this);
+        await screenshotStep.execute(this);
+      }
 
       await TestUtils.waitAround(5000 * this.numberOfParticipant); // 3s per participant
 

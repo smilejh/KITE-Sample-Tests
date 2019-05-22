@@ -34,8 +34,10 @@ class JanusEcho extends KiteBaseTest {
         await getStatsStep.execute(this);
       }
 
-      let screenshotStep = new ScreenshotStep(this);
-      await screenshotStep.execute(this);
+      if (this.takeScreenshot) {
+        let screenshotStep = new ScreenshotStep(this);
+        await screenshotStep.execute(this);
+      }
 
       await TestUtils.waitAround(3000 * this.numberOfParticipant); // 3s per participant
 
