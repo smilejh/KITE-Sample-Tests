@@ -7,3 +7,4 @@ logs
 kite-allure-reports
 *.iml
 /KITE-Jitsi-Test/configs/private.jitsi.config.json
+temp
