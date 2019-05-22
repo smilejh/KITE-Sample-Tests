@@ -1,0 +1,20 @@
+{
+  "name": "js",
+  "version": "1.0.0",
+  "description": "KITE Javascript Test",
+  "main": "janus.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ManuCosmo/KITE-Hackathon.git"
+  },
+  "author": "emmanuel.andre@cosmosoftware.io",
+  "license": "ISC",
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "kite-common": "0.1.0",
+    "selenium-webdriver": "^4.0.0-alpha.1"
+  }
+}
