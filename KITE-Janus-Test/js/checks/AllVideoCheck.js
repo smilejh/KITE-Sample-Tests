@@ -51,23 +51,7 @@ class AllVideoCheck extends TestStep {
   async step() {
     try {
       await executeStep(this);
-      // let result = "";
-      // let tmp;
-      // let error = false;
-      // for(let i = 1; i < this.numberOfParticipant; i++) {
-      //   tmp = await this.page.videoCheck(this, i);
-      //   result += tmp;
-      //   if (i < this.numberOfParticipant) {
-      //     result += ' | ';
-      //   }
-      //   if (tmp != 'video') {
-      //     error = true;
-      //   }
-      // }
-      // if (error) {
-      //   this.testReporter.textAttachment(this.report, "Received videos", result, "plain");
-      //   throw new KiteTestError(Status.FAILED, "Some videos are still or blank: " + result);
-      // }
+
     } catch (error) {
       console.log(error);
       if (error instanceof KiteTestError) {

@@ -1,14 +1,9 @@
 const {TestStep} = require('kite-common');
-const {JanusPage, JanusEchoPage, 
+const {JanusEchoPage, 
       JanusStreamingPage, JanusVideoCallPage, 
       JanusVideoRoomPage} = require('../pages');
 
-
-// Factory pattern
 const description = function(stepInfo) {
-  if (stepInfo.page instanceof JanusPage) {
-    return 'Open ' + stepInfo.url;
-  }
   if (stepInfo.page instanceof JanusEchoPage || stepInfo.page instanceof JanusStreamingPage
     || stepInfo.page instanceof JanusVideoCallPage) {
     return 'Open ' + stepInfo.url + ' and join a session';
@@ -19,9 +14,6 @@ const description = function(stepInfo) {
 }
 
 const executeStep = async function(stepInfo) {
-  if (stepInfo.page instanceof JanusPage) {
-    await stepInfo.page.open(stepInfo);
-  }
   if (stepInfo.page instanceof JanusEchoPage || stepInfo.page instanceof JanusStreamingPage) {
     await stepInfo.page.open(stepInfo);
     await stepInfo.page.joinSession(stepInfo);
