@@ -29,7 +29,7 @@
     {
       "browserName": "chrome",
       "version": "74",
-      "platform": "WINDOWS",
+      "platform": "localhost",
       "headless": false
     }
   ]

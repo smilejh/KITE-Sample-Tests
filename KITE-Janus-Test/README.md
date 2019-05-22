@@ -30,7 +30,7 @@ To setup KITE, please follow these [instructions](https://github.com/webrtc/KITE
 Set the address of your Selenium Hub:  
   `"remoteAddress": "http://localhost:4444/wd/hub"`  
   
-Set your Chrome version and OS according to what is available on your Grid. The test has been written specifically for Chrome. Some functionality will not work on other web browsers.
+Set your Chrome version and OS according to what is available on your Grid. You can use `localhost` as the platform name if the grid is running on your localhost, KITE will automatically set it according to your OS.
 ```
 "browsers": [
     {

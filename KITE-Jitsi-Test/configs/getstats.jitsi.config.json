@@ -52,13 +52,13 @@
     {
       "browserName": "chrome",
       "version": "74",
-      "platform": "WINDOWS",
+      "platform": "localhost",
       "focus": true
     },
     {
       "browserName": "firefox",
       "version": "66",
-      "platform": "WINDOWS",
+      "platform": "localhost",
       "focus": true
     }
   ]
