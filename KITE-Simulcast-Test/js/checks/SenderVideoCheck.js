@@ -16,7 +16,7 @@ class SenderVideoCheck extends VideoCheck {
 
   async step() {
     let direction = 'sent';
-    super.step(direction);
+    await super.step(direction);
   }
 }
 

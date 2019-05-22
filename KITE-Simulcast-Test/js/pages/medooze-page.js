@@ -2,6 +2,7 @@ const {By, Key, promise} = require('selenium-webdriver');
 const map = promise.map;
 const {TestUtils, Status, KiteTestError} = require('kite-common'); 
 const waitAround = TestUtils.waitAround;
+const verifyVideoDisplayById = TestUtils.verifyVideoDisplayById;
 
 const elements = {
   peervideo: By.id('peervideo'),
@@ -11,13 +12,13 @@ const elements = {
   medium: By.id('medium'),
   low: By.id('low'),
 
-  video: {
-    type: 'tagName',
-    value: 'video',
-  },
-
   videos: By.css('video'),
 }
+
+const statsWidth = By.id("s_s_w");
+const statsHeight = By.id("s_s_h");
+const statsFps = By.id("s_s_f");
+const statsBandwidth = By.id("s_s_b");
 
 const buttons = {
   sl0Button: By.id('sl-0'),
@@ -29,6 +30,10 @@ const buttons = {
 };
 
 module.exports = { 
+
+  open: async function(stepInfo) {
+    await TestUtils.open(stepInfo);
+  },
 
   // Click the start button
   clickStartButton: async function(driver) {
@@ -70,39 +75,28 @@ module.exports = {
     }
   },
 
-
   // type: width / height / fps / bandwidth 
   // idx: 0 for sent stats / 1 for received stats
   loopbackStats: async function(driver, type, idx) {
-    let script = "return s_s_";
+    let element;
     switch(type) {
       case "width":
-        script += 'w[';
+        element = await driver.findElements(statsWidth);
         break;
       case "height":
-        script += 'h[';
+        element = await driver.findElements(statsHeight);
         break;
       case "fps":
-        script += 'f[';
+        element = await driver.findElements(statsFps);
         break;
       case "bandwidth":
-        script += 'b[';    
+        element = await driver.findElements(statsBandwidth);    
         break;
       default:
         return 0;
     }
-    switch(idx) {
-      case 0:
-        script += 0;
-        break;
-      case 1:
-        script += 1;
-        break;
-      default:
-        return 0;
-    }
-    script += '].innerText;'
-    return await driver.executeScript(script);
+    let value = await element[idx].getText(); 
+    return value;
   },
 
   getLoopbackStats: async function(stepInfo) {
@@ -124,34 +118,40 @@ module.exports = {
   selectProfile: async function(stepInfo) {
     const button = await stepInfo.driver.findElement(By.xpath('//button[@data-rid="' + stepInfo.rid + '" and @data-tid="' + stepInfo.tid + '"]'));
     button.sendKeys(Key.ENTER);
-    await TestUtils.waitAround(stepInfo.statsCollectionInterval);
+    await waitAround(stepInfo.statsCollectionInterval);
   },
 
   // VideoCheck
   videoCheck: async function(stepInfo, direction) {
-    //wait a while to allow the video to load.
-    await TestUtils.waitAround(2000);
     let videos;
     let ids = [];
     let i = 0;
-    await TestUtils.waitForElement(stepInfo.driver, elements.video.type, elements.video.value, stepInfo.timeout);
+    let timeout = stepInfo.timeout / 1000;
 
-    while (ids.length < stepInfo.numberOfParticipant && i < stepInfo.timeout / 1000) {
+    while (ids.length < stepInfo.numberOfParticipant && i < timeout) {
       videos = await stepInfo.driver.findElements(elements.videos);
       ids = await map(videos, e => e.getAttribute("id"));
       i++;
       await waitAround(1000);
     }
 
-    if (i === stepInfo.timeout) {
-      throw new KiteTestError(Status.FAILED, "Unable to find " + stepInfo.numberOfParticipants + " <video> element on the page. No video found = " + ids.length);
+    if (i === timeout) {
+      throw new KiteTestError(Status.FAILED, "Unable to find " + stepInfo.numberOfParticipant + " <video> element on the page. Number of video found = " + ids.length);
     }
 
     let idx = ("sent" === direction) ? 0 : 1;
-    let checked = await TestUtils.verifyVideoDisplayById(stepInfo.driver, ids[1]);
+    let checked = await verifyVideoDisplayById(stepInfo.driver, ids[idx]);
+    i = 0;
+    checked = await verifyVideoDisplayById(stepInfo.driver, ids[idx]);
+    while(checked.result === 'blank' || checked.result === undefined && i < timeout) {
+      checked = await verifyVideoDisplayById(stepInfo.driver, ids[idx]);
+      i++;
+      await waitAround(1000);
+    }
+
     i = 0;
     while(i < 3 && checked.result != 'video') {
-      checked = await TestUtils.verifyVideoDisplayById(stepInfo.driver, ids[1]);
+      checked = await verifyVideoDisplayById(stepInfo.driver, ids[idx]);
       i++;
       await waitAround(3 * 1000);
     }

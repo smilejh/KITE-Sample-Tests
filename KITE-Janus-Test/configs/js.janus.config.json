@@ -51,6 +51,12 @@
       "version": "74",
       "platform": "WINDOWS",
       "headless": false
+    },
+    {
+      "browserName": "firefox",
+      "version": "66",
+      "platform": "WINDOWS",
+      "headless": false
     }
   ]
 }

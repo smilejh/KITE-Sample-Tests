@@ -37,12 +37,12 @@ public class KiteJitsiTest extends KiteBaseTest {
       runner.addStep(new JoinRoomStep(webDriver, getRoomManager().getRoomUrl()));
       runner.addStep(new SetUserIdStep(webDriver, "user" + runner.getId()));
       runner.addStep(new FirstVideoCheck(webDriver));
-      if (this.getStatsSdk != null) {
-        runner.addStep(new StartGetStatsSDKStep(runner.getWebDriver(), this.name, getStatsSdk));
-      }
       runner.addStep(new AllVideoCheck(webDriver, getMaxUsersPerRoom()));
       if (this.getStats()) {
         runner.addStep(new GetStatsStep( webDriver, getStatsConfig));
+      }
+      if (this.getStatsSdk != null) {
+        runner.addStep(new StartGetStatsSDKStep(runner.getWebDriver(), this.name, getStatsSdk));
       }
       if (this.takeScreenshotForEachTest()) {
         runner.addStep(new ScreenshotStep(webDriver));

@@ -69,7 +69,7 @@ public class StartGetStatsSDKStep extends TestStep {
 
         String[] initSplit = getStatsFile.toString().split("testStats.init.* pc, ");
         logger.info("Returning non-default init");
-        String getStatsScript = initSplit[0] + "testStats.init(" + logstashUrl + ", " 
+        String getStatsScript = initSplit[0] + "testStats.init(\"" + logstashUrl + "\", "
           + this.userNameCommand + ", " + this.roomNameCommand + ", " + sfu + ", pc, " + initSplit[1];
 
         String[] publishingSplit = getStatsScript.split("testStats.startPublishing\\(15000\\)");
@@ -88,7 +88,7 @@ public class StartGetStatsSDKStep extends TestStep {
         String[] sendSplit = getStatsScript.split("KITETestName, KITETestId");
         getStatsScript = sendSplit[0];
         for (int i = 1; i <= 2; i++) {
-            sendSplit[i] = "\"" + testName + "\", " + testId + sendSplit[i];
+            sendSplit[i] = "\"" + testName + "\", \"" + testId + "\"" + sendSplit[i];
             getStatsScript = getStatsScript + sendSplit[i];
         }
 

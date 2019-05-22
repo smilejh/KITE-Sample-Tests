@@ -43,23 +43,19 @@ class Janus extends KiteBaseTest{
       let allVideoCheck = new AllVideoCheck(this);
       await allVideoCheck.execute(this);
 
-      let screenshotStep = new ScreenshotStep(this);
-      await screenshotStep.execute(this);
-      
       let pcArray = getPcArray(this.numberOfParticipant);
       let getStatsStep = new GetStatsStep(this, pcArray);
       await getStatsStep.execute(this);
       
-      this.report.setStopTimestamp();
+      let screenshotStep = new ScreenshotStep(this);
+      await screenshotStep.execute(this);
+      
+      await TestUtils.waitAround(3000 * this.numberOfParticipant); // 3s per participant
     } catch (e) {
       console.log(e);
     } finally {
       this.driver.quit();
     }
-
-    this.reporter.generateReportFiles();
-    let value = this.report.getJsonBuilder();
-    TestUtils.writeToFile(this.reportPath + "/result.json", JSON.stringify(value));
   }
 }
 
@@ -67,4 +63,4 @@ module.exports = Janus;
 
 let test = new Janus('Janus test', globalVariables, capabilities, payload); 
 
-test.testScript();
+test.run();

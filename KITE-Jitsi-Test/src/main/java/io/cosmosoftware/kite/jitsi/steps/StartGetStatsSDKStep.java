@@ -80,7 +80,7 @@ public class StartGetStatsSDKStep extends TestStep {
         String[] initSplit = getStatsScript.split("testStats.init.* pc, ");
         logger.info("Returning non-default init");
         getStatsScript = initSplit[0] + "testStats.init(" + logstashUrl + ", " + this.userNameCommand 
-          + ", " + this.roomNameCommand + ", " + sfu + ", pc, " + initSplit[1];
+          + ", " + this.roomNameCommand + ", \"" + sfu + "\", pc, " + initSplit[1];
 
         String[] publishingSplit = getStatsScript.split("testStats.startPublishing\\(15000\\)");
         getStatsScript = publishingSplit[0] 

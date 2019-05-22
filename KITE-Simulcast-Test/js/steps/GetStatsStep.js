@@ -24,13 +24,13 @@ class GetStatsStep extends TestStep {
 
   async step() {
     try {
-    let receivedStats = await TestUtils.getStats(this);
+    let receivedStats = await TestUtils.getStats(this, 'kite', this.pc);
 
     // Data
     this.testReporter.textAttachment(this.report, 'getStatsRaw', JSON.stringify(receivedStats), "json");
     
     } catch (error) {
-      console.log(e);
+      console.log(error);
       throw new KiteTestError(Status.BROKEN, "Failed to getStats");
     }
   }

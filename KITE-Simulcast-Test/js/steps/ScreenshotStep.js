@@ -9,9 +9,6 @@ class ScreenshotStep extends TestStep {
   constructor(kiteBaseTest) {
     super();
     this.driver = kiteBaseTest.driver;
-    this.statsCollectionTime = kiteBaseTest.statsCollectionTime;
-    this.statsCollectionInterval = kiteBaseTest.statsCollectionInterval;
-    this.selectedStats = kiteBaseTest.selectedStats;
 
     // Test reporter if you want to add attachment(s)
     this.testReporter = kiteBaseTest.reporter;
