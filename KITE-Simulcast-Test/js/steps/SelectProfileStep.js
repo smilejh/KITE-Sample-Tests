@@ -1,5 +1,4 @@
 const {TestStep} = require('kite-common');
-const {medoozePage} = require('../pages');
 
 /**
  * Class: SelectProfileStep
@@ -13,6 +12,7 @@ class SelectProfileStep extends TestStep {
     this.rid = rid;
     this.tid = tid;
     this.statsCollectionInterval = kiteBaseTest.statsCollectionInterval;
+    this.page = kiteBaseTest.page;
   }
 
   stepDescription() {
@@ -20,7 +20,7 @@ class SelectProfileStep extends TestStep {
   }
 
   async step() {
-    await medoozePage.selectProfile(this);
+    await this.page.selectProfile(this);
   }
 }
 

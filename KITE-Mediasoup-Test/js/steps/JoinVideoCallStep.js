@@ -1,5 +1,4 @@
 const {TestStep} = require('kite-common');
-const {mediasoupPage}  = require('../pages');
 
 /**
  * Class: JoinVideoCallStep

@@ -29,19 +29,20 @@ const buttons = {
   tl2Button: By.id('tl-2'),
 };
 
-module.exports = { 
+class MedoozePage {
+  constructor() {}
 
-  open: async function(stepInfo) {
+  async open(stepInfo) {
     await TestUtils.open(stepInfo);
-  },
+  }
 
   // Click the start button
-  clickStartButton: async function(driver) {
+  async clickStartButton(driver) {
     let startButton = await driver.findElement(buttons.startButton);
     await startButton.click();
-  },
+  }
 
-  clickButton: async function(driver, rid, tid) {
+  async clickButton(driver, rid, tid) {
     let button;
     switch (rid) {
       case 'a':
@@ -73,11 +74,11 @@ module.exports = {
     if (button != undefined) {
       await button.click();
     }
-  },
+  }
 
   // type: width / height / fps / bandwidth 
   // idx: 0 for sent stats / 1 for received stats
-  loopbackStats: async function(driver, type, idx) {
+  async loopbackStats(driver, type, idx) {
     let element;
     switch(type) {
       case "width":
@@ -97,9 +98,9 @@ module.exports = {
     }
     let value = await element[idx].getText(); 
     return value;
-  },
+  }
 
-  getLoopbackStats: async function(stepInfo) {
+  async getLoopbackStats(stepInfo) {
     let loopBackStats = {};
 
     loopBackStats.sentWidth = await this.loopbackStats(stepInfo.driver,"width", 0);
@@ -112,21 +113,21 @@ module.exports = {
     loopBackStats.recvBW = await this.loopbackStats(stepInfo.driver, "bandwidth", 1);
 
     return loopBackStats;
-  },
+  }
 
   // SelectProfileStep
-  selectProfile: async function(stepInfo) {
+  async selectProfile(stepInfo) {
     const button = await stepInfo.driver.findElement(By.xpath('//button[@data-rid="' + stepInfo.rid + '" and @data-tid="' + stepInfo.tid + '"]'));
     button.sendKeys(Key.ENTER);
     await waitAround(stepInfo.statsCollectionInterval);
-  },
+  }
 
   // VideoCheck
-  videoCheck: async function(stepInfo, direction) {
+  async videoCheck(stepInfo, direction) {
     let videos;
     let ids = [];
     let i = 0;
-    let timeout = stepInfo.timeout / 1000;
+    let timeout = stepInfo.timeout;
 
     while (ids.length < stepInfo.numberOfParticipant && i < timeout) {
       videos = await stepInfo.driver.findElements(elements.videos);
@@ -156,27 +157,8 @@ module.exports = {
       await waitAround(3 * 1000);
     }
     return checked.result;
-  },
-
-  // Bandwidth check
-  /* Set the bitrate cap (in bps)
-  setBitrateCap: async function(driver, str) {
-    let script = "$('#cap').html('" + str + "');echotest.send({message: {bitrate:" + str + "}})"; 
-    await driver.executeScript(script);
-    console.log("bitrate cap set to " + str + "bps");
-  },
+  }
+}
 
   
-  lowHigherThanMedium: async function(driver) {
-    let l = await parseInt(driver.findElement(elements.low).innerText);
-    let m = await parseInt(driver.findElement(elements.medium).innerText);
-    return l != 0 && m != 0 && (l > m);
-  }
-
-  lowHigherThanMedium: async function(driver) {
-    let m = await parseInt(driver.findElement(elements.medium).innerText);
-    let h = await parseInt(driver.findElement(elements.high).innerText);
-    return h != 0 && m != 0 && (m > h);
-  }
-  */
-}
+module.exports = MedoozePage;
