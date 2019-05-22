@@ -1,6 +1,6 @@
 {
   "type": 1,
-  "name": "js.vp8.medooze.config.json %ts",
+  "name": "js.jitsi.config.json %ts",
   "remotes": [
     {
       "type": "local",
@@ -9,20 +9,20 @@
   ],
   "tests": [
     {
-      "name": "JS Medooze Simulcast VP8 %ts",
-      "description":"JS Simulcast Test for Medooze with VP8 codec",
-      "tupleSize": 1,
+      "name": "Jitsi Test %ts",
+      "description":"Jitsi Test",
+      "tupleSize": 2,
       "noOfThreads": 1,
-      "testImpl": "Medooze.js",
+      "testImpl": "Jitsi.js",
       "payload":{
-        "url": "https://playground.cosmosoftware.io/simulcast/index.html?codec=vp8",
+        "url": "https://meet.jit.si/",
         "takeScreenshotForEachTest": true,
-        "testTimeout": 20,
+        "testTimeout": 40,
         "getStats" : {
           "enabled": true,
           "statsCollectionTime": 2,
           "statsCollectionInterval": 1,
-          "peerConnections": ["pc"],
+          "peerConnections": ["window.pc[0]"],
           "selectedStats" : ["inbound-rtp", "outbound-rtp", "candidate-pair"]
         }
       }

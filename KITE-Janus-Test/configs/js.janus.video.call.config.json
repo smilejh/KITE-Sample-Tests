@@ -1,6 +1,6 @@
 {
   "type": 1,
-  "name": "js.vp8.medooze.config.json %ts",
+  "name": "js.janus.video.call.config.json %ts",
   "remotes": [
     {
       "type": "local",
@@ -9,20 +9,20 @@
   ],
   "tests": [
     {
-      "name": "JS Medooze Simulcast VP8 %ts",
-      "description":"JS Simulcast Test for Medooze with VP8 codec",
-      "tupleSize": 1,
+      "name": "Janus Video Call Test %ts",
+      "description":"Janus Video Call Test",
+      "tupleSize": 2,
       "noOfThreads": 1,
-      "testImpl": "Medooze.js",
+      "testImpl": "JanusVideoCall.js",
       "payload":{
-        "url": "https://playground.cosmosoftware.io/simulcast/index.html?codec=vp8",
+        "url": "https://janus.conf.meetecho.com/videocalltest.html",
         "takeScreenshotForEachTest": true,
-        "testTimeout": 20,
+        "testTimeout": 60,
         "getStats" : {
-          "enabled": true,
+          "enabled": false,
           "statsCollectionTime": 2,
           "statsCollectionInterval": 1,
-          "peerConnections": ["pc"],
+          "peerConnections": [],
           "selectedStats" : ["inbound-rtp", "outbound-rtp", "candidate-pair"]
         }
       }

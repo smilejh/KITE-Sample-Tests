@@ -2,7 +2,7 @@
   "name": "js",
   "version": "1.0.0",
   "description": "KITE Javascript Test",
-  "main": "Janus.js",
+  "main": "Jitsi.js",
   "scripts": {
     "test": "test"
   },

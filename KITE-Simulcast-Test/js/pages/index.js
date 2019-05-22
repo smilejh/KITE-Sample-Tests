@@ -1,1 +1,1 @@
-exports.medoozePage = require("./medooze-page");
+exports.MedoozePage = require("./MedoozePage");

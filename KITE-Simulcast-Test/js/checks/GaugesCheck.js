@@ -1,5 +1,4 @@
 const {TestUtils, TestStep} = require('kite-common');
-const {medoozePage} = require('../pages');
 /**
  * Class: GaugesCheck
  * Extends: TestStep
@@ -11,7 +10,8 @@ class GaugesCheck extends TestStep {
     this.driver = kiteBaseTest.driver;
     this.rid = rid;
     this.tid = tid;
-
+    this.page = kiteBaseTest.page;
+    this.takeScreenshot = kiteBaseTest.takeScreenshot;
     // Test reporter if you want to add attachment(s)
     this.testReporter = kiteBaseTest.reporter;
   }
@@ -22,13 +22,15 @@ class GaugesCheck extends TestStep {
 
   async step() {
 
-    let loopBackStats = await medoozePage.getLoopbackStats(this);
+    let loopBackStats = await this.page.getLoopbackStats(this);
 
     // Data
     this.testReporter.textAttachment(this.report, 'stats', JSON.stringify(loopBackStats), "json");
 
-    let screenshot = await TestUtils.takeScreenshot(this.driver);
-    this.testReporter.screenshotAttachment(this.report, "Screenshot step", screenshot); 
+    if (this.takeScreenshot) {
+      let screenshot = await TestUtils.takeScreenshot(this.driver);
+      this.testReporter.screenshotAttachment(this.report, "Screenshot step", screenshot); 
+    }
   }
 }
 

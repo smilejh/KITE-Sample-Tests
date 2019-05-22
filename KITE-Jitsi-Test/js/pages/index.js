@@ -1,0 +1,1 @@
+exports.JitsiPage = require("./JitsiPage");

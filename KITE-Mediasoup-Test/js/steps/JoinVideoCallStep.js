@@ -1,5 +1,5 @@
 const {TestStep} = require('kite-common');
-const {janusPage} = require('../pages')
+
 /**
  * Class: JoinVideoCallStep
  * Extends: TestStep
@@ -9,16 +9,18 @@ class JoinVideoCallStep extends TestStep {
   constructor(kiteBaseTest, url) {
     super();
     this.driver = kiteBaseTest.driver;
-    this.url = url;
     this.timeout = kiteBaseTest.timeout;
+    this.url = url;
+    this.uuid = kiteBaseTest.uuid;
+    this.page = kiteBaseTest.page;
   }
 
   stepDescription() {
-    return 'Open ' + this.url;
+    return 'Open ' + this.url + ' wait for page to load';
   }
 
   async step() {
-    await janusPage.open(this);
+    await this.page.open(this);
   }
 }
 

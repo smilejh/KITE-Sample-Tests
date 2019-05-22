@@ -1,6 +1,7 @@
 {
   "type": 1,
-  "name": "js.vp8.medooze.config.json %ts",
+  "name": "JS Mediasoup Interop",
+  "permute": false,
   "remotes": [
     {
       "type": "local",
@@ -9,22 +10,28 @@
   ],
   "tests": [
     {
-      "name": "JS Medooze Simulcast VP8 %ts",
-      "description":"JS Simulcast Test for Medooze with VP8 codec",
-      "tupleSize": 1,
-      "noOfThreads": 1,
-      "testImpl": "Medooze.js",
-      "payload":{
-        "url": "https://playground.cosmosoftware.io/simulcast/index.html?codec=vp8",
+      "name": "JS Mediasoup Local Grid %ts",
+      "description":"JS interop test for Mediasoup",
+      "tupleSize": 2,
+      "testImpl": "Mediasoup.js",
+      "payload": {
+        "url": "https://v3demo.mediasoup.org/?roomId=",
+        "rooms": [
+          "hackathonRoom_01",
+          "hackathonRoom_02",
+          "hackathonRoom_03"
+        ],
+        "usersPerRoom": 2,
         "takeScreenshotForEachTest": true,
-        "testTimeout": 20,
+        "testTimeout": 60,
         "getStats" : {
           "enabled": true,
           "statsCollectionTime": 2,
           "statsCollectionInterval": 1,
-          "peerConnections": ["pc"],
+          "peerConnections": ["window.PC1", "window.PC2"],
           "selectedStats" : ["inbound-rtp", "outbound-rtp", "candidate-pair"]
-        }
+        },
+        "loadReachTime": 5
       }
     }
   ],

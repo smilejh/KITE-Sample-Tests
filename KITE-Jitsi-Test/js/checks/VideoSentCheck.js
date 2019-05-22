@@ -1,17 +1,12 @@
 const {TestStep, KiteTestError, Status} = require('kite-common');
 
-/**
- * Class: FirstVideoCheck
- * Extends: TestStep
- * Description:
- */
-class FirstVideoCheck extends TestStep {
+class VideoSentCheck extends TestStep {
   constructor(kiteBaseTest) {
     super();
     this.driver = kiteBaseTest.driver;
-    this.numberOfParticipant = kiteBaseTest.numberOfParticipant;
     this.timeout = kiteBaseTest.timeout;
-    this.page = kiteBaseTest.page;
+    this.numberOfParticipant = kiteBaseTest.numberOfParticipant;
+    this.page = kiteBaseTest.page
 
     // Test reporter if you want to add attachment(s)
     this.testReporter = kiteBaseTest.reporter;
@@ -26,7 +21,7 @@ class FirstVideoCheck extends TestStep {
       let result = await this.page.videoCheck(this, 0);
       if (result != 'video') {
         this.testReporter.textAttachment(this.report, "Sent video", result, "plain");
-        throw new KiteTestError(Status.FAILED, "The first video is " + result);
+        throw new KiteTestError(Status.FAILED, "The video sent is " + result);
       }
     } catch (error) {
       console.log(error);
@@ -36,10 +31,7 @@ class FirstVideoCheck extends TestStep {
         throw new KiteTestError(Status.BROKEN, "Error looking for the video");
       }
     }
-
-
-
   }
 }
 
-module.exports = FirstVideoCheck;
+module.exports = VideoSentCheck;
