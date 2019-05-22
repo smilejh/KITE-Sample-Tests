@@ -19,6 +19,18 @@ public class GetStatsStep extends TestStep {
 
   private final JsonObject getStatsConfig;
 
+  /**
+   * for Janus demo testing, the name of the local peer connection are like "pluginHandle" + webrtcStuff.pc in the website source code (https://janus.conf.meetecho.com)
+   * list of pluginHandle (corresponding Plugin Demo name):
+   *      - echotest (Echo Test)
+   *      - streaming (Streaming)
+   *      - sfutest (Video Room)
+   *      - videocall (Video Call)
+   *      - ...
+   *
+   *      see configs file to set the name of the peer connection for each test (key: 'peerConnection')
+   */
+
   public GetStatsStep(WebDriver webDriver, JsonObject getStatsConfig) {
     super(webDriver);
     this.getStatsConfig = getStatsConfig;
@@ -33,20 +45,13 @@ public class GetStatsStep extends TestStep {
   @Override
   protected void step() throws KiteTestException {
     logger.info("Getting WebRTC stats via getStats");
-    String pcName = "echotest.webrtcStuff.pc";
+
     try {
       List<JsonObject> stats = getPCStatOvertime(webDriver, getStatsConfig);
       JsonObject sentStats = stats.get(0);
       JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
       List<JsonObject> receivedStats = new ArrayList<>();
       for (int i = 1; i < stats.size(); i++) {
-//        JsonObject receivedObject = getPCStatOvertime(webDriver,
-//          "window.remotePc[" + (i-1) + "]",
-//          statsCollectionTime,
-//          statsCollectionInterval,
-//          selectedStats);
-//        receivedStats.add(receivedObject);
-//        arrayBuilder.add(receivedObject);
         JsonObject receivedObject = stats.get(i);
         receivedStats.add(receivedObject);
         arrayBuilder.add(receivedObject);

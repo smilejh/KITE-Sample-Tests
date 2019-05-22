@@ -24,6 +24,7 @@ public class JanusEchoTest extends KiteBaseTest {
   @Override
   public void populateTestSteps(TestRunner runner) {
     try {
+
       WebDriver webDriver = runner.getWebDriver();
       runner.addStep(new StartDemoStep(webDriver, this.url));
       runner.addStep(new FirstVideoCheck(webDriver));
@@ -32,10 +33,12 @@ public class JanusEchoTest extends KiteBaseTest {
 
       if (this.getStats()) {
         runner.addStep(new GetStatsStep( webDriver, getStatsConfig));
+
       }
       if (this.takeScreenshotForEachTest()) {
         runner.addStep(new ScreenshotStep(webDriver));
       }
+      //the next if part can be removed
       if (url.contains("simulcast=true")){
         for (String rid : rids) {
           for (int tid : tids) {

@@ -37,6 +37,8 @@ public class AllVideoCheck extends TestStep {
       List<WebElement> videos = janusPage.getVideoElements();
       boolean flag = true;
       for (int i = 1; i < numberOfParticipants; i++) {
+        String videoId = janusPage.getVideoIdByIndex(i);
+        logger.info("video id= " + videoId);
         String v2 = videoCheck(webDriver, i);
         flag = flag && "video".equalsIgnoreCase(v2);
       }
