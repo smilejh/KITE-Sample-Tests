@@ -101,6 +101,9 @@ public class JanusPage extends BasePage {
   @FindBy(id="call")
   private WebElement callHangupButton;
 
+  @FindBy(xpath = "//button[contains(text(),'Answer')]")
+  private WebElement answerButton;
+
 
 
   public JanusPage(WebDriver webDriver, Logger logger) {
@@ -155,7 +158,6 @@ public class JanusPage extends BasePage {
     waitUntilVisibilityOf(localStreamHeader, timeoutInSeconds);
 
   }
-
 
 
   /**
@@ -245,14 +247,16 @@ public class JanusPage extends BasePage {
   }
 
   public void fillCallerName(String userName) throws KiteInteractionException {
-    waitUntilVisibilityOf(callerNameField, 1);
+    waitUntilVisibilityOf(callerNameField, 2);
     sendKeys(callerNameField, userName);
-
   }
 
   public void fillPeerName(String userName) throws KiteInteractionException {
     waitUntilVisibilityOf(callerNameField, 1);
-    sendKeys(callerNameField, userName);
+    sendKeys(peerNameField, userName);
+  }
+  public void callPeer() throws KiteInteractionException {
+    click(callHangupButton);
 
   }
 
@@ -265,5 +269,23 @@ public class JanusPage extends BasePage {
   public String getVideoIdByIndex(int i) {
     return videos.get(i).getAttribute("id");
 
+  }
+
+  public void answerCall () throws KiteInteractionException {
+    WebDriverWait wait = new WebDriverWait(this.webDriver, 2);
+    wait.until(ExpectedConditions.alertIsPresent());
+    click(answerButton);
+  }
+
+  public void checkAlert() {
+    try {
+      WebDriverWait wait = new WebDriverWait(this.webDriver, 2);
+      wait.until(ExpectedConditions.alertIsPresent());
+      Alert alert = this.webDriver.switchTo().alert();
+      logger.info("Alert: " + alert.getText());
+      alert.accept();
+    } catch (Exception e) {
+        return;
+    }
   }
 }

@@ -1,0 +1,48 @@
+{
+  "type": 1,
+  "name": "Janus Video Call Local",
+  "permute": true,
+  "remotes": [
+    {
+      "type": "local",
+      "remoteAddress": "http://localhost:4444/wd/hub"
+    }
+  ],
+  "tests": [
+    {
+      "name": "Janus Video Call Test Local Grid %ts",
+      "description":"video call test for Janus",
+      "tupleSize": 1,
+      "testImpl": "io.cosmosoftware.kite.janus.JanusVideoCallTest",
+      "payload":{
+        "url": "https://janus.conf.meetecho.com/videocalltest.html",
+        "rooms": ["1"],
+        "usersPerRoom": 2,
+        "pageTitle": "Janus Video Call Test",
+        "takeScreenshotForEachTest": true,
+        "testTimeout": 20,
+        "getStats" : {
+          "enabled": true,
+          "statsCollectionTime": 2,
+          "statsCollectionInterval": 1,
+          "peerConnections": ["videocall.webrtcStuff.pc", "videocall.webrtcStuff.remoteStream"],
+          "selectedStats" : ["inbound-rtp", "outbound-rtp", "candidate-pair"]
+        }
+      }
+    }
+  ],
+  "browsers": [
+    {
+      "browserName": "chrome",
+      "version": "74",
+      "platform": "WINDOWS",
+      "headless": false
+    },
+    {
+      "browserName": "firefox",
+      "version": "66",
+      "platform": "WINDOWS",
+      "headless": false
+    }
+  ]
+}

@@ -20,9 +20,6 @@ public class JoinStreamingStep extends TestStep {
     janusPage.openStreamSetList();
     janusPage.selectStreamSet(this.streamSet);
     janusPage.launchStreaming();
-
-
-
   }
 
   @Override

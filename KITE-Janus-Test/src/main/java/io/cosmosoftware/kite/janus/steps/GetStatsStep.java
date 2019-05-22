@@ -26,7 +26,7 @@ public class GetStatsStep extends TestStep {
    *      - streaming (Streaming)
    *      - sfutest (Video Room)
    *      - videocall (Video Call)
-   *      - ...
+   *      - screentest (Screen Share)
    *
    *      see configs file to set the name of the peer connection for each test (key: 'peerConnection')
    */

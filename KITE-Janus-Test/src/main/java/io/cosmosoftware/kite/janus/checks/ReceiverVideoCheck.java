@@ -33,6 +33,8 @@ public class ReceiverVideoCheck extends TestStep {
         throw new KiteTestException(
             "Unable to find any <video> element on the page", Status.FAILED);
       }
+      String videoId = janusPage.getVideoIdByIndex(1);
+      logger.info("second video id : " + videoId);
       String videoCheck = videoCheck(webDriver,1);
       int ct = 0;
       while(!"video".equalsIgnoreCase(videoCheck) && ct < 3) {

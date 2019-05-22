@@ -21,11 +21,13 @@ public class JanusVideoRoomTest extends KiteBaseTest {
       WebDriver webDriver = runner.getWebDriver();
       String userName = "user" + TestUtils.idToString(runner.getId());
       runner.addStep(new StartDemoStep(webDriver, this.url));
+      //find a way to have no more than 6 user per room with the room manager(flag?) or accept the pop up if there is too many users in the room
       runner.addStep(new JoinVideoRoomStep(webDriver, userName));
+
       runner.addStep(new FirstVideoCheck(webDriver));
       runner.addStep(new AllVideoCheck(webDriver, getMaxUsersPerRoom()));
       if (this.getStats()) {
-        runner.addStep(new GetStatsStep(webDriver, getStatsConfig));
+        runner.addStep(new GetStatsStep(webDriver, getStatsConfig)); //need to find the name of the remote Peer connections
       }
       if (this.takeScreenshotForEachTest()) {
         runner.addStep(new ScreenshotStep(webDriver));
