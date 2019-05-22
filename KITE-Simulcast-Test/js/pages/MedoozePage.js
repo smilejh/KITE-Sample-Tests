@@ -158,6 +158,27 @@ class MedoozePage {
     }
     return checked.result;
   }
+
+  // Bandwidth check
+  /* Set the bitrate cap (in bps)
+  async setBitrateCap(driver, str) {
+    let script = "$('#cap').html('" + str + "');echotest.send({message: {bitrate:" + str + "}})"; 
+    await driver.executeScript(script);
+    console.log("bitrate cap set to " + str + "bps");
+  },
+
+  async lowHigherThanMedium(driver) {
+    let l = await parseInt(driver.findElement(elements.low).innerText);
+    let m = await parseInt(driver.findElement(elements.medium).innerText);
+    return l != 0 && m != 0 && (l > m);
+  }
+
+  async lowHigherThanMedium(driver) {
+    let m = await parseInt(driver.findElement(elements.medium).innerText);
+    let h = await parseInt(driver.findElement(elements.high).innerText);
+    return h != 0 && m != 0 && (m > h);
+  }
+  */
 }
 
   
