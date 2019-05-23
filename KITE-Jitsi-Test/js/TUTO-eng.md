@@ -4,7 +4,6 @@
 
 
 This tutorial will guide you step-by-step in writing your first KITE Test. The test will open the https://meet.jit.si/ page on a web browser (Chrome and Firefox), check the sent and received videos, collect the WebRTC statistics and take a screenshot.  
-KITE Tests follow the Page Object Model design pattern [(POM)](https://medium.com/tech-tajawal/page-object-model-pom-design-pattern-f9588630800b). 
 
 1. Create the Test
 2. Adding a Step
@@ -17,6 +16,18 @@ KITE Tests follow the Page Object Model design pattern [(POM)](https://medium.co
 5. Step: collect WebRTC Stats
 6. Step: taking a Screenshot
 &nbsp;
+
+### KITE Test Design Pattern
+
+KITE Tests are implemented in a framework that follows the Page Object Model design pattern [(POM)](https://medium.com/tech-tajawal/page-object-model-pom-design-pattern-f9588630800b), and organises a Test in Pages, Steps and Checks.  
+Using Page Object Model, all element locators are being managed in separate directory and can be updated easily without any change in test cases.  
+A Test consists of a succession of Steps and Checks:
+- Steps are actions, for example, navigate to a page or click a button. Steps are not expected to fail, they either 'Pass' or 'Break' (any unexpected error).
+- Checks are assertations, for example, validate that a video is playing. Checks can 'Pass' (video is playing), 'Fail' (video is blank/still) or 'Break' (e.g. page timeout). 
+
+Pages are where we place the element locators and the functions to interact with them.
+
+
 
 *****
 
@@ -73,10 +84,14 @@ Next, we will edit the configuration file.
 
 Once done, you can already run the test with:
 ```
-r configs\jitsiTutorial.config.json
+r configs\js.jitsiTutorial.config.json
 ```
 At this stage, the test only launch a webbrowser, open https://meet.jit.si/ and does a random check.
 
+Open the Allure Report with:
+```
+a
+```
 
 
 *****
@@ -144,21 +159,19 @@ To obtain:
     }
 
 todo: not needed for the open page which comes from the template
-```
-r configs\your.config.json
-```
-Un navigateur s'ouvre et navigue jusqu'a l'URL: https://meet.jit.si/
 
-Maintenant, on va ajouter le code permettant de rejoindre un meeting.
+
+NOw we're going to add the code that allows joining a meeting.
 *****
 ### 3. Adding a Page
 #### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. Page: jitsi page
 
-Comme pour les etapes, les pages seront places dans le dossier pages.
-Un fichier page contient l'ensemble des elements et fonctions necessaires au fonctionnement de l'etape. 
-On va donc creer dans ce dossier un fichier nomme *jitsi-page.js* et l'ajouter au fichier index.js du dossier comme fait precedemment.
+Similarly to the Steps which are placed in the `steps/` folder, the Pages are placed in the `pages/` folder.
+The `kite_init` script created two files:  `pages/MainPage.js` and `pages/index.js`.
+Here we're going to edit  `pages/MainPage.js` and add the HTML locators and functions that interact with the web page.
 
-Fichier index.js:
+
+Fichier :
 
 `exports.jitsiPage = require("./jitsi-page");`
     
@@ -177,13 +190,14 @@ Ensuite, on va exporter la fonction nous permettant de rentrer dans cette room.
             await meeting.sendKeys(Key.ENTER); // Press ENTER to enter in the room
     }
     
-La variable **stepInfo** est le contexte de l'etape (= this).
-Les fonctions utilisees sur le bouton sont disponibles ici: [Selenium-webdriver](https://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/)
+The variable **stepInfo** is a reference to the Step object (= this).
+To interact with a HTML element, for example the button or the text input, we're using the selenium-webdriver API.
+The full API doc can be found here: [Selenium-webdriver](https://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/)
     
 Pour observer le resultat on pourra ajouter:
 `const {TestUtils} = require('kite-common');` au debut du fichier.
 &
-`await TestUtils.waitAround(10000);` a la fin de la fonction enterRoom().
+`await TestUtils.waitAround(10000);` a la fin de la fonction enterRoom(). ==> This should change to explicit wait (wait for some element on the next page to be visible)
 
 On obtient ainsi:
 
@@ -202,6 +216,8 @@ On obtient ainsi:
         }
     }
     
+    
+    ///// this is already created by the kite_init script. to be updated.
 Maintenant il faut modifier le fichier test OpenJitsiUrlStep.js
 On ajoute:
 `const {jitsiPage} = require('../pages');` au debut du fichier.
@@ -232,37 +248,39 @@ On obtient:
     
 Vous pouvez relancer la commande:
 ```
-r configs\your.config.json
+r configs\js.jitsiTutorial.config.json
 ```
 Vous observez que la page se charge, le champ se remplit, et nous nous retrouvons dans une room.
 
+Open the Allure Report with:
+```
+a
+```
+
 ****
-### 4. Ajouter des checks
-#### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. Verifier la video envoyee
+### 4. Adding the Checks
+#### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. Sent Video Check
 
-Maintenant, nous allons ajouter un check. Un check est l'equivalent d'une etape, hormis qu'il permet de verifier quelque chose, par exemple l'etat d'une connexion.
-Comme pour les autres fichiers, les checks seront places dans le dossier checks.
+Now, we're going to add a Check. A Check is a kind of Step that asserts a condition and can 'Fail'. All Checks are places in the `checks/` folder.
 
-On va donc creer dans ce dossier un fichier nomme: *VideoSentCheck.js* et aussi l'ajouter au fichier index.js du dossier
+We're goind to create a file named `checks/SentVideoCheck.js`.
+Once the file has been created, we'll add a reference to `checks/index.js` so it's available to any code that requires the folder `checks/`:
 
-Fichier index.js:
+__** checks/index.js **__  
 `exports.VideoSentCheck = require('./VideoSentCheck');`
     
-Ici, nous voulons verifier que la video a envoye fonctionne.
-Nous allons avoir besoin d'elements de la jistsi-page ainsi qu'une fonction deja cree dans le fichier TestUtils de kite-common.
+The objective of this Check is to validate that the video is being sent.  We'll need some elements in the `pages/MainPage.js` to access the \<video\> elements.
 
-Commencons par jistsi-page.js.
+Open the file `pages/MainPage.js`.
 
-Pour ajouter les elements videos, nous allons utiliser la classe By de [Selenium-webdriver](https://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/), en faisant simplement:
-`const videos = By.css('video');` => Ceci permet de recuperer toutes les balises 'video'.
-Ensuite, nous allons ajouter une fonction asynchrone dans module.exports:
-Appelons cette fonction **videoCheck**:
+To add the \<video\> elements, we're going to use the class `By` from [Selenium-webdriver](https://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/) by simply adding:
+`const videos = By.css('video');` => This allows us to get all the HTML elements with tag \<video\> into our `videos` array.
+Next we're goign to add a synchronous function called **videoCheck()** where we'll implement the video check logic.
 
     videoCheck: async function(stepInfo, direction) {},
     
-**stepInfo** est le contexte du Check cree.
-**index** est l'index de la video a verifier.
-Cette fonction permettra donc d'effectuer les deux checks consistant a verifier les videos.
+**stepInfo** is a reference to the Check object.
+**index** is the index of the video to be checked (0 for the first video, 1 for the 2nd, etc...) 
 
 Pour commencer, nous allons d'abord declarer nos variables:
 
@@ -274,7 +292,7 @@ Pour commencer, nous allons d'abord declarer nos variables:
     }
     
 Ensuite nous allons verifier le nombre de videos disponibles:
-    
+/////////// todo: the wait for all videos should move to kite-common test utils or base page, since it can be used for many tests.    
     videoCheck: async function(stepInfo, index) {
         // wait a while to allow the video to load
         await TestUtils.waitAround(2000);
@@ -318,7 +336,8 @@ Puis, on verifie qu'il n'y a pas d'erreur dans la verification:
 
 Si cette erreur apparait, elle aura pour effet de passer les prochains tests.
 
-Ensuite, on verifie la video a l'aide de la fonction verifyVideoDisplayByIndex() de la librairie Kite-common :
+Next we'll check that the video is actually playing, meaning that it isn't blank (all the pixels of the video frame are the same color) or still, 
+which means that the same image is still displayed after a second interval. For that we'll use the utility function `TestUtils.verifyVideoDisplayByIndex` from kite-common:
 
     videoCheck: async function(stepInfo, index) {
         // wait a while to allow the video to load
@@ -350,20 +369,22 @@ Ensuite, on verifie la video a l'aide de la fonction verifyVideoDisplayByIndex()
         return checked.result;
     }
     
-On ajoute `index` **`+ 1`** pour eviter la large video dans nos checks. 
+We need to add `index` **`+ 1`** to skip the large video in our.
     
-Pour verifier la video, on effectue cette verification 4 fois dont 3 fois a 3 secondes d'intervalle.
-    
-Une fois ceci fait, retournons dans le fichier VideoSentCheck.js:
+To make the check robust to poor connections, we decided to repeat it 3 times at 3 seconds interval. We could make the checks much stricter by doing it only once, which would cause it to fail more easily in case of low framerate.
 
-Comme dit precedemment, un check est l'equivalent d'un step, nous pouvons donc prendre la meme base.
-On ajoute les dependances au debut du fichier:
-`const {TestStep, KiteTestError, Status} = require('kite-common');`
-&
-`const {jitsiPage} = require('../pages');`
+Now that we completed the implementation in `pages/MainPage.js`, we're going to edit `checks/SentVideoCheck.js`.    
 
-On ajoute les valeurs dont on a besoin dans le constructeur:
+As previously mentioned, a Check is a kind of Step and inherits from the the framework's `TestStep` class.
+At the top of the file, we add the following require:
+```
+const {TestStep, KiteTestError, Status} = require('kite-common');
+const {mainPage} = require('../pages');`
+```
+///// missing class declaration 
 
+Then we implement the constructor:
+```
     constructor(kiteBaseTest) {
         super();
         this.driver = kiteBaseTest.driver;
@@ -373,18 +394,19 @@ On ajoute les valeurs dont on a besoin dans le constructeur:
         // Test reporter if you want to add attachment(s)
         this.testReporter = kiteBaseTest.reporter;
     }
-
-On modifie la description:
+```
+Update the **stepDescription()**:
 
     stepDescription() {
         return "Check the first video is being sent OK";
     }
     
-Puis la fonction step:
-
+Then the **step()**, where we call `mainPage.videoCheck()` for the first video in the page (the sender's video).
+We compare the result and if it's not 'video' we throw a KiteTestError with the Status.FAILED, that will be reported accordingly in the Allure Report.
+```
     async step() {
         try {
-            let result = await jitsiPage.videoCheck(this, 0);
+            let result = await mainPage.videoCheck(this, 0);
             if (result != 'video') {
                 this.testReporter.textAttachment(this.report, "Sent video", result, "plain");
                 throw new KiteTestError(Status.FAILED, "The video sent is " + result);
@@ -398,24 +420,34 @@ Puis la fonction step:
             }
         }
     }
-    
-Dans cette fonction, on appelle la fonction videoCheck de la page jitsi, on compare le resultat.
-S'il est different de 'video', on lance une erreur.
+```
 
-Pour finir, on revient sur le test principal, Jitsi.js, on ajoute le check dans les dependances, puis on l'ajoute dans la fonction testScript.
-`const {VideoSentCheck} = require('./checks');`
+Lastly, we return to the main Test class file: `JitsiTutorial.js` and add our check there: 
+At the top of the file, we import the class
+`const {SentVideoCheck} = require('./checks');`
 
+And add the check to the **testScript()** function:
+```
     this.driver = await WebDriverFactory.getDriver(capabilities, capabilities.remoteAddress);
-    let openJitsiUrlStep = new OpenJitsiUrlStep(this);
-    await openJitsiUrlStep.execute(this);
+    let openUrlStep = new OpenUrlStep(this);
+    await openUrlStep.execute(this);
     // New check
-    let videoSentCheck = new VideoSentCheck(this);
-    await videoSentCheck.execute(this);
-    
-Maintenant, le test Jitsi permet en plus de verifier la video envoyee.
+    let sentVideoCheck = new SentVideoCheck(this);
+    await sentVideoCheck.execute(this);
+```    
+Now our test is able to check the sentVideo. 
+
+You can run the test again with:
+```
+r configs\js.jitsiTutorial.config.json
+```
+And open the Allure Report with:
+```
+a
+```
 
 *****
-#### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. Verifier les videos recues
+#### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. Received Videos Check
 On va maintenant ajouter le check permettant de verifier les autres videos.
 Pour cela nous allons faire la meme chose que pour le check precedent.
 - Creer le fichier VideoReceivedCheck.js dans le dossier checks
