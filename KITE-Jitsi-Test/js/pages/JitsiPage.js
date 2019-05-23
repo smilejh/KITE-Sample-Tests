@@ -33,20 +33,16 @@ class JitsiPage {
   async videoCheck(stepInfo, index) {
     let videos = []; // it will contains our video elements
     let checked; // Result of the verification
-    let i = 0;
-    let timeout = stepInfo.timeout / 1000;
-    let numberOfParticipant = parseInt(stepInfo.numberOfParticipant) + 1;
+    let timeout = stepInfo;
+    stepInfo.numberOfParticipant = parseInt(stepInfo.numberOfParticipant) + 1; // To avoid the first video
     
     // Waiting for all the videos
-    while (videos.length < numberOfParticipant && i < timeout) {
-      videos = await stepInfo.driver.findElements(videoElements);
-      i++;
-      await waitAround(1000); // waiting 1s after each iteration
-    }
+    let i = await TestUtils.waitVideos(stepInfo, videoElements);
+
     // Make sure that it has not timed out
     if (i === timeout) {
       throw new KiteTestError(Status.FAILED, "unable to find " +
-        numberOfParticipant + " <video> element on the page. Number of video found = " +
+        stepInfo.numberOfParticipant + " <video> element on the page. Number of video found = " +
         videos.length);
     }
     // Check the status of the video

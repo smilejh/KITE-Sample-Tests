@@ -1,2 +1,2 @@
-exports.VideoSentCheck = require("./VideoSentCheck");
-exports.VideoReceivedCheck = require("./VideoReceivedCheck");
+exports.SentVideoCheck = require("./SentVideoCheck");
+exports.ReceivedVideoCheck = require("./ReceivedVideoCheck");

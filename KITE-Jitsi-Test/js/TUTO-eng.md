@@ -4,7 +4,6 @@
 
 
 This tutorial will guide you step-by-step in writing your first KITE Test. The test will open the https://meet.jit.si/ page on a web browser (Chrome and Firefox), check the sent and received videos, collect the WebRTC statistics and take a screenshot.  
-KITE Tests follow the Page Object Model design pattern [(POM)](https://medium.com/tech-tajawal/page-object-model-pom-design-pattern-f9588630800b). 
 
 1. Create the Test
 2. Adding a Step
@@ -17,6 +16,18 @@ KITE Tests follow the Page Object Model design pattern [(POM)](https://medium.co
 5. Step: collect WebRTC Stats
 6. Step: taking a Screenshot
 &nbsp;
+
+### KITE Test Design Pattern
+
+KITE Tests are implemented in a framework that follows the Page Object Model design pattern [(POM)](https://medium.com/tech-tajawal/page-object-model-pom-design-pattern-f9588630800b), and organises a Test in Pages, Steps and Checks.  
+Using Page Object Model, all element locators are being managed in separate directory and can be updated easily without any change in test cases.  
+A Test consists of a succession of Steps and Checks:
+- Steps are actions, for example, navigate to a page or click a button. Steps are not expected to fail, they either 'Pass' or 'Break' (any unexpected error).
+- Checks are assertations, for example, validate that a video is playing. Checks can 'Pass' (video is playing), 'Fail' (video is blank/still) or 'Break' (e.g. page timeout). 
+
+Pages are where we place the element locators and the functions to interact with them.
+
+
 
 *****
 
@@ -41,9 +52,6 @@ This will create KITE-JitsiTutorial-Test and with inside, all the basic files an
 This tutorial is about the Javascript KITE Test and all the javascript files are located in: `KITE-JitsiTutorial-Test/js`.   
 It will also recompile the project.
 
-todo: the tutorial needs to be update once the template has been done.
- 
-
 #### Generate the test 
 ```
 const {TestUtils, WebDriverFactory, KiteBaseTest} = require('kite-common'); 
@@ -66,249 +74,157 @@ const capabilities = require(globalVariables.capabilitiesPath);
 const payload = require(globalVariables.payloadPath);
 ```
   
-  
 Next, we will edit the configuration file.
 **Expliquer le document de config**
 *****
 
 Once done, you can already run the test with:
 ```
-r configs\jitsiTutorial.config.json
+r configs\js.jitsiTutorial.config.json
 ```
 At this stage, the test only launch a webbrowser, open https://meet.jit.si/ and does a random check.
 
-
+Open the Allure Report with:
+```
+a
+```
+You should get the following:
+////////////////// SCREENSHOT //////////////////
 
 *****
 ### 2. Adding a Step
 #### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. Step: open a the web page
 
-todo: update this is already done in the template
-
-Pour ajouter une etape, il est preferable de l'ajouter dans le dossier steps qui contiendra l'ensemble des etapes de votre test.
-
-Ensuite a l'interieur de ce dossier, on cree un fichier nomme: *OpenJitsiUrlStep.js*
-Cette etape permettra de naviguer jusqu'a l'URL: https://meet.jit.si/
-
-Voici une base de votre etape:
-**TemplateStep.js**
+Thanks to the kite_init command, you have the file `/steps/OpenUrlStep.js`.
+This one contains everything to create this step.
 
 **TestStep** this is the parent class that enables the Allure Report generation.
 
 The constructor of each Step must contain the WebDriver object. It is needed for the Step to control the web browser and execute what it needs to do.  
-Next, the constructor will include the other variables and objects needed for the Step.
+Next, the constructor will include the other variables and objects needed for the Step. Moreover, there is the attribute this.page which contains an instance of the MainPage.
 
+⚠ To create a Step or a Check, you must implement the two functions **stepDescription()** and **step()**, which are abstract functions of the parent class **TestStep**.
 
-⚠ To create a Step, you must implement the two functions *stepDescription()* and *step()*, which are abstract functions of the parent class *TestStep*.
+**stepDescription()** returns a string which will be displayed in the report.
 
-Next you'll update the text in *stepDescription*, which will be displayed in the report:  
+**step()** is asynchronous because it executes WebDriver functions which are. Therefore, we use `async/await` to make it synchronous.
 
-    stepDescription() {
-        return 'Open https://meet.jit.si/ and wait for page to load';
-    }
-
-The function *step()* is asynchronous because it executes WebDriver functions which are. Therefore, we use `async/await` to make it synchronous.
-To open the browser to the url, we use the TestUtils.open() function:      
+Therefore:
+    
     async step() {
-        await TestUtils.open(this);
+        await this.page.open(this);
     }
 
-todo: not needed for the open page which comes from the template
-All Steps, Checks and Pages classes need to be exported to be available to others in the test. We do that in the file `steps/index.js`: 
+**step()** will call **open()** in `/pages/MainPage.js` which use **TestUtils.open()** to open the browser to the url. Indeed, this.page is an instance of MainPage.
 
-`exports.OpenJitsiUrlStep = require("./OpenJitsiUrlStep");`
-todo: not needed for the open page which comes from the template
-Puis on ajoute au debut du fichier *Jitsi.js*:
-todo: not needed for the open page which comes from the template
-`const {OpenJitsiUrlStep} = require('./steps');`
-todo: not needed for the open page which comes from the template
-et ensuite on ajoute a la fonction testcript():
-todo: not needed for the open page which comes from the template
-`let openJitsiUrlStep = new OpenJitsiUrlStep(this);`
-`await openJitsiUrlStep.execute(this);`
-todo: not needed for the open page which comes from the template
-To obtain:
-
-    async testScript() {
-        try {
-            this.driver = await WebDriverFactory.getDriver(capabilities, capabilities.remoteAddress);
-
-            let openJitsiUrlStep = new OpenJitsiUrlStep(this);
-            await openJitsiUrlStep.execute(this);
-
-        } catch (e) {
-            console.log(e);
-        } finally {
-            await this.driver.quit();
-        }
-    }
-
-todo: not needed for the open page which comes from the template
-```
-r configs\your.config.json
-```
-Un navigateur s'ouvre et navigue jusqu'a l'URL: https://meet.jit.si/
-
-Maintenant, on va ajouter le code permettant de rejoindre un meeting.
+Now we're going to add the code that allows joining a meeting.
 *****
 ### 3. Adding a Page
-#### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. Page: jitsi page
+#### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. Page: Main page
 
-Comme pour les etapes, les pages seront places dans le dossier pages.
-Un fichier page contient l'ensemble des elements et fonctions necessaires au fonctionnement de l'etape. 
-On va donc creer dans ce dossier un fichier nomme *jitsi-page.js* et l'ajouter au fichier index.js du dossier comme fait precedemment.
+Similarly to the Steps which are placed in the `steps/` folder, the Pages are placed in the `pages/` folder.
+The `kite_init` script created two files:  `pages/MainPage.js` and `pages/index.js`.
+Here we're going to edit `pages/MainPage.js` and add the HTML locators and functions that interact with the web page.
+ 
+To add HTLM locators, we are going to use the class `By` from [Selenium-webdriver](https://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/).
+Here, we will use the text input to choose our meeting room;
 
-Fichier index.js:
+`const meetingRoom = By.id('enter_room_field')` **enter_room_field** is the id of the HTML object.
 
-`exports.jitsiPage = require("./jitsi-page");`
-    
-Concernant les elements, ici, nous avons besoin de la barre permettant de choisir le nom du metting.
-Pour la recuperer, nous allons avoir besoin de ceci:
-`const {By} = require('selenium-webdriver');`
-et 
-`const meetingRoom = By.id('enter_room_field')` *enter_room_field* est l'id de cet objet.
+In MainPage class, add:
 
-Ensuite, on va exporter la fonction nous permettant de rentrer dans cette room.
-
-    module.exports = {
-        enterRoom: async function(stepInfo, room) {
-            let meeting = await stepInfo.driver.findElement(meetingRoom); // Find the element 
-            await meeting.sendKeys(room); // Fill out the field
-            await meeting.sendKeys(Key.ENTER); // Press ENTER to enter in the room
+    async enterRoom(stepInfo, room) {
+        const roomId = room + stepInfo.uuid;
+        let meeting = await stepInfo.driver.findElement(meetingRoom);
+        await meeting.sendKeys(roomId); // Fill out the field and add some random numbers
+        await meeting.sendKeys(Key.ENTER); // Press ENTER to enter in the room
     }
-    
-La variable **stepInfo** est le contexte de l'etape (= this).
-Les fonctions utilisees sur le bouton sont disponibles ici: [Selenium-webdriver](https://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/)
-    
-Pour observer le resultat on pourra ajouter:
-`const {TestUtils} = require('kite-common');` au debut du fichier.
-&
-`await TestUtils.waitAround(10000);` a la fin de la fonction enterRoom().
 
-On obtient ainsi:
+The variable **stepInfo** is a reference to the Step object (= this).
+To interact with a HTML element, for example the button or the text input, we're using the selenium-webdriver API.
+The full API doc can be found here: [Selenium-webdriver](https://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/)
+`Key` is an enumeration of keys like "ENTER" that can be used: [Key](https://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/index_exports_Key.html).
 
-    const {By, Key} = require('selenium-webdriver');
-    const {TestUtils} = require('kite-common'); 
-    const meetingRoom = By.id('enter_room_field');
-    
-    const today = new Date();
-    const roomId = (today.getDate()) * (today.getHours()+100) * (today.getMinutes()+100);
-    module.exports = {
-        enterRoom: async function(stepInfo, room) {
-            let meeting = await stepInfo.driver.findElement(meetingRoom);
-            await meeting.sendKeys(room + roomId); // Fill out the field and add some random numbers
-            await meeting.sendKeys(Key.ENTER); // Press ENTER to enter in the room
-            await TestUtils.waitAround(20000);
-        }
-    }
-    
-Maintenant il faut modifier le fichier test OpenJitsiUrlStep.js
-On ajoute:
-`const {jitsiPage} = require('../pages');` au debut du fichier.
-&
-`await jitsiPage.enterRoom(this, "ChooseYourOwnRoomName");` a la fin de la fonction step.
-On obtient:
+Now, we are going to modify `/steps/OpenUrlStep.js` to join our metting room.
 
-    const {TestUtils, TestStep} = require('kite-common');
-    const {jitsiPage} = require('../pages');
-    class OpenJitsiUrlStep extends TestStep {
-        constructor(kiteBaseTest) {
-            super();
-            this.driver = kiteBaseTest.driver;
-            this.timeout = kiteBaseTest.timeout;
-            this.url = kiteBaseTest.url;
-        }
-        stepDescription() {
-            return 'Open https://meet.jit.si/ and wait for page to load';
-        }
-        async step() {
-            await TestUtils.open(this);
-            await jitsiPage.enterRoom(this, "I'm a random room");
-        }
-    }
-    module.exports = OpenJitsiUrlStep;
+in **step()**, add:
+`await this.page.enterRoom(this, "I am a random room);
 
+To obtain:
 
-    
-Vous pouvez relancer la commande:
+    async step() {
+        await TestUtils.open(this);
+        await jitsiPage.enterRoom(this, "I am a random room");
+    }    
+
+You can run the test with:
 ```
-r configs\your.config.json
+r configs\js.jitsiTutorial.config.json
 ```
-Vous observez que la page se charge, le champ se remplit, et nous nous retrouvons dans une room.
+As you can see, the page loads, the text input fills up and we join a room.
 
+Open the Allure Report with:
+```
+a
+```
+You should get the following:
+    ////////////////// SCREENSHOT //////////////////
 ****
-### 4. Ajouter des checks
-#### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. Verifier la video envoyee
+### 4. Adding the Checks
+#### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. Sent Video Check
 
-Maintenant, nous allons ajouter un check. Un check est l'equivalent d'une etape, hormis qu'il permet de verifier quelque chose, par exemple l'etat d'une connexion.
-Comme pour les autres fichiers, les checks seront places dans le dossier checks.
+Now, we're going to add a Check. A Check is a kind of Step that asserts a condition and can 'Fail'. All Checks are places in the `checks/` folder.
 
-On va donc creer dans ce dossier un fichier nomme: *VideoSentCheck.js* et aussi l'ajouter au fichier index.js du dossier
+We're goind to create a file named `checks/SentVideoCheck.js`.
+Once the file has been created, we'll add a reference to `checks/index.js` so it's available to any code that requires the folder `checks/`:
 
-Fichier index.js:
-`exports.VideoSentCheck = require('./VideoSentCheck');`
+__** checks/index.js **__  
+`exports.SentVideoCheck = require('./SentVideoCheck');`
     
-Ici, nous voulons verifier que la video a envoye fonctionne.
-Nous allons avoir besoin d'elements de la jistsi-page ainsi qu'une fonction deja cree dans le fichier TestUtils de kite-common.
+The objective of this Check is to validate that the video is being sent.  We'll need some elements in the `pages/MainPage.js` to access the \<video\> elements.
 
-Commencons par jistsi-page.js.
+Open the file `pages/MainPage.js`.
 
-Pour ajouter les elements videos, nous allons utiliser la classe By de [Selenium-webdriver](https://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/), en faisant simplement:
-`const videos = By.css('video');` => Ceci permet de recuperer toutes les balises 'video'.
-Ensuite, nous allons ajouter une fonction asynchrone dans module.exports:
-Appelons cette fonction **videoCheck**:
+To add the \<video\> elements, we're going to use the class `By` from [Selenium-webdriver](https://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/) by simply adding:
+`const videos = By.css('video');` => This allows us to get all the HTML elements with tag \<video\> into our `videos` array.
+Next we're going to add a synchronous function called **videoCheck()** where we'll implement the video check logic.
 
-    videoCheck: async function(stepInfo, direction) {},
+    async videoCheck(stepInfo, index) {},
     
-**stepInfo** est le contexte du Check cree.
-**index** est l'index de la video a verifier.
-Cette fonction permettra donc d'effectuer les deux checks consistant a verifier les videos.
+**stepInfo** is a reference to the Check object.
+**index** is the index of the video to be checked (0 for the first video, 1 for the 2nd, etc...) 
 
-Pour commencer, nous allons d'abord declarer nos variables:
+First, we will declare our variables
 
-    videoCheck: async function(stepInfo, index) {
-        // wait a while to allow the video to load
-        await TestUtils.waitAround(2000);
-        let videos; // Our video elements
-        let i = 0;       
+    async videoCheck(stepInfo, index) {
+        let videos = []; // it will contains our video elements
+        let checked; // Result of the verification
+        let timeout = stepInfo;
+        stepInfo.numberOfParticipant = parseInt(stepInfo.numberOfParticipant) + 1; // To avoid the first video      
     }
     
-Ensuite nous allons verifier le nombre de videos disponibles:
-    
-    videoCheck: async function(stepInfo, index) {
-        // wait a while to allow the video to load
-        await TestUtils.waitAround(2000);
-        let videos; // Our video elements
+Then we will wait for all the videos. So, we are going to use `TestUtils.waitVideos()` from kite-common. This function returns a number that indicates how long we have been waiting.
+  
+    async videoCheck(stepInfo, index) {
+        let videos = []; // it will contains our video elements
         let checked; // Result of the verification
-        let i = 0;       
+        let timeout = stepInfo;
+        stepInfo.numberOfParticipant = parseInt(stepInfo.numberOfParticipant) + 1; // To avoid the first video         
         // Waiting for all the videos
-        while (videos.length < stepInfo.numberOfParticipant + 1 && i < stepInfo.timeout / 1000) {
-            videos = await stepInfo.driver.findElements(videoElements);
-            i++;
-            await TestUtils.waitAround(1000); // waiting 1s after each iteration
-        }
+        let i = await TestUtils.waitVideos(stepInfo, videoElements);
     }
-    
-Comme vous pouvez le constater, nous ajoutons `stepInfo.numerOfParticipant` **`+ 1`** car en effet, il y a une video supplementaire, une large video, qui elle n'a pas besoin d'etre check.
 
-Le fait de recuperer les videos peut provoquer une erreur. En effet, si la derniere etape time out, il faut lancer une erreur. Pour cela, il faut ajouter `KiteTestError` et `Status` dans les dependances, comme ceci:
-`const {TestUtils, KiteTestError, Status} = require('kite-common');`
+As you can see, we add `parseInt(stepInfo.numerOfParticipant)` **`+ 1`** because there is an other video that does not need to be checked. 
 
-Puis, on verifie qu'il n'y a pas d'erreur dans la verification:
+Moreover, we verify that it has not timed out. Indeed, if we do not have every videos, we have to throw a **KiteTestError** that will skip our futur steps and checks.
 
-    videoCheck: async function(stepInfo, index) {
-        // wait a while to allow the video to load
-        await TestUtils.waitAround(2000);
-        let videos; // Our video elements
+    async videoCheck(stepInfo, index) {
+        let videos = []; // it will contains our video elements
         let checked; // Result of the verification
-        let i = 0;       
+        let timeout = stepInfo;
+        stepInfo.numberOfParticipant = parseInt(stepInfo.numberOfParticipant) + 1; // To avoid the first video         
         // Waiting for all the videos
-        while (videos.length < stepInfo.numberOfParticipant + 1 && i < stepInfo.timeout / 1000) {
-            videos = await stepInfo.driver.findElements(videoElements);
-            i++;
-            await TestUtils.waitAround(1000); // waiting 1s after each iteration
-        }
-        // Make sure that it has not timed out
+        let i = await TestUtils.waitVideos(stepInfo, videoElements);
         if (i === stepInfo.timeout) {
             throw new KiteTestError(Status.FAILED, "unable to find " +
             stepInfo.numberOfParticipant + " <video> element on the page. Number of video found = " +
@@ -316,75 +232,81 @@ Puis, on verifie qu'il n'y a pas d'erreur dans la verification:
         }
     }
 
-Si cette erreur apparait, elle aura pour effet de passer les prochains tests.
 
-Ensuite, on verifie la video a l'aide de la fonction verifyVideoDisplayByIndex() de la librairie Kite-common :
+Next we'll check that the video is actually playing, meaning that it isn't blank (all the pixels of the video frame are the same color) or still, 
+which means that the same image is still displayed after a second interval. For that we'll use the utility function `TestUtils.verifyVideoDisplayByIndex()` from kite-common:
 
-    videoCheck: async function(stepInfo, index) {
-        // wait a while to allow the video to load
-        await TestUtils.waitAround(2000);
-        let videos = []; // Our video elements
+    async videoCheck(stepInfo, index) {
+        let videos = []; // it will contains our video elements
         let checked; // Result of the verification
-        let i = 0;
+        let timeout = stepInfo;
+        stepInfo.numberOfParticipant = parseInt(stepInfo.numberOfParticipant) + 1; // To avoid the first video
+        
         // Waiting for all the videos
-        while (videos.length < stepInfo.numberOfParticipant + 1 && i < stepInfo.timeout / 1000) {
-            videos = await stepInfo.driver.findElements(videoElements);
-            i++;
-            await TestUtils.waitAround(1000); // waiting 1s after each iteration
-        }
+        let i = await TestUtils.waitVideos(stepInfo, videoElements);
+
         // Make sure that it has not timed out
-        if (i === stepInfo.timeout) {
-            throw new KiteTestError(Status.FAILED, "unable to find " +
+        if (i === timeout) {
+        throw new KiteTestError(Status.FAILED, "unable to find " +
             stepInfo.numberOfParticipant + " <video> element on the page. Number of video found = " +
             videos.length);
         }
         // Check the status of the video
-        // status = 'blank' || 'still' || 'video'
-        checked = await TestUtils.verifyVideoDisplayByIndex(stepInfo.driver, index + 1);
+        // checked.result = 'blank' || 'still' || 'video'
+        i = 0;
+        checked = await verifyVideoDisplayByIndex(stepInfo.driver, index + 1);
+            while(checked.result === 'blank' || checked.result === undefined && i < timeout) {
+            checked = await verifyVideoDisplayByIndex(stepInfo.driver, index + 1);
+            i++;
+            await waitAround(1000);
+        }
+
         i = 0;
         while(i < 3 && checked.result != 'video') {
-            checked = await TestUtils.verifyVideoDisplayByIndex(stepInfo.driver, index + 1);
+            checked = await verifyVideoDisplayByIndex(stepInfo.driver, index + 1);
             i++;
-            await TestUtils.waitAround(3 * 1000); // waiting 3s after each iteration
+            await waitAround(3 * 1000); // waiting 3s after each iteration
         }
         return checked.result;
     }
     
-On ajoute `index` **`+ 1`** pour eviter la large video dans nos checks. 
+We need to add `index` **`+ 1`** to skip the large video in our.
     
-Pour verifier la video, on effectue cette verification 4 fois dont 3 fois a 3 secondes d'intervalle.
-    
-Une fois ceci fait, retournons dans le fichier VideoSentCheck.js:
+To make the check robust to poor connections, we decided to repeat it 3 times at 3 seconds interval. We could make the checks much stricter by doing it only once, which would cause it to fail more easily in case of low framerate.
 
-Comme dit precedemment, un check est l'equivalent d'un step, nous pouvons donc prendre la meme base.
-On ajoute les dependances au debut du fichier:
+Now that we completed the implementation in `pages/MainPage.js`, we're going to edit `checks/SentVideoCheck.js`.    
+
+As previously mentioned, a Check is a kind of Step and inherits from the the framework's `TestStep` class.
+At the top of the file, we add the following require:
 `const {TestStep, KiteTestError, Status} = require('kite-common');`
-&
-`const {jitsiPage} = require('../pages');`
 
-On ajoute les valeurs dont on a besoin dans le constructeur:
-
+Then we implement the SentVideoCheck Class and its constructor:
+```
+class SentVideoCheck extends TestStep {
     constructor(kiteBaseTest) {
         super();
         this.driver = kiteBaseTest.driver;
         this.timeout = kiteBaseTest.timeout;
         this.numberOfParticipant = kiteBaseTest.numberOfParticipant;
+        this.page = kiteBaseTest.page;
 
         // Test reporter if you want to add attachment(s)
         this.testReporter = kiteBaseTest.reporter;
     }
-
-On modifie la description:
+}
+```
+Update the **stepDescription()**:
 
     stepDescription() {
         return "Check the first video is being sent OK";
     }
     
-Puis la fonction step:
-
+Then the **step()**, where we call `this.page.videoCheck()` for the first video in the page (the sender's video).
+We compare the result and if it's not 'video' we throw a KiteTestError with the Status.FAILED, that will be reported accordingly in the Allure Report.
+```
     async step() {
         try {
-            let result = await jitsiPage.videoCheck(this, 0);
+            let result = await this.page.videoCheck(this, 0);
             if (result != 'video') {
                 this.testReporter.textAttachment(this.report, "Sent video", result, "plain");
                 throw new KiteTestError(Status.FAILED, "The video sent is " + result);
@@ -398,50 +320,81 @@ Puis la fonction step:
             }
         }
     }
-    
-Dans cette fonction, on appelle la fonction videoCheck de la page jitsi, on compare le resultat.
-S'il est different de 'video', on lance une erreur.
+```
 
-Pour finir, on revient sur le test principal, Jitsi.js, on ajoute le check dans les dependances, puis on l'ajoute dans la fonction testScript.
-`const {VideoSentCheck} = require('./checks');`
+To finish with this file, at the end, add:
+`module.exports = SentVideoCheck;`
 
+Lastly, we return to the main Test class file: `JitsiTutorial.js` and add our check there: 
+At the top of the file, we import the class
+`const {SentVideoCheck} = require('./checks');`
+
+And add the check to the **testScript()** function:
+```
     this.driver = await WebDriverFactory.getDriver(capabilities, capabilities.remoteAddress);
-    let openJitsiUrlStep = new OpenJitsiUrlStep(this);
-    await openJitsiUrlStep.execute(this);
+    let openUrlStep = new OpenUrlStep(this);
+    await openUrlStep.execute(this);
     // New check
-    let videoSentCheck = new VideoSentCheck(this);
-    await videoSentCheck.execute(this);
-    
-Maintenant, le test Jitsi permet en plus de verifier la video envoyee.
+    let sentVideoCheck = new SentVideoCheck(this);
+    await sentVideoCheck.execute(this);
+```    
+Now, our test is able to check the sentVideo. 
+
+You can run the test again with:
+```
+r configs\js.jitsiTutorial.config.json
+```
+And open the Allure Report with:
+```
+a
+```
+You should get the following:
+    ////////////////// SCREENSHOT //////////////////
+
 
 *****
-#### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. Verifier les videos recues
-On va maintenant ajouter le check permettant de verifier les autres videos.
-Pour cela nous allons faire la meme chose que pour le check precedent.
-- Creer le fichier VideoReceivedCheck.js dans le dossier checks
-- Ajouter `exports.VideoReceivedCheck = require('./VideoReceivedCheck');` au fichier index.js
-- Ajouter `const {TestStep, KiteTestError, Status} = require('kite-common');` 
-& `const {jitsiPage} = require('../pages');` au debut du fichier VideoReceivedCheck.js
+#### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. Received Videos Check
 
-Nous reprenons la meme base que le check precedent, et nous modifier le constructeur de la meme maniere:
+Now, we are going to add an other Check. It will check that we received all the remote videos.
 
+We're goind to create a file named `checks/ReceivedVideoCheck.js`.
+Once the file has been created, we will add a reference to `checks/index.js`.
+
+__** checks/index.js **__  
+`exports.VideoSentCheck = require('./VideoSentCheck');`
+
+The objective of this Check is to validate that all the remode videos are being received.
+Fortunately, we already have everything to do it.
+
+Open the file `checks/ReceivedVideoCheck.js`.
+
+Like the last check, at the top of the file, we add the following require:
+`const {TestStep, KiteTestError, Status} = require('kite-common');`
+
+Then we implement the ReceivedVideoCheck Class and its constructor:
+```
+class ReceivedVideoCheck extends TestStep {
     constructor(kiteBaseTest) {
         super();
         this.driver = kiteBaseTest.driver;
         this.timeout = kiteBaseTest.timeout;
         this.numberOfParticipant = kiteBaseTest.numberOfParticipant;
+        this.page = kiteBaseTest.page;
     
         // Test reporter if you want to add attachment(s)
         this.testReporter = kiteBaseTest.reporter;
-    } 
+    }
+} 
+```
     
-Ensuite nous modifions la description:
+Update the **stepDescription()**:
 
     stepDescription() {
         return "Check the other videos are being received OK";
     }
     
-Puis nous creons la fonction step:
+Then the **step()**, where we call `this.page.videoCheck()` for each remote video.
+We compare every result and if one is not 'video', then we throw a KiteTestError with the Status.FAILED, that will be reported accordingly in the Allure Report.
 
     async step() {
         let result = "";
@@ -449,7 +402,7 @@ Puis nous creons la fonction step:
         let error = false;
         try {
             for(let i = 1; i < this.numberOfParticipant; i++) {
-                tmp = await jitsiPage.videoCheck(this, i);
+                tmp = await this.page.videoCheck(this, i);
                 result += tmp;
                 if (i < this.numberOfParticipant) {
                     result += ' | ';
@@ -471,14 +424,19 @@ Puis nous creons la fonction step:
             }
         }
     }
-    
-La boucle for commencant par 1 permet de parcourir chacune des videos recues. En effet, celle d'index 0 est la video envoyee.
 
-Puis nous ajoutons ce check au fichier Jitsi.js de la meme maniere que le check precedent.
+The for-loop, starting at index 1, allows to check every reveived video. Indeed, the one of index 0 is the video sent.
 
-Au debut du fichier: `const {VideoSentCheck, VideoReceivedCheck} = require('./checks');`
+Do not forget, at the end of this file, add:
+`module.exports = ReceivedVideoCheck;`
 
-testScript():
+Finally, we add this check as the previous one in ```JitsiTutorial.js```. 
+We modify: 
+`const {SentVideoCheck} = require('./checks');`
+by
+`const {SentVideoCheck, ReceivedVideoCheck} = require('./checks');`
+
+and add in **testScript()**:
 
     this.driver = await WebDriverFactory.getDriver(capabilities, capabilities.remoteAddress);
     let openJitsiUrlStep = new OpenJitsiUrlStep(this);
@@ -489,43 +447,97 @@ testScript():
     let videoReceivedCheck = new VideoReceivedCheck(this);
     await videoReceivedCheck.execute(this);
     
-Le check permettant de verifier les videos recues est termine. 
+Now, our test is able to every videos (sent and received). 
+
+You can run the test again with:
+```
+r configs\js.jitsiTutorial.config.json
+```
+And open the Allure Report with:
+```
+a
+```
+You should get the following:
+    ////////////////// SCREENSHOT //////////////////
 
 *****
-# Une fois fixe
-### 5. Etape: recuperer les stats
-En ce qui concerne l'etape pour recuperer les stats, c'est un peu plus delicat.
-Encore une fois, quelque pre-requis:
-- Creer le fichier GetStatsStep.js dans le dossier steps
-- Ajouter `exports.GetStatsStep = require('./GetStatsStep');` au fichier index.js
-- Ajouter au debut du fichier GetStatsStep.js: 
-`const {TestUtils, TestStep, } = require('kite-common');` 
-& 
-`const {jitsiPage} = require('../pages');` 
+### 5. Step: get stats
 
-Ensuite, dans ce fichier, nous allons modifier le constructeur. Ici nous aurons besoin du driver, statsCollectionTime, statsCollectionInterval, statsCollectionInterval et du testReporter pour ecrire les donnees.
+#CONFIG FILE
+Before we start, we have to modify our config file, **configs/js.jitsiTutorial.config.json**.
+Indeed, this step require some information to work properly.
+So, in `payload`, we add :
 
-    constructor(kiteBaseTest) {
+    "getStats" : {
+        "enabled": true,
+        "statsCollectionTime": 2,
+        "statsCollectionInterval": 1,
+        "peerConnections": ["window.pc[0]"],
+        "selectedStats" : ["inbound-rtp", "outbound-rtp", "candidate-pair"]
+    }
+
+To obtain: 
+
+    "payload":{
+        "url": "https://meet.jit.si/",
+        "getStats" : {
+            "enabled": true,
+            "statsCollectionTime": 2,
+            "statsCollectionInterval": 1,
+            "peerConnections": ["window.pc[0]"],
+            "selectedStats" : ["inbound-rtp", "outbound-rtp", "candidate-pair"]`
+        }
+    }
+
+
+Now, we are going to create a step from scratch. Remember, all Steps are places in the `steps/` folder.
+
+We're goind to create a file named `steps/GetStatsStep.js`.
+Once the file has been created, we'll also add a reference to `steps/index.js`.
+
+__** steps/index.js **__  
+`exports.GetStatsStep = require('./GetStatsStep');`
+
+Open the file `checks/GetStatsStep.js`.
+
+At the top of the file, we add the following require:
+`const {TestStep, KiteTestError, Status} = require('kite-common');`
+
+Then, in this file, we implement the GetStatsStep class and its constructor:
+
+```
+class GetStatsStep extends TestStep {
+    constructor() {
         super();
         this.driver = kiteBaseTest.driver;
         this.statsCollectionTime = kiteBaseTest.statsCollectionTime;
         this.statsCollectionInterval = kiteBaseTest.statsCollectionInterval;
         this.selectedStats = kiteBaseTest.selectedStats;
+        this.peerConnections = kiteBaseTest.peerConnections;
+        this.page = kiteBaseTest.page;
+
         // Test reporter if you want to add attachment(s)
         this.testReporter = kiteBaseTest.reporter;
     }
+}
+```
+`this.statsCollectionTime`: duration of data collection
+`this.statsCollectionTime`: interval of data collection
+`this.selectedStats`: the data you want to collect
+`this.peerConnections`: array of peer connections used to get stats;
+
     
-Nous modifions ensuite la description:
+Update the **stepDescription()**:
 
     stepDescription() {
         return 'Getting WebRTC stats via getStats'; 
     }
 
-Et pour finir, nous modifions la fonction step:
+Then the **step()**:
 
     async step() {
         try {
-            let rawStats = await jitsiPage.getStats(this);
+            let rawStats = await this.page.getStats(this);
             let summaryStats = TestUtils.extractJson(rawStats, 'both');
             // // Data
             this.testReporter.textAttachment(this.report, 'GetStatsRaw', JSON.stringify(rawStats), "json");
@@ -536,12 +548,22 @@ Et pour finir, nous modifions la fonction step:
         }
     }
     
-La fonction jitsiPage.getStats() est la fonction nous permettant de recuperer les stats. Elle n'est pas encore cree mais c'est ce que nous allons faire juste apres.
-La fonction TestUtils.extractJson() permet de faire un resume des donnees recuperer par la fonction precedente.
+The **this.page.getStats()** allows to get stats. We are going to create it right after in MainPage();
+The **TestUtils.extractJson()** allows to make a summary of the data collected.
 
-Maintenant nous allons creer la fonction getSats() dans le fichier jitsi-page.js.
-Pour commencer, il faut executer un script pernettant de recuperer la peer connection:
-Voici le script:
+Now, we are going to create **getSats()**.
+Open the file **/pages/MainPage.js**.
+
+First, we need a script to get the peer connection.
+Here is the script:
+
+    window.peerConnections = [];
+    map = APP.conference._room.rtc.peerConnections;
+    for(var key of map.keys()){
+        window.peerConnections.push(map.get(key).peerconnection);
+    }
+
+So, we create a function, outside our class, to get this script:
 
     const getPeerConnectionScript = function() {
         return "window.peerConnections = [];"
@@ -551,55 +573,137 @@ Voici le script:
         + "}";
     }
     
-Ensuite, dans la fonction getStats():
+Then, in **MainPage** class: 
 
-    getStats: async function(stepInfo) {
-        await stepInfo.driver.executeScript(getPeerConnectionScript()); 
-        // pc = "window.peerConnections[0]"
-        let stats = await TestUtils.getStats(stepInfo, 'kite', "window.peerConnections[0]");
+    async getStats(stepInfo) {
+        await stepInfo.driver.executeScript(getPeerConnectionScript());
+        let stats = await TestUtils.getStats(stepInfo, 'kite', stepInfo.peerConnections[0]);
         return stats;
-    },
+    }
     
-La fonction TestUtils.getStats() retourne les statistiques du type donnee de la peer connection.
+The **stepInfo.driver.executeScript(getPeerConnectionScript())** will execute our script to get the peer connection more easily.
+The **TestUtils.getStats()** get stats from the peer connection.
 
-L'etape permettant de recuperer les statistiques est terminee.
+Do not forget, at the end of this file, add:
+`module.exports = GetStatsStep;`
+
+Finally, we add this step in **JitsiTutorial.js**.
+We modify: 
+`const {OpenUrlStep} = require('./steps');`
+by
+`const {OpenUrlStep, GetStatsStep} = require('./steps');`
+
+and add in **testScript()**:
+
+    this.driver = await WebDriverFactory.getDriver(capabilities, capabilities.remoteAddress);
+    let openJitsiUrlStep = new OpenJitsiUrlStep(this);
+    await openJitsiUrlStep.execute(this);
+    let videoSentCheck = new VideoSentCheck(this);
+    await videoSentCheck.execute(this);
+    let videoReceivedCheck = new VideoReceivedCheck(this);
+    await videoReceivedCheck.execute(this);
+    // New step
+    if (this.getStats) {
+        let getStatsStep = new new GetStatsStep(this);
+        await getStatsStep.execute(this);
+    }
+
+Like this, it is easier to enable or disable this step using the config file.
+
+Now, you can get stats from the peer connection.
+
+You can run the test again with:
+```
+r configs\js.jitsiTutorial.config.json
+```
+And open the Allure Report with:
+```
+a
+```
+You should get the following:
+    ////////////////// SCREENSHOT //////////////////
     
 *****
-### 6. Etape: prendre un screenshot 
+### 6. Step: take a screenshot 
 
-On va maintenant ajouter l'etape permettant de prendre un screenshot.
-Comme d'habitude quelques pre-requis, il faut:
-- Creer le fichier ScreenshotStep.js dans le dossier steps
-- Ajouter `exports.ScreenshotStep = require('./ScreenshotStep');` au fichier index.js
-- Ajouter `const {ScreenshotStep, TestStep} = require('kite-common');` au debut du fichier ScreenshotStep.js
+Now, we are going to create a new step (Steps in `steps/` folder).
 
-Ensuite dans ce fichier:
-Nous prenons la base pour creer un step et on modifie le constructeur.
-Ici, nous aurons besoin uniquement du driver et du testReporter.
+We're goind to create a file named `steps/ScreenshotStep.js`.
+Once the file has been created, we'll again add a reference to `steps/index.js`.
 
-    constructor(kiteBaseTest) {
+__** steps/index.js **__  
+`exports.ScreenshotStep = require('./ScreenshotStep');`
+
+Open the file `checks/ScreenshotStep.js`.
+
+At the top of the file, we add the following require:
+`const {TestUtils, TestStep} = require('kite-common');`
+
+Then, in this file, we implement the ScreenshotStep class and its constructor:
+
+```
+class ScreenshotStep extends TestStep {
+    constructor() {
         super();
         this.driver = kiteBaseTest.driver;
-        this.testReporter = kiteBaseTest.reporter; //if you want to add attachment(s)
+
+        // Test reporter if you want to add attachment(s)
+        this.testReporter = kiteBaseTest.reporter;
     }
+}
+```
     
-Ensuite nous modifons la description:
+Update the **stepDescription()**:
 
     stepDescription() {
-        return 'Get a screenshot';
+        return 'Get a screenshot'; 
     }
-    
-Ensuite mous modifions la fonction step:
+
+Then the **step()**:
 
     async step() {
         let screenshot = await TestUtils.takeScreenshot(this.driver);
         this.testReporter.screenshotAttachment(this.report, "Screenshot step", screenshot); 
     }
-    
-TestUtils contient deja la fonction permettant de prendre un screenshot, il suffit juste de passer en parametre le driver.
-Ensuite, nous l'ajoutons au testReporter pour ajouter ce screenshot caux pieces jointes.
 
-ScreenshotStep est terminee.
 
+The **TestUtils.takeScreenshot()** allows to take a screenthot.
+
+Finally, we add this step in **JitsiTutorial.js**.
+We modify: 
+`const {OpenUrlStep} = require('./steps');`
+by
+`const {OpenUrlStep, GetStatsStep} = require('./steps');`
+
+and add in **testScript()**:
+
+    this.driver = await WebDriverFactory.getDriver(capabilities, capabilities.remoteAddress);
+    let openJitsiUrlStep = new OpenJitsiUrlStep(this);
+    await openJitsiUrlStep.execute(this);
+    let videoSentCheck = new VideoSentCheck(this);
+    await videoSentCheck.execute(this);
+    let videoReceivedCheck = new VideoReceivedCheck(this);
+    await videoReceivedCheck.execute(this);
+    if (this.getStats) {
+        let getStatsStep = new new GetStatsStep(this);
+        await getStatsStep.execute(this);
+    }
+    // New step
+    let screenshotStep = new ScreenshotStep(this);
+    await screenshotStep.execute(this);
+
+
+You can also do the same as getStats to enable or disable this step more easily
+
+You can run the test again with:
+```
+r configs\js.jitsiTutorial.config.json
+```
+And open the Allure Report with:
+```
+a
+```
+Finally, you should get the following:
+    ////////////////// SCREENSHOT //////////////////
 *****
-La creation du test est terminee.
+The test creation is complete.

@@ -1,6 +1,6 @@
 const {TestStep, KiteTestError, Status} = require('kite-common');
 
-class VideoSentCheck extends TestStep {
+class SentVideoCheck extends TestStep {
   constructor(kiteBaseTest) {
     super();
     this.driver = kiteBaseTest.driver;
@@ -34,4 +34,4 @@ class VideoSentCheck extends TestStep {
   }
 }
 
-module.exports = VideoSentCheck;
+module.exports = SentVideoCheck;
