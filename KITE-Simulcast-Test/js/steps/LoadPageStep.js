@@ -1,5 +1,5 @@
-const {TestUtils, TestStep} = require('kite-common');
-const {medoozePage} = require('../pages');
+const {TestStep} = require('kite-common');
+
 /**
  * Class: LoadPageStep
  * Extends: TestStep
@@ -11,6 +11,7 @@ class LoadPageStep extends TestStep {
     this.driver = kiteBaseTest.driver;
     this.timeout = kiteBaseTest.timeout;
     this.url = kiteBaseTest.url;
+    this.page = kiteBaseTest.page;
   }
 
   stepDescription() {
@@ -18,7 +19,7 @@ class LoadPageStep extends TestStep {
   }
 
   async step() {
-    await medoozePage.open(this);
+    await this.page.open(this);
   }
 }
 

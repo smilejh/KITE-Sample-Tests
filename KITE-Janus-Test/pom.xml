@@ -49,11 +49,10 @@
       </plugin>
     </plugins>
   </build>
-
   <dependencies>
     <dependency>
-      <groupId>com.github.CoSMoSoftware.KITE-Extras</groupId>
-      <artifactId>kite-extras</artifactId>
+      <groupId>com.github.CoSMoSoftware</groupId>
+      <artifactId>KITE-Extras</artifactId>
       <version>${kite.extras.version}</version>
     </dependency>
     <!-- Uncomment this and comment out the above dependency to use your local maven repo for KITE-Extras

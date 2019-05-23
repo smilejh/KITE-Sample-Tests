@@ -1,16 +1,44 @@
-const {janusPage} = require('../pages');
-const {TestUtils, TestStep, Status, KiteTestError} = require('kite-common');
-/**
- * Class: AllVideoCheck
- * Extends: TestStep
- * Description:
- */
+const {TestStep, Status, KiteTestError} = require('kite-common');
+const {JanusStreamingPage, JanusVideoRoomPage} = require('../pages');
+
+const executeStep = async function(stepInfo) {
+  let start = 1;
+  if (stepInfo.page instanceof JanusStreamingPage) {
+    // Only 1 video received with only 1 participant
+    start = 0;
+  }
+  let result = "";
+  let tmp;
+  let error = false;
+  for(i = start; i < stepInfo.numberOfParticipant; i++) {
+    tmp = await stepInfo.page.videoCheck(stepInfo, i);
+    result += tmp;
+    if (i < stepInfo.numberOfParticipant) {
+      result += ' | ';
+    }
+    if (tmp != 'video') {
+      error = true;
+    }
+  }
+  
+  // Only for VideoRoom test
+  if (stepInfo.page instanceof JanusVideoRoomPage) {
+    await stepInfo.page.stopVideo(stepInfo);
+  }
+
+  if (error) {
+    stepInfo.testReporter.textAttachment(stepInfo.report, "Received videos", result, "plain");
+    throw new KiteTestError(Status.FAILED, "Some videos are still or blank: " + result);
+  }
+}
+
 class AllVideoCheck extends TestStep {
   constructor(kiteBaseTest) {
     super();
     this.driver = kiteBaseTest.driver;
     this.numberOfParticipant = kiteBaseTest.numberOfParticipant;
     this.timeout = kiteBaseTest.timeout;
+    this.page = kiteBaseTest.page;
 
     // Test reporter if you want to add attachment(s)
     this.testReporter = kiteBaseTest.reporter;
@@ -21,24 +49,9 @@ class AllVideoCheck extends TestStep {
   }
 
   async step() {
-    let result = "";
-    let tmp;
-    let error = false;
     try {
-      for(let i = 1; i < this.numberOfParticipant; i++) {
-        tmp = await janusPage.verifyVideo(this, i);
-        result += tmp;
-        if (i < this.numberOfParticipant) {
-          result += ' | ';
-        }
-        if (tmp != 'video') {
-          error = true;
-        }
-      }
-      if (error) {
-        this.testReporter.textAttachment(this.report, "Received videos", result, "plain");
-        throw new KiteTestError(Status.FAILED, "Some videos are still or blank: " + result);
-      }
+      await executeStep(this);
+
     } catch (error) {
       console.log(error);
       if (error instanceof KiteTestError) {

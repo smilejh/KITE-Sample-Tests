@@ -1,18 +1,13 @@
 const {TestUtils, TestStep, Status, KiteTestError} = require('kite-common');
 
-/**
- * Class: GetStatsStep
- * Extends: TestStep
- * Description:
- */
 class GetStatsStep extends TestStep {
-  constructor(kiteBaseTest, pcArray) {
+  constructor(kiteBaseTest) {
     super();
     this.driver = kiteBaseTest.driver;
     this.statsCollectionTime = kiteBaseTest.statsCollectionTime;
     this.statsCollectionInterval = kiteBaseTest.statsCollectionInterval;
     this.selectedStats = kiteBaseTest.selectedStats;
-    this.pcArray = pcArray;
+    this.pcArray = kiteBaseTest.peerConnections;
 
     // Test reporter if you want to add attachment(s)
     this.testReporter = kiteBaseTest.reporter;
@@ -24,21 +19,20 @@ class GetStatsStep extends TestStep {
 
   async step() {
     try {
-      this.pc = "window.pc";
-      let sentStats = await TestUtils.getStats(this, 'kite', this.pc);
 
+      let sentStats = await TestUtils.getStats(this, 'kite', this.pcArray[0]);
+      
       let receivedStats = [];
-      for(let i = 0; i < this.pcArray.length; i++) {
-        this.pc = this.pcArray[i];
-        let receivedObj = await TestUtils.getStats(this, 'kite', this.pc);
+      for(let i = 1; i < this.pcArray.length; i++) {
+        let receivedObj = await TestUtils.getStats(this, 'kite', this.pcArray[i]);
         receivedStats.push(receivedObj);
       }
-  
+
       let builder = {};
       builder['local'] = sentStats;
       builder['remote'] = receivedStats;
       let obj = await TestUtils.extractStats(sentStats, receivedStats);
-  
+      
       // Data
       this.testReporter.textAttachment(this.report, 'getStatsRaw', JSON.stringify(builder), "json");
       this.testReporter.textAttachment(this.report, 'getStatsSummary', JSON.stringify(obj), "json");

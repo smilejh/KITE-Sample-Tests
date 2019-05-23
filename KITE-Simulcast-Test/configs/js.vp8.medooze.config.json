@@ -18,10 +18,13 @@
         "url": "https://playground.cosmosoftware.io/simulcast/index.html?codec=vp8",
         "takeScreenshotForEachTest": true,
         "testTimeout": 20,
-        "getStats": true,
-        "statsCollectionTime" : 2,
-        "statsCollectionInterval" : 1,
-        "selectedStats": ["inbound-rtp", "outbound-rtp", "candidate-pair"]
+        "getStats" : {
+          "enabled": true,
+          "statsCollectionTime": 2,
+          "statsCollectionInterval": 1,
+          "peerConnections": ["pc"],
+          "selectedStats" : ["inbound-rtp", "outbound-rtp", "candidate-pair"]
+        }
       }
     }
   ],
@@ -29,13 +32,13 @@
     {
       "browserName": "chrome",
       "version": "74",
-      "platform": "WINDOWS",
+      "platform": "localhost",
       "headless": false
     },
     {
       "browserName": "firefox",
       "version": "66",
-      "platform": "WINDOWS",
+      "platform": "localhost",
       "headless": false
     }
   ]

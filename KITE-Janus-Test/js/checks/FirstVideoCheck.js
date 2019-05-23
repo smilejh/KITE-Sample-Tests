@@ -1,4 +1,3 @@
-const {janusPage} = require('../pages');
 const {TestStep, KiteTestError, Status} = require('kite-common');
 
 /**
@@ -12,6 +11,7 @@ class FirstVideoCheck extends TestStep {
     this.driver = kiteBaseTest.driver;
     this.numberOfParticipant = kiteBaseTest.numberOfParticipant;
     this.timeout = kiteBaseTest.timeout;
+    this.page = kiteBaseTest.page;
 
     // Test reporter if you want to add attachment(s)
     this.testReporter = kiteBaseTest.reporter;
@@ -23,7 +23,7 @@ class FirstVideoCheck extends TestStep {
 
   async step() {
     try {
-      let result = await janusPage.verifyVideo(this, 0);
+      let result = await this.page.videoCheck(this, 0);
       if (result != 'video') {
         this.testReporter.textAttachment(this.report, "Sent video", result, "plain");
         throw new KiteTestError(Status.FAILED, "The first video is " + result);

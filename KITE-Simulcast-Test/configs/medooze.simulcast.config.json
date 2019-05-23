@@ -52,14 +52,14 @@
     {
       "browserName": "chrome",
       "version": "74",
-      "platform": "WINDOWS",
+      "platform": "localhost",
       "windowSize": "1280,800",
       "headless": false
     },
     {
       "browserName": "chrome",
       "version": "75",
-      "platform": "WINDOWS",
+      "platform": "localhost",
       "windowSize": "1280,800",
       "fakeMediaFile": "D:\\Videos\\Samples\\y4m\\avenger_trailer.y4m",
       "fakeMediaAudio": "D:\\Videos\\Samples\\y4m\\avenger_trailer.wav",
@@ -69,13 +69,13 @@
       "browserName": "firefox",
       "windowSize": "1280,800",
       "version": "66",
-      "platform": "WINDOWS",
+      "platform": "localhost",
       "headless": false
     },
     {
       "browserName": "MicrosoftEdge",
       "version": "42.17134",
-      "platform": "WINDOWS",
+      "platform": "localhost",
       "headless": false
     }
   ]

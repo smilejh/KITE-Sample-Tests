@@ -29,12 +29,13 @@ To run this test you will need a Selenium Grid with at least **K** instance of C
 Set the address of your Selenium Hub:  
   `"remoteAddress": "http://localhost:4444/wd/hub"`  
   
-Set your Browser(s) name(s), version(s) and OS/platform(s) according to what is available on your Grid.
+Set your Browser(s) name(s), version(s) and OS/platform(s) according to what is available on your Grid.  
+You can use `localhost` as the platform name if the grid is running on your localhost, KITE will automatically set it according to your OS.
 ```
 "browsers": [
     {
       "browserName": "chrome",
-      "version": "73",
+      "version": "74",
       "platform": "WINDOWS",
       "headless": false
     }

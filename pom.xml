@@ -39,7 +39,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <kite.version>2.0.1</kite.version>
-    <kite.extras.version>0.1.9</kite.extras.version>
+    <kite.extras.version>0.1.14</kite.extras.version>
     <kite.framework.version>0.1.1</kite.framework.version>
     <kite.log4j.version>1.2.17</kite.log4j.version>
     <!-- Core dependencies -->
@@ -47,7 +47,7 @@
     <kite.java.version>1.8</kite.java.version>
     <kite.guava.version>25.1-jre</kite.guava.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <!-- maven plugin versions, shouldn't need be changed very often -->
+    <!-- maven plugin versions, shouldn't need be chaconged very often -->
     <kite.test.mvn.compiler.version>3.6.1</kite.test.mvn.compiler.version>
 
     <!--Compilation dependencies-->

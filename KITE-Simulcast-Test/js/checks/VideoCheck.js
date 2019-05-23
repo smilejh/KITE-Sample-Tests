@@ -1,5 +1,4 @@
 const {TestStep, Status, KiteTestError} = require('kite-common');
-const {medoozePage} = require('../pages');
 
 /**
  * Class: VideoCheck
@@ -12,6 +11,7 @@ class VideoCheck extends TestStep {
     this.driver = kiteBaseTest.driver;
     this.timeout = kiteBaseTest.timeout;
     this.numberOfParticipant = 2; // 2 videos
+    this.page = kiteBaseTest.page;
 
     // Test reporter if you want to add attachment(s)
     this.testReporter = kiteBaseTest.reporter;
@@ -23,7 +23,7 @@ class VideoCheck extends TestStep {
 
   async step(direction) {
     try {
-      let sentResult = await medoozePage.videoCheck(this, direction); 
+      let sentResult = await this.page.videoCheck(this, direction); 
       if (sentResult != 'video') {
         this.testReporter.textAttachment(this.report, direction + " video", sentResult, "plain");
         throw new KiteTestError(Status.FAILED, 'The ' + direction + ' video is ' + sentResult);
