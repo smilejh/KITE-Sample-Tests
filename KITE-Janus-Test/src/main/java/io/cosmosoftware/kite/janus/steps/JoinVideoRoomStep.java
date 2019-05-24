@@ -17,10 +17,8 @@ public class JoinVideoRoomStep extends TestStep {
   protected void step() throws KiteTestException {
     final JanusPage janusPage = new JanusPage(webDriver, logger);
     janusPage.fillCallerName(userName);
-
     janusPage.registerUser();
     janusPage.checkAlert();
-
 
   }
 

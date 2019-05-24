@@ -272,8 +272,7 @@ public class JanusPage extends BasePage {
   }
 
   public void answerCall () throws KiteInteractionException {
-    WebDriverWait wait = new WebDriverWait(this.webDriver, 2);
-    wait.until(ExpectedConditions.alertIsPresent());
+    waitUntilVisibilityOf(answerButton,2);
     click(answerButton);
   }
 

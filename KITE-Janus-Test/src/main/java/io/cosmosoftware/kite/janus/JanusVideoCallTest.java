@@ -7,6 +7,9 @@ import io.cosmosoftware.kite.janus.steps.StartDemoStep;
 import io.cosmosoftware.kite.simulcast.checks.ReceiverVideoCheck;
 import io.cosmosoftware.kite.util.TestUtils;
 import org.openqa.selenium.WebDriver;
+import org.webrtc.kite.config.App;
+import org.webrtc.kite.config.Browser;
+import org.webrtc.kite.config.EndPoint;
 import org.webrtc.kite.steps.ScreenshotStep;
 import org.webrtc.kite.tests.KiteBaseTest;
 import org.webrtc.kite.tests.TestRunner;
@@ -20,11 +23,14 @@ public class JanusVideoCallTest extends KiteBaseTest {
   protected void populateTestSteps(TestRunner runner) {
     try {
       WebDriver webDriver = runner.getWebDriver();
-      String driverId = TestUtils.idToString(runner.getId());
+      String runnerId = TestUtils.idToString(runner.getId());
+      logger.info("runner id : " + runnerId);
+      String name = generateTestCaseName();
+      logger.info("test case name : " + name);
 
       runner.addStep(new StartDemoStep(webDriver, this.url));
-      //find a way to have no more than 6 user per room with the room manager(flag?) or accept the pop up if there is too many users in the room
-      runner.addStep(new JoinVideoCallStep(webDriver, driverId));
+
+      runner.addStep(new JoinVideoCallStep(webDriver, runnerId, name));
 
       runner.addStep(new FirstVideoCheck(webDriver));
       runner.addStep(new ReceiverVideoCheck(webDriver));
@@ -39,7 +45,31 @@ public class JanusVideoCallTest extends KiteBaseTest {
     }
 
 
+  }
 
+  /**
+   * used to create unique name for the caller username and callee username
+   * if users does not have unique name,
+   * @return
+   */
+
+  @Override
+  protected String generateTestCaseName (){
+    StringBuilder name = new StringBuilder();
+
+    for(int index = 0; index < this.endPointList.size(); ++index) {
+      EndPoint endPoint = this.endPointList.get(index);
+      name.append(endPoint.getPlatform().substring(0, 3));
+      if (endPoint instanceof Browser) {
+        name.append(((Browser)endPoint).getBrowserName().substring(0, 2));
+        name.append(((Browser)endPoint).getVersion());
+      } else {
+        name.append(((App)endPoint).getDeviceName().substring(0, 2));
+      }
+
+    }
+
+    return name.toString();
 
   }
 }
