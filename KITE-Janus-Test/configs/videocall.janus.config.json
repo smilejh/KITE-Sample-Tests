@@ -12,7 +12,7 @@
     {
       "name": "Janus Video Call Test Local Grid %ts",
       "description":"video call test for Janus",
-      "tupleSize": 1,
+      "tupleSize": 2,
       "testImpl": "io.cosmosoftware.kite.janus.JanusVideoCallTest",
       "payload":{
         "url": "https://janus.conf.meetecho.com/videocalltest.html",
