@@ -168,7 +168,7 @@ Open the Allure Report with:
 a
 ```
 You should get the following:
-    ![First Step Allure Report](/TutorialScreenshots/Screenshot2AllureReport.png)
+    ![First Step Allure Report](./TutorialScreenshots/Screenshot2AllureReport.png)
 ****
 ### 4. Adding the Checks
 #### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. Sent Video Check
@@ -328,7 +328,7 @@ And open the Allure Report with:
 a
 ```
 You should get the following:
-    ![First Check Allure Report](/TutorialScreenshots/Screenshot3AllureReport.png)
+    ![First Check Allure Report](./TutorialScreenshots/Screenshot3AllureReport.png)
 *****
 #### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. Received Videos Check
 
@@ -435,7 +435,7 @@ And open the Allure Report with:
 a
 ```
 You should get the following:
-    ![Second Step Allure Report](/TutorialScreenshots/Screenshot4AllureReport.png)
+    ![Second Step Allure Report](./TutorialScreenshots/Screenshot4AllureReport.png)
 *****
 ### 5. Step: get stats
 
@@ -597,7 +597,7 @@ And open the Allure Report with:
 a
 ```
 You should get the following:
-    ![GetStats Step Allure Report](/TutorialScreenshots/Screenshot5AllureReport.png)  
+    ![GetStats Step Allure Report](./TutorialScreenshots/Screenshot5AllureReport.png)  
 *****
 ### 6. Step: take a screenshot 
 
@@ -679,6 +679,6 @@ And open the Allure Report with:
 a
 ```
 Finally, you should get the following:
-    ![Screenshot Step Allure Report](/TutorialScreenshots/Screenshot6AllureReport.png)
+    ![Screenshot Step Allure Report](./TutorialScreenshots/Screenshot6AllureReport.png)
 *****
 The test creation is complete.
