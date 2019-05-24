@@ -2,7 +2,7 @@ const {By, Key, promise} = require('selenium-webdriver');
 const map = promise.map;
 const {TestUtils, Status, KiteTestError} = require('kite-common'); 
 const waitAround = TestUtils.waitAround;
-const verifyVideoDisplayById = TestUtils.verifyVideoDisplayById;
+const verifyVideoDisplayByIndex = TestUtils.verifyVideoDisplayByIndex;
 
 const elements = {
   peervideo: By.id('peervideo'),
@@ -124,35 +124,24 @@ class MedoozePage {
 
   // VideoCheck
   async videoCheck(stepInfo, direction) {
-    let videos;
-    let ids = [];
-    let i = 0;
+    let i;
     let timeout = stepInfo.timeout;
 
-    while (ids.length < stepInfo.numberOfParticipant && i < timeout) {
-      videos = await stepInfo.driver.findElements(elements.videos);
-      ids = await map(videos, e => e.getAttribute("id"));
-      i++;
-      await waitAround(1000);
-    }
-
-    if (i === timeout) {
-      throw new KiteTestError(Status.FAILED, "Unable to find " + stepInfo.numberOfParticipant + " <video> element on the page. Number of video found = " + ids.length);
-    }
+    await TestUtils.waitVideos(stepInfo, elements.videos);
 
     let idx = ("sent" === direction) ? 0 : 1;
-    let checked = await verifyVideoDisplayById(stepInfo.driver, ids[idx]);
+    let checked = await verifyVideoDisplayByIndex(stepInfo.driver, idx);
     i = 0;
-    checked = await verifyVideoDisplayById(stepInfo.driver, ids[idx]);
+    checked = await verifyVideoDisplayByIndex(stepInfo.driver, idx);
     while(checked.result === 'blank' || checked.result === undefined && i < timeout) {
-      checked = await verifyVideoDisplayById(stepInfo.driver, ids[idx]);
+      checked = await verifyVideoDisplayByIndex(stepInfo.driver, idx);
       i++;
       await waitAround(1000);
     }
 
     i = 0;
     while(i < 3 && checked.result != 'video') {
-      checked = await verifyVideoDisplayById(stepInfo.driver, ids[idx]);
+      checked = await verifyVideoDisplayByIndex(stepInfo.driver, idx);
       i++;
       await waitAround(3 * 1000);
     }

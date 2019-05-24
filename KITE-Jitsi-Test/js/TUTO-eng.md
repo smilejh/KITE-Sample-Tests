@@ -148,7 +148,7 @@ The full API doc can be found here: [Selenium-webdriver](https://seleniumhq.gith
 Now, we are going to modify `/steps/OpenUrlStep.js` to join our metting room.
 
 in **step()**, add:
-`await this.page.enterRoom(this, "I am a random room);
+`await this.page.enterRoom(this, "I am a random room");
 
 To obtain:
 
@@ -168,7 +168,7 @@ Open the Allure Report with:
 a
 ```
 You should get the following:
-    ////////////////// SCREENSHOT //////////////////
+    ![First Step Allure Report](/TutorialScreenshots/Screenshot2AllureReport.png)
 ****
 ### 4. Adding the Checks
 #### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. Sent Video Check
@@ -197,60 +197,39 @@ Next we're going to add a synchronous function called **videoCheck()** where we'
 First, we will declare our variables
 
     async videoCheck(stepInfo, index) {
-        let videos = []; // it will contains our video elements
         let checked; // Result of the verification
-        let timeout = stepInfo;
-        stepInfo.numberOfParticipant = parseInt(stepInfo.numberOfParticipant) + 1; // To avoid the first video      
+        let i; // iteration indicator
+        let timeout = stepInfo.timeout;
+        stepInfo.numberOfParticipant = parseInt(stepInfo.numberOfParticipant) + 1; // To add the first video      
     }
     
-Then we will wait for all the videos. So, we are going to use `TestUtils.waitVideos()` from kite-common. This function returns a number that indicates how long we have been waiting.
+Then we will wait for all the videos. So, we are going to use `TestUtils.waitVideos()` from kite-common.
   
     async videoCheck(stepInfo, index) {
-        let videos = []; // it will contains our video elements
         let checked; // Result of the verification
+        let i; // iteration indicator
         let timeout = stepInfo;
-        stepInfo.numberOfParticipant = parseInt(stepInfo.numberOfParticipant) + 1; // To avoid the first video         
+        stepInfo.numberOfParticipant = parseInt(stepInfo.numberOfParticipant) + 1; // To add the first video         
         // Waiting for all the videos
         let i = await TestUtils.waitVideos(stepInfo, videoElements);
+        stepInfo.numberOfParticipant --; // To delete the first video
     }
 
-As you can see, we add `parseInt(stepInfo.numerOfParticipant)` **`+ 1`** because there is an other video that does not need to be checked. 
-
-Moreover, we verify that it has not timed out. Indeed, if we do not have every videos, we have to throw a **KiteTestError** that will skip our futur steps and checks.
-
-    async videoCheck(stepInfo, index) {
-        let videos = []; // it will contains our video elements
-        let checked; // Result of the verification
-        let timeout = stepInfo;
-        stepInfo.numberOfParticipant = parseInt(stepInfo.numberOfParticipant) + 1; // To avoid the first video         
-        // Waiting for all the videos
-        let i = await TestUtils.waitVideos(stepInfo, videoElements);
-        if (i === stepInfo.timeout) {
-            throw new KiteTestError(Status.FAILED, "unable to find " +
-            stepInfo.numberOfParticipant + " <video> element on the page. Number of video found = " +
-            videos.length);
-        }
-    }
-
+As you can see, we add `parseInt(stepInfo.numerOfParticipant)` **`+ 1`** because there is an other video that does not need to be checked. But, we remove it right after. 
 
 Next we'll check that the video is actually playing, meaning that it isn't blank (all the pixels of the video frame are the same color) or still, 
 which means that the same image is still displayed after a second interval. For that we'll use the utility function `TestUtils.verifyVideoDisplayByIndex()` from kite-common:
 
     async videoCheck(stepInfo, index) {
-        let videos = []; // it will contains our video elements
         let checked; // Result of the verification
-        let timeout = stepInfo;
-        stepInfo.numberOfParticipant = parseInt(stepInfo.numberOfParticipant) + 1; // To avoid the first video
+        let i; // iteration indicator
+        let timeout = stepInfo.timeout;
+        stepInfo.numberOfParticipant = parseInt(stepInfo.numberOfParticipant) + 1; // To add the first video
         
         // Waiting for all the videos
-        let i = await TestUtils.waitVideos(stepInfo, videoElements);
+        await TestUtils.waitVideos(stepInfo, videoElements);
+        stepInfo.numberOfParticipant --; // To delete the first video
 
-        // Make sure that it has not timed out
-        if (i === timeout) {
-        throw new KiteTestError(Status.FAILED, "unable to find " +
-            stepInfo.numberOfParticipant + " <video> element on the page. Number of video found = " +
-            videos.length);
-        }
         // Check the status of the video
         // checked.result = 'blank' || 'still' || 'video'
         i = 0;
@@ -349,9 +328,7 @@ And open the Allure Report with:
 a
 ```
 You should get the following:
-    ////////////////// SCREENSHOT //////////////////
-
-
+    ![First Check Allure Report](/TutorialScreenshots/Screenshot3AllureReport.png)
 *****
 #### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. Received Videos Check
 
@@ -458,8 +435,7 @@ And open the Allure Report with:
 a
 ```
 You should get the following:
-    ////////////////// SCREENSHOT //////////////////
-
+    ![Second Step Allure Report](/TutorialScreenshots/Screenshot4AllureReport.png)
 *****
 ### 5. Step: get stats
 
@@ -621,8 +597,7 @@ And open the Allure Report with:
 a
 ```
 You should get the following:
-    ////////////////// SCREENSHOT //////////////////
-    
+    ![GetStats Step Allure Report](/TutorialScreenshots/Screenshot5AllureReport.png)  
 *****
 ### 6. Step: take a screenshot 
 
@@ -693,7 +668,7 @@ and add in **testScript()**:
     await screenshotStep.execute(this);
 
 
-You can also do the same as getStats to enable or disable this step more easily
+You can also do the same as getStats to enable or disable this step more easily. You just have to add "takeScreenshotForEachTest": true, in **configs/js.jitsiTutorial.config.json** in the payload.
 
 You can run the test again with:
 ```
@@ -704,6 +679,6 @@ And open the Allure Report with:
 a
 ```
 Finally, you should get the following:
-    ////////////////// SCREENSHOT //////////////////
+    ![Screenshot Step Allure Report](/TutorialScreenshots/Screenshot6AllureReport.png)
 *****
 The test creation is complete.
