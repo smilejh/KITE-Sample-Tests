@@ -106,12 +106,12 @@ You should get the following:
 Thanks to the kite_init command, you have the file `/steps/OpenUrlStep.js`.
 This one contains everything to create this step.
 
-**TestStep** this is the parent class that enables the Allure Report generation.
+**TestStep** is the parent class that enables the Allure Report generation.
 
 The constructor of each Step must contain the WebDriver object. It is needed for the Step to control the web browser and execute what it needs to do.  
-Next, the constructor will include the other variables and objects needed for the Step. Moreover, there is the attribute this.page which contains an instance of the MainPage.
+Next, the constructor will include the other variables and objects needed for the Step. Moreover, there is the attribute `this.page` which contains an instance of the **MainPage**.
 
-⚠ To create a Step or a Check, you must implement the two functions **stepDescription()** and **step()**, which are abstract functions of the parent class **TestStep**.
+⚠ To create a Step or a Check, you must implement two functions, **stepDescription()** and **step()**, which are abstract functions of the parent class **TestStep**.
 
 **stepDescription()** returns a string which will be displayed in the report.
 
@@ -123,7 +123,7 @@ Therefore:
         await this.page.open(this);
     }
 
-**step()** will call **open()** in `/pages/MainPage.js` which use **TestUtils.open()** to open the browser to the url. Indeed, `this.page` is an instance of MainPage.
+**step()** will call **open()** in `/pages/MainPage.js` which use **TestUtils.open()** to open the browser to the url.
 
 Now we're going to add the code that allows joining a meeting.
 *****
@@ -135,11 +135,11 @@ The `kite_init` script created two files:  `pages/MainPage.js` and `pages/index.
 Here we're going to edit `pages/MainPage.js` and add the HTML locators and functions that interact with the web page.
  
 To add HTLM locators, we are going to use the class `By` from [Selenium-webdriver](https://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/).
-Here, we will use the text input to choose our meeting room;
+Here, we'll use the text input to choose our meeting room;
 
 `const meetingRoom = By.id('enter_room_field')` **enter_room_field** is the id of the HTML object.
 
-In MainPage class, add:
+In **MainPage** class, add:
 
     async enterRoom(stepInfo, room) {
         const roomId = room + stepInfo.uuid;
@@ -169,6 +169,7 @@ You can run the test with:
 ```
 r configs\js.jitsiTutorial.config.json
 ```
+~ //Not sure about the translation
 As you can see, the page loads, the text input fills up and we join a room.
 
 Open the Allure Report with:
@@ -195,14 +196,14 @@ Open the file `pages/MainPage.js`.
 
 To add the \<video\> elements, we're going to use the class `By` from [Selenium-webdriver](https://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/) by simply adding:
 `const videos = By.css('video');` => This allows us to get all the HTML elements with tag \<video\> into our `videos` array.
-Next we're going to add a synchronous function called **videoCheck()** where we'll implement the video check logic.
+Next, we're going to add a synchronous function called **videoCheck()** where we'll implement the video check logic.
 
     async videoCheck(stepInfo, index) {},
     
 **stepInfo** is a reference to the Check object.
 **index** is the index of the video to be checked (0 for the first video, 1 for the 2nd, etc...) 
 
-First, we will declare our variables
+First, we'll declare our variables
 
     async videoCheck(stepInfo, index) {
         let checked; // Result of the verification
@@ -211,7 +212,7 @@ First, we will declare our variables
         stepInfo.numberOfParticipant = parseInt(stepInfo.numberOfParticipant) + 1; // To add the first video      
     }
     
-Then we will wait for all the videos. So, we are going to use `TestUtils.waitVideos()` from kite-common.
+Then we'll wait for all the videos. So, we're going to use `TestUtils.waitVideos()` from kite-common.
   
     async videoCheck(stepInfo, index) {
         let checked; // Result of the verification
@@ -341,6 +342,7 @@ You should get the following:
 #### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. Received Videos Check
 
 Now, we are going to add an other Check. It will check that we received all the remote videos.
+First, we have to change the value of `tupleSize` in `/configs/js.jitsiTutorial.config.json` and set it at 2 because we'll need 2 browsers.
 
 We're goind to create a file named `checks/ReceivedVideoCheck.js`.
 Once the file has been created, we will add a reference to `checks/index.js`.
@@ -588,11 +590,11 @@ and add in **testScript()**:
     await videoReceivedCheck.execute(this);
     // New step
     if (this.getStats) {
-        let getStatsStep = new new GetStatsStep(this);
+        let getStatsStep = new GetStatsStep(this);
         await getStatsStep.execute(this);
     }
 
-Like this, it is easier to enable or disable this step using the config file.
+Like this, it's easier to enable or disable this step using the config file.
 
 Now, you can get stats from the peer connection.
 
@@ -609,7 +611,7 @@ You should get the following:
 *****
 ### 6. Step: take a screenshot 
 
-Now, we are going to create a new step (Steps in `steps/` folder).
+Now, we're going to create a new step (Steps in `steps/` folder).
 
 We're goind to create a file named `steps/ScreenshotStep.js`.
 Once the file has been created, we'll again add a reference to `steps/index.js`.
