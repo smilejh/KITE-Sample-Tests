@@ -80,7 +80,7 @@ The `kite_init` script generated 3 subfolders:
 ```
 This is where we will respectively implement the Pages, Steps and Checks of the test, following the Page Object Model design pattern.
 
-The `node_modules` should al 
+There should also be a `node_modules/` folder created during the compilation by `npm install`.  
 
 
 #### Config file. 
@@ -275,6 +275,7 @@ which means that the same image is still displayed after a second interval. For 
 
 We need to add `index` **`+ 1`** to skip the large video in our.
     
+
 To make the check robust to poor connections, we decided to repeat it 3 times at 3 seconds interval. We could make the checks much stricter by doing it only once, which would cause it to fail more easily in case of low framerate.
 
 Now that we completed the implementation in `pages/MainPage.js`, we're going to edit `checks/SentVideoCheck.js`.    
@@ -355,7 +356,6 @@ Our report should not look like this:
     ![First Check Allure Report](./TutorialScreenshots/Screenshot3AllureReport.png)
 *****
 #### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. Received Videos Check
-
 Now, we are going to add an other Check. It will check that we received all the remote videos.
 First, we have to change the value of `tupleSize` in `/configs/js.jitsiTutorial.config.json` and set it at 2 because we'll need 2 browsers.
 
