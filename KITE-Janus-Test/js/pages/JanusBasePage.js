@@ -18,27 +18,14 @@ class JanusBasePage {
 
   // VideoCheck with verifyVideoDisplayByIndex
   async videoCheck(stepInfo, index) {
-    let videos = [];
-    let i = 0;
     let timeout = stepInfo.timeout;
 
     // Waiting for the videos
-    while (videos.length < stepInfo.numberOfParticpant && i < timeout) {
-      videos = await stepInfo.driver.findElements(this.videos);
-      i++;
-      await waitAround(1000); // waiting 1s after each iteration
-    }
-
-    // Make sure that it has not timed out
-    if (i === timeout) {
-      throw new KiteTestError(Status.FAILED, "unable to find " +
-        stepInfo.numberOfParticpant + " <video> element on the page. Number of video found = " +
-        videos.length);
-    }
+    await TestUtils.waitVideos(stepInfo, this.videos);
 
     // Check the status of the video
     // checked.result = 'blank' || 'still' || 'video'
-    i = 0;
+    let i = 0;
     let checked = await verifyVideoDisplayByIndex(stepInfo.driver, index);
     while(checked.result === 'blank' || checked.result === undefined && i < timeout) {
       checked = await verifyVideoDisplayByIndex(stepInfo.driver, index);

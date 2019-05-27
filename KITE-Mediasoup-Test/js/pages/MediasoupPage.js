@@ -15,25 +15,12 @@ class MediasoupPage {
 
   // VideoCheck with verifyVideoDisplayByIndex
   async videoCheck(stepInfo, index) {
-    let videos = [];
-    let i = 0;
     let timeout = stepInfo.timeout;
 
-    while (videos.length < stepInfo.numberOfParticipant && i < timeout) {
-      videos = await stepInfo.driver.findElements(videoElements);
-      i++;
-      await waitAround(1000);
-    }
-
-    if (i === timeout) {
-      throw new KiteTestError(Status.FAILED, "Unable to find " 
-        + stepInfo.numberOfParticipant 
-        + " <video> element on the page. Number of video found = " 
-        + videos.length);
-    }
+    await TestUtils.waitVideos(stepInfo, videoElements);
 
     let checked = await verifyVideoDisplayByIndex(stepInfo.driver, index);
-    i = 0;
+    let i = 0;
     checked = await verifyVideoDisplayByIndex(stepInfo.driver, index);
     while(checked.result === 'blank' || checked.result === undefined && i < timeout) {
       checked = await verifyVideoDisplayByIndex(stepInfo.driver, index);

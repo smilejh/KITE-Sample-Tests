@@ -17,7 +17,7 @@
       "payload":{
         "url": "https://meet.jit.si/",
         "takeScreenshotForEachTest": true,
-        "testTimeout": 40,
+        "testTimeout": 60,
         "getStats" : {
           "enabled": true,
           "statsCollectionTime": 2,
