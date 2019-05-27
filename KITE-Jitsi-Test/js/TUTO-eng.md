@@ -1,4 +1,4 @@
-# Jitsi test tutoral
+# Jitsi test tutorial
 *****
 ## Writing a test
 
@@ -52,13 +52,9 @@ This will create KITE-JitsiTutorial-Test and with inside, all the basic files an
 This tutorial is about the Javascript KITE Test and all the javascript files are located in: `KITE-JitsiTutorial-Test/js`.   
 It will also recompile the project.
 
-#### Generate the test 
-```
-const {TestUtils, WebDriverFactory, KiteBaseTest} = require('kite-common'); 
-```
 
-To start, here is the base of the test:  
-**Template.js**
+To start, here is the base of the test: `Template.js`
+In this file, you will find:
  
 ```
 const {TestUtils, WebDriverFactory, KiteBaseTest} = require('kite-common'); 
@@ -73,11 +69,23 @@ const globalVariables = TestUtils.getGlobalVariables(process);
 const capabilities = require(globalVariables.capabilitiesPath);
 const payload = require(globalVariables.payloadPath);
 ```
-  
-Next, we will edit the configuration file.
-**Expliquer le document de config**
-*****
 
+Also, you will find a configuration file: `configs/js.jitsiTutorial.config.json`
+This file contains all the informations for the tests.
+Simply, it is a name:values file in which you can find:
+
+**name**: name of the configuration file.
+**remotes**:
+**tests**: a list containing all the tests to be run. Each test contains all the necessary information for its progress.
+In each test you can find:
+- **name**: name of the test
+- **description**: description of the test
+- **tupleSize**: number of browsers launched at the same time
+- **testImpl**: name of the JS test file
+- **payload** contains name:values pairs to run the tests.
+- **browsers**: a list containing all the browsers that will be tested.
+
+*****
 Once done, you can already run the test with:
 ```
 r configs\js.jitsiTutorial.config.json
@@ -89,7 +97,7 @@ Open the Allure Report with:
 a
 ```
 You should get the following:
-////////////////// SCREENSHOT //////////////////
+    ![First Allure Report](./TutorialScreenshots/Screenshot1AllureReport.png)
 
 *****
 ### 2. Adding a Step
@@ -115,7 +123,7 @@ Therefore:
         await this.page.open(this);
     }
 
-**step()** will call **open()** in `/pages/MainPage.js` which use **TestUtils.open()** to open the browser to the url. Indeed, this.page is an instance of MainPage.
+**step()** will call **open()** in `/pages/MainPage.js` which use **TestUtils.open()** to open the browser to the url. Indeed, `this.page` is an instance of MainPage.
 
 Now we're going to add the code that allows joining a meeting.
 *****
@@ -154,7 +162,7 @@ To obtain:
 
     async step() {
         await TestUtils.open(this);
-        await jitsiPage.enterRoom(this, "I am a random room");
+        await this.page.enterRoom(this, "I am a random room");
     }    
 
 You can run the test with:
@@ -416,8 +424,8 @@ by
 and add in **testScript()**:
 
     this.driver = await WebDriverFactory.getDriver(capabilities, capabilities.remoteAddress);
-    let openJitsiUrlStep = new OpenJitsiUrlStep(this);
-    await openJitsiUrlStep.execute(this);
+    let openUrlStep = new OpenUrlStep(this);
+    await openUrlStep.execute(this);
     let videoSentCheck = new VideoSentCheck(this);
     await videoSentCheck.execute(this);
     // New check
@@ -572,8 +580,8 @@ by
 and add in **testScript()**:
 
     this.driver = await WebDriverFactory.getDriver(capabilities, capabilities.remoteAddress);
-    let openJitsiUrlStep = new OpenJitsiUrlStep(this);
-    await openJitsiUrlStep.execute(this);
+    let openUrlStep = new OpenUrlStep(this);
+    await openUrlStep.execute(this);
     let videoSentCheck = new VideoSentCheck(this);
     await videoSentCheck.execute(this);
     let videoReceivedCheck = new VideoReceivedCheck(this);
@@ -653,8 +661,8 @@ by
 and add in **testScript()**:
 
     this.driver = await WebDriverFactory.getDriver(capabilities, capabilities.remoteAddress);
-    let openJitsiUrlStep = new OpenJitsiUrlStep(this);
-    await openJitsiUrlStep.execute(this);
+    let openUrlStep = new OpenUrlStep(this);
+    await openUrlStep.execute(this);
     let videoSentCheck = new VideoSentCheck(this);
     await videoSentCheck.execute(this);
     let videoReceivedCheck = new VideoReceivedCheck(this);
