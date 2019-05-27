@@ -1,9 +1,7 @@
 package io.cosmosoftware.kite.janus;
 
 import io.cosmosoftware.kite.janus.checks.FirstVideoCheck;
-import io.cosmosoftware.kite.janus.steps.GetStatsStep;
-import io.cosmosoftware.kite.janus.steps.JoinVideoCallStep;
-import io.cosmosoftware.kite.janus.steps.StartDemoStep;
+import io.cosmosoftware.kite.janus.steps.*;
 import io.cosmosoftware.kite.simulcast.checks.ReceiverVideoCheck;
 import io.cosmosoftware.kite.util.TestUtils;
 import org.openqa.selenium.WebDriver;
@@ -11,6 +9,7 @@ import org.webrtc.kite.config.App;
 import org.webrtc.kite.config.Browser;
 import org.webrtc.kite.config.EndPoint;
 import org.webrtc.kite.steps.ScreenshotStep;
+import org.webrtc.kite.steps.WaitForOthersStep;
 import org.webrtc.kite.tests.KiteBaseTest;
 import org.webrtc.kite.tests.TestRunner;
 
@@ -29,8 +28,16 @@ public class JanusVideoCallTest extends KiteBaseTest {
       logger.info("test case name : " + name);
 
       runner.addStep(new StartDemoStep(webDriver, this.url));
+      runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
+
+      runner.addStep(new RegisterUserToVideoCallStep(webDriver, runnerId, name));
+      runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
+
+      runner.addStep(new CallPeerStep(webDriver, runnerId, name));
+      runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
 
       runner.addStep(new JoinVideoCallStep(webDriver, runnerId, name));
+      runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
 
       runner.addStep(new FirstVideoCheck(webDriver));
       runner.addStep(new ReceiverVideoCheck(webDriver));
@@ -40,6 +47,7 @@ public class JanusVideoCallTest extends KiteBaseTest {
       if (this.takeScreenshotForEachTest()) {
         runner.addStep(new ScreenshotStep(webDriver));
       }
+      runner.addStep(new ReceiverVideoCheck(webDriver));
     } catch (Exception e) {
       logger.error(getStackTrace(e));
     }

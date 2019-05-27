@@ -104,6 +104,8 @@ public class JanusPage extends BasePage {
   @FindBy(xpath = "//button[contains(text(),'Answer')]")
   private WebElement answerButton;
 
+  @FindBy(xpath = "//button[contains(text(),'OK')]")
+  private WebElement waitingForPeerToAnswerButton;
 
 
   public JanusPage(WebDriver webDriver, Logger logger) {
@@ -252,7 +254,9 @@ public class JanusPage extends BasePage {
   }
 
   public void fillPeerName(String userName) throws KiteInteractionException {
-    waitUntilVisibilityOf(callerNameField, 1);
+//    WebDriverWait wait = new WebDriverWait(this.webDriver, 3);
+//    wait.until(ExpectedConditions.elementToBeClickable(peerNameField));
+    waitUntilVisibilityOf(peerNameField, 2);
     sendKeys(peerNameField, userName);
   }
   public void callPeer() throws KiteInteractionException {
@@ -272,13 +276,13 @@ public class JanusPage extends BasePage {
   }
 
   public void answerCall () throws KiteInteractionException {
-    waitUntilVisibilityOf(answerButton,2);
+    waitUntilVisibilityOf(answerButton,10);
     click(answerButton);
   }
 
-  public void checkAlert() {
+  public void acceptAlert() {
     try {
-      WebDriverWait wait = new WebDriverWait(this.webDriver, 2);
+      WebDriverWait wait = new WebDriverWait(this.webDriver, 4);
       wait.until(ExpectedConditions.alertIsPresent());
       Alert alert = this.webDriver.switchTo().alert();
       logger.info("Alert: " + alert.getText());
@@ -287,4 +291,29 @@ public class JanusPage extends BasePage {
         return;
     }
   }
+
+  public String getAlertText() throws TimeoutException {
+    WebDriverWait wait = new WebDriverWait(this.webDriver, 4);
+    wait.until(ExpectedConditions.alertIsPresent());
+    Alert alert = this.webDriver.switchTo().alert();
+    return "Alert text: " +alert.getText();
+  }
+
+  public void waitForWaitingAnswerAlert(int timeoutInSeconds) throws KiteInteractionException {
+    waitUntilVisibilityOf(waitingForPeerToAnswerButton,timeoutInSeconds);
+
+  }
+
+
+  public void waitUntilPeerAnswer(int timeoutInSeconds) throws TimeoutException {
+    WebDriverWait wait = new WebDriverWait(webDriver, timeoutInSeconds);
+    wait.until(ExpectedConditions.invisibilityOf(waitingForPeerToAnswerButton));
+
+  }
+
+//  public void videoIsPublishing(int timeout) throws TimeoutException {
+//    WebDriverWait wait = new WebDriverWait(webDriver, timeout);
+//    WebElement element = wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath(PUBLISHING)));
+//    wait.until(ExpectedConditions.invisibilityOf(element));
+//  }
 }
