@@ -11,12 +11,12 @@ const payload = require(globalVariables.payloadPath);
 class Jitsi extends KiteBaseTest {
   constructor(name, globalVariables, capabilities, payload) {
     super(name, globalVariables, capabilities, payload);
-    this.page = new JitsiPage();
   }
   
   async testScript() {
     try {
       this.driver = await WebDriverFactory.getDriver(capabilities, capabilities.remoteAddress);
+      this.page = new JitsiPage(this.driver);
 
       let openJitsiUrlStep = new OpenJitsiUrlStep(this);
       await openJitsiUrlStep.execute(this);
