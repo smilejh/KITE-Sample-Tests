@@ -736,3 +736,4 @@ Finally, the report should be now:
 *****
 
 Congratulations, you've implemented your first KITE Test in javascript! 
+
