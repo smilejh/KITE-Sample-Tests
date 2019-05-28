@@ -30,15 +30,17 @@ const buttons = {
 };
 
 class MedoozePage {
-  constructor() {}
+  constructor(driver) {
+    this.driver = driver;
+  }
 
   async open(stepInfo) {
     await TestUtils.open(stepInfo);
   }
 
   // Click the start button
-  async clickStartButton(driver) {
-    let startButton = await driver.findElement(buttons.startButton);
+  async clickStartButton() {
+    let startButton = await this.findElement(buttons.startButton);
     await startButton.click();
   }
 
@@ -100,17 +102,17 @@ class MedoozePage {
     return value;
   }
 
-  async getLoopbackStats(stepInfo) {
+  async getLoopbackStats() {
     let loopBackStats = {};
 
-    loopBackStats.sentWidth = await this.loopbackStats(stepInfo.driver,"width", 0);
-    loopBackStats.sentHeight = await this.loopbackStats(stepInfo.driver,"height", 0);
-    loopBackStats.sentFPS = await this.loopbackStats(stepInfo.driver,"fps", 0);
-    loopBackStats.sentBW = await this.loopbackStats(stepInfo.driver,"bandwidth", 0);
-    loopBackStats.recvWidth = await this.loopbackStats(stepInfo.driver,"width", 1);
-    loopBackStats.recvHeight = await this.loopbackStats(stepInfo.driver,"height", 1);
-    loopBackStats.recvFPS = await this.loopbackStats(stepInfo.driver,"fps", 1);
-    loopBackStats.recvBW = await this.loopbackStats(stepInfo.driver, "bandwidth", 1);
+    loopBackStats.sentWidth = await this.loopbackStats(this.driver,"width", 0);
+    loopBackStats.sentHeight = await this.loopbackStats(this.driver,"height", 0);
+    loopBackStats.sentFPS = await this.loopbackStats(this.driver,"fps", 0);
+    loopBackStats.sentBW = await this.loopbackStats(this.driver,"bandwidth", 0);
+    loopBackStats.recvWidth = await this.loopbackStats(this.driver,"width", 1);
+    loopBackStats.recvHeight = await this.loopbackStats(this.driver,"height", 1);
+    loopBackStats.recvFPS = await this.loopbackStats(this.driver,"fps", 1);
+    loopBackStats.recvBW = await this.loopbackStats(this.driver, "bandwidth", 1);
 
     return loopBackStats;
   }

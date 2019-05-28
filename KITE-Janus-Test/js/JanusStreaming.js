@@ -11,12 +11,12 @@ const payload = require(globalVariables.payloadPath);
 class JanusStreaming extends KiteBaseTest {
   constructor(name, globalVariables, capabilities, payload) {
     super(name, globalVariables, capabilities, payload);
-    this.page = new JanusStreamingPage();
   }
   
   async testScript() {
     try {
       this.driver = await WebDriverFactory.getDriver(capabilities, capabilities.remoteAddress);
+      this.page = new JanusStreamingPage(this.driver);
 
       let joinUrlStep = new JoinUrlStep(this);
       await joinUrlStep.execute(this);

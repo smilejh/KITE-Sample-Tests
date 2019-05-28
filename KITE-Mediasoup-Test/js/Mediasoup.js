@@ -8,7 +8,6 @@ const globalVariables = TestUtils.getGlobalVariables(process);
 const capabilities = require(globalVariables.capabilitiesPath);
 const payload = require(globalVariables.payloadPath);
 
-
 function getRoomUrl(id) {
   const roomid = Math.floor(id / payload.usersPerRoom);
   if (roomid > payload.rooms.length) {
@@ -18,17 +17,15 @@ function getRoomUrl(id) {
   return payload.url + payload.rooms[roomid] + '&username=user' + Array(Math.max(3 - String(id).length + 1, 0)).join(0) + id;
 }
 
-
-
 class Mediasoup extends KiteBaseTest {
   constructor(name, globalVariables, capabilities, payload) {
     super(name, globalVariables, capabilities, payload);
-    this.page = new MediasoupPage();
   }
   
   async testScript() {
     try {
       this.driver = await WebDriverFactory.getDriver(capabilities, capabilities.remoteAddress);
+      this.page = new MediasoupPage(this.driver);
 
       let joinVideoCallStep = new JoinVideoCallStep(this, getRoomUrl(this.id));
       await joinVideoCallStep.execute(this);

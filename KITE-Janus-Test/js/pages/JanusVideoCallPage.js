@@ -38,19 +38,19 @@ const call = async function(stepInfo) {
   }
 }
 
-const receive = async function(stepInfo) {
-  let answer = await stepInfo.driver.findElements(answerButton);
+const receive = async function(driver) {
+  let answer = await driver.findElements(answerButton);
   // answer[2] is a modal button that permites to answer the call
   while(answer[2] === undefined) {
-    answer = await stepInfo.driver.findElements(answerButton);
+    answer = await driver.findElements(answerButton);
   }
   await answer[2].click();
 }
 
 
 class JanusVideoCallPage extends JanusBasepage {
-  constructor() {
-    super();
+  constructor(driver) {
+    super(driver);
   }
 
   async joinSession(stepInfo, session) {
@@ -66,7 +66,7 @@ class JanusVideoCallPage extends JanusBasepage {
     if (stepInfo.id %2 === 0) {
       await call(stepInfo);
     } else {
-      await receive(stepInfo);
+      await receive(stepInfo.driver);
     }
   }
 }

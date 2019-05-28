@@ -1,12 +1,12 @@
 const JanusBasepage = require('./JanusBasePage');
 
 class JanusEchoPage extends JanusBasepage {
-  constructor() {
-    super();
+  constructor(driver) {
+    super(driver);
   }
 
-  async joinSession(stepInfo) {
-    let start = await stepInfo.driver.findElement(this.startButton);
+  async joinSession() {
+    let start = await this.driver.findElement(this.startButton);
     await start.click();
   }
 }

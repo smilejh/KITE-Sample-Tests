@@ -17,6 +17,7 @@ class JanusVideoRoom extends KiteBaseTest {
   async testScript() {
     try {
       this.driver = await WebDriverFactory.getDriver(capabilities, capabilities.remoteAddress);
+      this.page = new JanusVideoRoomPage(this.driver);
 
       let joinUrlStep = new JoinUrlStep(this);
       await joinUrlStep.execute(this);

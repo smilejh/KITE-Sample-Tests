@@ -22,7 +22,7 @@ class GaugesCheck extends TestStep {
 
   async step() {
 
-    let loopBackStats = await this.page.getLoopbackStats(this);
+    let loopBackStats = await this.page.getLoopbackStats();
 
     // Data
     this.testReporter.textAttachment(this.report, 'stats', JSON.stringify(loopBackStats), "json");
