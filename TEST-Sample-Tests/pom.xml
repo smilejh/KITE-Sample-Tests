@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+
+  <parent>
+    <groupId>io.cosmosoftware.kite</groupId>
+    <artifactId>kite-sample-tests</artifactId>
+    <version>2.0.2</version>
+  </parent>
+
+  <artifactId>test-sample-tests</artifactId>
+  <name>test-sample-tests</name>
+  <version>0.1.1</version>
+
+  <build>
+    <plugins>
+      <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-antrun-plugin</artifactId>
+      <version>1.8</version>
+      <executions>
+        <execution>
+          <phase>install</phase>
+          <configuration>
+            <tasks>
+              <copy file="../KITE-Janus-Test/target/janus-test-0.1.4.jar" todir="target/"/>
+              <copy file="../KITE-Jitsi-Test/target/jitsi-test-0.1.4.jar" todir="target/"/>
+              <copy file="../KITE-Mediasoup-Test/target/mediasoup-test-0.1.4.jar" todir="target/"/>
+              <copy file="../KITE-Openvidu-Test/target/openvidu-test-0.1.4.jar" todir="target/"/>
+              <copy file="../KITE-Simulcast-Test/target/simulcast-test-0.1.4.jar" todir="target/"/>
+            </tasks>
+          </configuration>
+          <goals>
+            <goal>run</goal>
+          </goals>
+        </execution>
+      </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

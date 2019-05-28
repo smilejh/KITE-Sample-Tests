@@ -1,7 +1,7 @@
 package io.cosmosoftware.kite.simulcast.pages;
 
 import io.cosmosoftware.kite.pages.BasePage;
-import io.cosmosoftware.kite.simulcast.LoopbackStats;
+import io.cosmosoftware.kite.simulcast.*;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

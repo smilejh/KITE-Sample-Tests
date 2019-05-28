@@ -1,6 +1,6 @@
 const {TestUtils, WebDriverFactory, KiteBaseTest} = require('./node_modules/kite-common'); 
 const {OpenJitsiUrlStep, ScreenshotStep, GetStatsStep} = require('./steps');
-const {VideoSentCheck, VideoReceivedCheck} = require('./checks');
+const {SentVideoCheck, ReceivedVideoCheck} = require('./checks');
 const {JitsiPage} = require('./pages');
 
 // KiteBaseTest config
@@ -21,11 +21,11 @@ class Jitsi extends KiteBaseTest {
       let openJitsiUrlStep = new OpenJitsiUrlStep(this);
       await openJitsiUrlStep.execute(this);
 
-      let videoSentCheck = new VideoSentCheck(this);
-      await videoSentCheck.execute(this);
+      let sentVideoCheck = new SentVideoCheck(this);
+      await sentVideoCheck.execute(this);
 
-      let videoReceivedCheck = new VideoReceivedCheck(this);
-      await videoReceivedCheck.execute(this);
+      let receivedVideoCheck = new ReceivedVideoCheck(this);
+      await receivedVideoCheck.execute(this);
 
       if (this.getStats) {
         let getStatsStep = new GetStatsStep(this);

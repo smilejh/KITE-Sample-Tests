@@ -1,10 +1,13 @@
 package io.cosmosoftware.kite.janus.pages;
 
 import io.cosmosoftware.kite.exception.KiteInteractionException;
-import io.cosmosoftware.kite.janus.LoopbackStats;
 import io.cosmosoftware.kite.pages.BasePage;
+import io.cosmosoftware.kite.janus.*;
 import org.apache.log4j.Logger;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -240,12 +243,9 @@ public class JanusPage extends BasePage {
   }
 
   public LoopbackStats getLoopbackStats() {
-    {
-      String r = currentResolutionPrint.getText();
-      StringTokenizer st = new StringTokenizer(r, "x");
-      return new LoopbackStats("1280", "720", "0", "0",
-          st.nextToken(), st.nextToken(), "0", "0");
-    }
+    String r = currentResolutionPrint.getText();
+    StringTokenizer st = new StringTokenizer(r, "x");
+    return new LoopbackStats("1280", "720", "0", "0", st.nextToken(), st.nextToken(), "0", "0");
   }
 
   public void fillCallerName(String userName) throws KiteInteractionException {
@@ -254,25 +254,21 @@ public class JanusPage extends BasePage {
   }
 
   public void fillPeerName(String userName) throws KiteInteractionException {
-//    WebDriverWait wait = new WebDriverWait(this.webDriver, 3);
-//    wait.until(ExpectedConditions.elementToBeClickable(peerNameField));
     waitUntilVisibilityOf(peerNameField, 2);
     sendKeys(peerNameField, userName);
   }
+  
   public void callPeer() throws KiteInteractionException {
-    click(callHangupButton);
-
+    click(callHangupButton);    
   }
 
   public void registerUser() throws KiteInteractionException {
     waitUntilVisibilityOf(userRegisterButton, 1);
     click(userRegisterButton);
-
   }
 
   public String getVideoIdByIndex(int i) {
     return videos.get(i).getAttribute("id");
-
   }
 
   public void answerCall () throws KiteInteractionException {
@@ -301,19 +297,12 @@ public class JanusPage extends BasePage {
 
   public void waitForWaitingAnswerAlert(int timeoutInSeconds) throws KiteInteractionException {
     waitUntilVisibilityOf(waitingForPeerToAnswerButton,timeoutInSeconds);
-
   }
 
 
   public void waitUntilPeerAnswer(int timeoutInSeconds) throws TimeoutException {
     WebDriverWait wait = new WebDriverWait(webDriver, timeoutInSeconds);
     wait.until(ExpectedConditions.invisibilityOf(waitingForPeerToAnswerButton));
-
   }
-
-//  public void videoIsPublishing(int timeout) throws TimeoutException {
-//    WebDriverWait wait = new WebDriverWait(webDriver, timeout);
-//    WebElement element = wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath(PUBLISHING)));
-//    wait.until(ExpectedConditions.invisibilityOf(element));
-//  }
+  
 }

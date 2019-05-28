@@ -60,8 +60,19 @@ Whether to take screenshot for each test/client (if false, it will still take sc
 
 ### GetStats parameters
 
+```
+"getStats" : {
+          "enabled": true,
+          "statsCollectionTime": 2,
+          "statsCollectionInterval": 1,
+          "peerConnections": ["sfutest.webrtcStuff.pc"],
+          "selectedStats" : ["inbound-rtp", "outbound-rtp", "candidate-pair"]
+        }
+```
+
+
 Whether to call getStats  
-`"getStats": true`  
+`"enabled": true`  
 
 How long to collect stats for (in seconds)  
 `"statsCollectionTime" : 4`  
@@ -70,18 +81,14 @@ Interval between 2 getStats calls (in seconds)
 `"statsCollectionInterval" : 2`
 
 
-
 You should not need to change any other parameter.
 
 
 ## Compile
 
-
-__On Windows:__  
-    Just type `c` (which will execute `mvn clean install -DskipTests`). 
+Just type `c` (which will execute `mvn clean install -DskipTests`). 
     
     ```
-    cd %KITE_HOME%
     c
     ```
 
@@ -89,58 +96,18 @@ If you are within a test folder, for example in KITE-Janus-Test, you can type __
 only or __`c all`__ to recompile the entire project:
 
     ```
-    cd %KITE_HOME%\KITE-Janus-Test  
+    cd KITE-Janus-Test  
     c all
     ```  
     
-__On Linux:__  
-Just type `./c` (which will execute `mvn clean install -DskipTests`). 
-
-    ```
-    cd $KITE_HOME
-    ./c
-    ```
-If you are within a test folder, for example in KITE-Janus-Test, you can type __`./c`__ to compile the test module
-only or __`./c all`__ to recompile the entire project:  
-
-    ```
-    cd $KITE_HOME/KITE-Janus-Test 
-    ./c all
-    ```
-    
-__On Mac:__  
-Just type `c` (which will execute `mvn clean install -DskipTests`).
-    ```
-    cd $KITE_HOME
-    c
-    ```
-If you are within a test folder, for example in KITE-Janus-Test, you can type __`c`__ to compile the test module
- only or __`c all`__ to recompile the entire project:  
-
-    ```
-    cd $KITE_HOME/KITE-Janus-Test
-    c all
-    ```
 
 
 ## Run
 
-__On Windows:__  
 ```
-cd %KITE_HOME%\KITE-Janus-Test
-r configs\local.janus.config.json
+cd KITE-Janus-Test
+r configs\videoroom.janus.config.json
 ```
-__On Linux:__  
-```
-cd $KITE_HOME/KITE-Janus-Test
-./r configs/local.janus.config.json
-```
-__On Mac:__  
-```
-cd $KITE_HOME/KITE-Janus-Test
-r configs/local.janus.config.json
-```
-
 
 
 ## Test output
@@ -148,21 +115,11 @@ r configs/local.janus.config.json
 Each will generate allure report found in `kite-allure-report/` folder.  
 After running the test, you can open the Allure dashboard with the command `a`.
 
-__On Windows:__  
 ```
-cd %KITE_HOME%\KITE-Janus-Test
+cd KITE-Janus-Test
 a
 ```
-__On Linux:__  
-```
-cd $KITE_HOME/KITE-Janus-Test
-./a
-```
-__On Mac:__  
-```
-cd $KITE_HOME/KITE-Janus-Test
-a
-```
+
 
 Alternatively, the full command to launch the Allure dashboard is:  
 ```
