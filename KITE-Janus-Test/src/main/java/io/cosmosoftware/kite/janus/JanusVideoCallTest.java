@@ -22,8 +22,8 @@ public class JanusVideoCallTest extends KiteBaseTest {
   protected void populateTestSteps(TestRunner runner) {
     try {
       WebDriver webDriver = runner.getWebDriver();
-      String runnerId = TestUtils.idToString(runner.getId());
-      logger.info("runner id : " + runnerId);
+      int runnerId = runner.getId();
+      logger.info("runner id : " + TestUtils.idToString(runnerId));
       String name = generateTestCaseName();
       logger.info("test case name : " + name);
 

@@ -9,10 +9,10 @@ import org.openqa.selenium.WebDriver;
 
 public class JoinVideoCallStep extends TestStep {
 
-  private final String runnerId;
+  private final int runnerId;
   private final String testCaseName;
 
-  public JoinVideoCallStep(WebDriver webDriver, String runnerId, String testCaseName) {
+  public JoinVideoCallStep(WebDriver webDriver, int runnerId, String testCaseName) {
 
     super(webDriver);
     this.runnerId = runnerId;
@@ -22,7 +22,7 @@ public class JoinVideoCallStep extends TestStep {
 
   @Override
   public String stepDescription() {
-    if (("000").equalsIgnoreCase(this.runnerId)){
+    if (this.runnerId == 0){
       return "Wait for the user Bob" + testCaseName + " to answer" ;
     } else {
       return "Answer the call from Alice" + testCaseName ;
@@ -38,7 +38,7 @@ public class JoinVideoCallStep extends TestStep {
     //but need to adapt the following lines if we want to enable tupleSize>2
 
 
-    if (("001").equalsIgnoreCase(runnerId)){
+    if (runnerId == 1){
       janusPage.answerCall();
     }
 

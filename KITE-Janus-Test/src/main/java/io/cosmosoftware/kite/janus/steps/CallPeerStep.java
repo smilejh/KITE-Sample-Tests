@@ -8,10 +8,10 @@ import org.openqa.selenium.WebDriver;
 public class CallPeerStep extends TestStep {
 
 
-  private final String runnerId;
+  private final int runnerId;
   private final String testCaseName;
 
-  public CallPeerStep(WebDriver webDriver, String runnerId, String testCaseName) {
+  public CallPeerStep(WebDriver webDriver, int runnerId, String testCaseName) {
     super(webDriver);
     this.runnerId = runnerId;
     this.testCaseName = testCaseName;
@@ -21,9 +21,9 @@ public class CallPeerStep extends TestStep {
   protected void step() throws KiteTestException {
     final JanusPage janusPage = new JanusPage(this.webDriver, this.logger);
 
-    String peerName = (("000").equalsIgnoreCase(runnerId))? "Bob" + testCaseName: "Alice" + testCaseName;
+    String peerName = (runnerId == 0)? "Bob" + testCaseName: "Alice" + testCaseName;
 
-    if (("000").equalsIgnoreCase(runnerId)){
+    if ((runnerId == 0)){
       janusPage.fillPeerName(peerName);
       janusPage.callPeer();
     }
@@ -33,7 +33,7 @@ public class CallPeerStep extends TestStep {
   @Override
   public String stepDescription() {
 
-    if (("000").equalsIgnoreCase(this.runnerId)){
+    if (this.runnerId == 0){
       return "Call the user Bob" + testCaseName ;
     } else {
       return "Wait for the call from Alice" + testCaseName ;

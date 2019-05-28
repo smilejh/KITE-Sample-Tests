@@ -11,10 +11,10 @@ import static io.cosmosoftware.kite.util.TestUtils.waitAround;
 
 public class RegisterUserToVideoCallStep extends TestStep {
 
-  private final String runnerId;
+  private final int runnerId;
   private final String testCaseName;
 
-  public RegisterUserToVideoCallStep(WebDriver webDriver, String runnerId, String testCaseName) {
+  public RegisterUserToVideoCallStep(WebDriver webDriver, int runnerId, String testCaseName) {
 
     super(webDriver);
     this.runnerId = runnerId;
@@ -24,7 +24,7 @@ public class RegisterUserToVideoCallStep extends TestStep {
 
   @Override
   public String stepDescription() {
-    if (("000").equalsIgnoreCase(this.runnerId)){
+    if (this.runnerId == 0){
       return "Register the user Alice"+ testCaseName;
     } else {
       return "Register the user Bob" + testCaseName;
@@ -38,7 +38,7 @@ public class RegisterUserToVideoCallStep extends TestStep {
 
     //for now, tupleSize has to be equal to 2
     //but need to adapt the following lines if we want to enable tupleSize>2
-    String callerName = (("000").equalsIgnoreCase(runnerId))? "Alice" + testCaseName : "Bob" + testCaseName;
+    String callerName = (runnerId == 0)? "Alice" + testCaseName : "Bob" + testCaseName;
     janusPage.fillCallerName(callerName);
     janusPage.registerUser();
 
