@@ -14,7 +14,7 @@ const call = async function(stepInfo) {
   let peer = await stepInfo.driver.findElement(peerInput);
   await peer.sendKeys(stepInfo.sessionId + parseInt((stepInfo.id + 1)));
   await peer.sendKeys(Key.ENTER);
-  await waitAround(5000); // wait for buttons to display
+  await waitAround(5000); // wait for modal to display
   
   let btns = await stepInfo.driver.findElements(btnElements);
   // If there are more than 6 buttons, it means
@@ -61,7 +61,7 @@ class JanusVideoCallPage extends JanusBasepage {
     let username = await stepInfo.driver.findElement(usernameInput);
     await username.sendKeys(stepInfo.sessionId + stepInfo.id);
     await username.sendKeys(Key.ENTER);
-    await waitAround(2000); // wait for modal to display
+    await waitAround(2000); // wait for element to display
     // The browser with an even id is the caller and the other the receiver 
     if (stepInfo.id %2 === 0) {
       await call(stepInfo);

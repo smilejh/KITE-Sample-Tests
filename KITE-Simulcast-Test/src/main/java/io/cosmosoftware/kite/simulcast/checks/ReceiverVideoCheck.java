@@ -1,7 +1,7 @@
 package io.cosmosoftware.kite.simulcast.checks;
 
 import io.cosmosoftware.kite.exception.KiteTestException;
-import io.cosmosoftware.kite.simulcast.pages.SimulcastPageBase;
+import io.cosmosoftware.kite.simulcast.pages.*;
 import org.openqa.selenium.WebDriver;
 
 import static io.cosmosoftware.kite.entities.Timeouts.ONE_SECOND_INTERVAL;

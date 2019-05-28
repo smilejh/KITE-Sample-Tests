@@ -1,0 +1,119 @@
+{
+  "type": 1,
+  "name": "TEST Sample Tests %ts",
+  "permute": true,
+  "remotes": [
+    {
+      "type": "local",
+      "remoteAddress": "http://localhost:4444/wd/hub"
+    }
+  ],
+  "tests": [
+    {
+      "name": "Janus Video Room Test %ts",
+      "description": "Video Room Test for Janus",
+      "tupleSize": 2,
+      "testImpl": "io.cosmosoftware.kite.janus.JanusVideoRoomTest",
+      "payload": {
+        "url": "https://janus.conf.meetecho.com/videoroomtest.html",
+        "rooms": ["1"],
+        "usersPerRoom": 2,
+        "pageTitle": "Janus",
+        "takeScreenshotForEachTest": true,
+        "testTimeout": 20,
+        "getStats": {
+          "enabled": true,
+          "statsCollectionTime": 2,
+          "statsCollectionInterval": 1,
+          "peerConnections": [
+            "sfutest.webrtcStuff.pc"
+          ],
+          "selectedStats" : ["inbound-rtp", "outbound-rtp", "candidate-pair"]
+        }
+      }
+    },
+    {
+      "name": "Jitsi Test %ts",
+      "description": "Jitsi Test",
+      "tupleSize": 2,
+      "testImpl": "io.cosmosoftware.kite.jitsi.KiteJitsiTest",
+      "payload": {
+        "getStats" : true,
+        "url": "https://meet.jit.si/",
+        "rooms": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+        "usersPerRoom": 2,
+        "testTimeout": 20,
+        "meetingDuration": 20,
+        "getStats" : {
+          "enabled": true,
+          "statsCollectionTime": 2,
+          "statsCollectionInterval": 1,
+          "peerConnections": ["window.pc[0]"],
+          "selectedStats" : ["inbound-rtp", "outbound-rtp", "candidate-pair"]
+        }
+      }
+    },
+    {
+      "name": "Mediasoup Local Grid %ts",
+      "description":"interop test for Mediasoup",
+      "tupleSize": 4,
+      "testImpl": "io.cosmosoftware.kite.mediasoup.KiteMediasoupTest",
+      "payload": {
+        "url": "https://v3demo.mediasoup.org/?roomId=",
+        "rooms": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+        "usersPerRoom": 2,
+        "takeScreenshotForEachTest": true,
+        "testTimeout": 20,
+        "meetingDuration": 20,
+        "getStats" : {
+          "enabled": true,
+          "statsCollectionTime": 2,
+          "statsCollectionInterval": 1,
+          "peerConnections": ["window.PC1", "window.PC2"],
+          "selectedStats" : ["inbound-rtp", "outbound-rtp", "candidate-pair"]
+        }
+      }
+    },
+    {
+      "name": "OpenVidu Local Grid %ts",
+      "description":"interop test for OpenVidu",
+      "tupleSize": 2,
+      "testImpl": "io.cosmosoftware.kite.openvidu.KiteOpenViduTest",
+      "payload": {
+        "url": "https://demos.openvidu.io/openvidu-call/#/",
+        "rooms": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+        "usersPerRoom": 4,
+        "takeScreenshotForEachTest": true,
+        "testTimeout": 20,
+        "meetingDuration": 20
+      }
+    },
+    {
+      "name": "Medooze Simulcast VP8 %ts",
+      "description":"Simulcast Test for Medooze with VP8 codec",
+      "tupleSize": 1,
+      "noOfThreads": 2,
+      "testImpl": "io.cosmosoftware.kite.simulcast.KiteMedoozeTest",
+      "payload":{
+        "url": "https://playground.cosmosoftware.io/simulcast/index.html?codec=vp8",
+        "takeScreenshotForEachTest": true,
+        "testTimeout": 20,
+        "getStats" : {
+          "enabled": true,
+          "statsCollectionTime": 2,
+          "statsCollectionInterval": 1,
+          "peerConnections": ["pc"],
+          "selectedStats" : ["inbound-rtp", "outbound-rtp", "candidate-pair"]
+        }
+      }
+    }
+  ],
+  "browsers": [
+    {
+      "browserName": "chrome",
+      "version": "74",
+      "platform": "localhost",
+      "headless": false
+    }
+  ]
+}
