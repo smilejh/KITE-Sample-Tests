@@ -18,7 +18,7 @@ public class JoinVideoRoomStep extends TestStep {
     final JanusPage janusPage = new JanusPage(webDriver, logger);
     janusPage.fillCallerName(userName);
     janusPage.registerUser();
-    janusPage.acceptAlert();
+//    janusPage.acceptAlert();
 
   }
 

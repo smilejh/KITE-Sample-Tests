@@ -276,24 +276,24 @@ public class JanusPage extends BasePage {
     click(answerButton);
   }
 
-  public void acceptAlert() {
-    try {
-      WebDriverWait wait = new WebDriverWait(this.webDriver, 4);
-      wait.until(ExpectedConditions.alertIsPresent());
-      Alert alert = this.webDriver.switchTo().alert();
-      logger.info("Alert: " + alert.getText());
-      alert.accept();
-    } catch (Exception e) {
-        return;
-    }
-  }
+//  public void acceptAlert() {
+//    try {
+//      WebDriverWait wait = new WebDriverWait(this.webDriver, 4);
+//      wait.until(ExpectedConditions.alertIsPresent());
+//      Alert alert = this.webDriver.switchTo().alert();
+//      logger.info("Alert: " + alert.getText());
+//      alert.accept();
+//    } catch (Exception e) {
+//        return;
+//    }
+//  }
 
-  public String getAlertText() throws TimeoutException {
-    WebDriverWait wait = new WebDriverWait(this.webDriver, 4);
-    wait.until(ExpectedConditions.alertIsPresent());
-    Alert alert = this.webDriver.switchTo().alert();
-    return "Alert text: " +alert.getText();
-  }
+//  public String getAlertText() throws TimeoutException {
+//    WebDriverWait wait = new WebDriverWait(this.webDriver, 4);
+//    wait.until(ExpectedConditions.alertIsPresent());
+//    Alert alert = this.webDriver.switchTo().alert();
+//    return "Alert text: " +alert.getText();
+//  }
 
   public void waitForWaitingAnswerAlert(int timeoutInSeconds) throws KiteInteractionException {
     waitUntilVisibilityOf(waitingForPeerToAnswerButton,timeoutInSeconds);
