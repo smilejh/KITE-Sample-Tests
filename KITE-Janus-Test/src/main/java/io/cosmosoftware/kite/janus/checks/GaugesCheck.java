@@ -1,8 +1,8 @@
 package io.cosmosoftware.kite.janus.checks;
 
 import io.cosmosoftware.kite.exception.KiteTestException;
-import io.cosmosoftware.kite.janus.LoopbackStats;
-import io.cosmosoftware.kite.janus.pages.JanusPage;
+import io.cosmosoftware.kite.janus.*;
+import io.cosmosoftware.kite.janus.pages.*;
 import io.cosmosoftware.kite.report.Reporter;
 import io.cosmosoftware.kite.steps.TestStep;
 import org.openqa.selenium.WebDriver;

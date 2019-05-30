@@ -1,4 +1,4 @@
-package io.cosmosoftware.kite.simulcast.checks;
+package io.cosmosoftware.kite.janus.checks;
 
 import io.cosmosoftware.kite.exception.KiteTestException;
 import io.cosmosoftware.kite.janus.pages.JanusPage;
