@@ -1,8 +1,8 @@
 package io.cosmosoftware.kite.janus;
 
 import io.cosmosoftware.kite.janus.checks.FirstVideoCheck;
+import io.cosmosoftware.kite.janus.checks.ReceiverVideoCheck;
 import io.cosmosoftware.kite.janus.steps.*;
-import io.cosmosoftware.kite.simulcast.checks.ReceiverVideoCheck;
 import io.cosmosoftware.kite.util.TestUtils;
 import org.openqa.selenium.WebDriver;
 import org.webrtc.kite.config.App;
@@ -42,12 +42,12 @@ public class JanusVideoCallTest extends KiteBaseTest {
       runner.addStep(new FirstVideoCheck(webDriver));
       runner.addStep(new ReceiverVideoCheck(webDriver));
       if (this.getStats()) {
-        runner.addStep(new GetStatsStep(webDriver, getStatsConfig)); //need to find the name of the remote Peer connections
+        runner.addStep(new GetApprtcStatsStep(webDriver, getStatsConfig)); //need to find the name of the remote Peer connections
       }
       if (this.takeScreenshotForEachTest()) {
         runner.addStep(new ScreenshotStep(webDriver));
       }
-      runner.addStep(new ReceiverVideoCheck(webDriver));
+      runner.addStep(new LeaveDemoStep(webDriver));
     } catch (Exception e) {
       logger.error(getStackTrace(e));
     }

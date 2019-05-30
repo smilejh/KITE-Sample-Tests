@@ -28,7 +28,7 @@ public class JanusEchoTest extends KiteBaseTest {
       runner.addStep(new ReceiverVideoCheck(webDriver));
 
       if (this.getStats()) {
-        runner.addStep(new GetStatsStep( webDriver, getStatsConfig));
+        runner.addStep(new GetApprtcStatsStep( webDriver, getStatsConfig));
 
       }
       if (this.takeScreenshotForEachTest()) {
@@ -49,8 +49,6 @@ public class JanusEchoTest extends KiteBaseTest {
         logger.error(getStackTrace(e));
       }
   }
-
-
 
 
   @Override

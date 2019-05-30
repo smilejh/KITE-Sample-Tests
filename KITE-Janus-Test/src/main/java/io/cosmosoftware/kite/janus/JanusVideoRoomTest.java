@@ -4,6 +4,7 @@ import io.cosmosoftware.kite.janus.checks.AllVideoCheck;
 import io.cosmosoftware.kite.janus.checks.FirstVideoCheck;
 import io.cosmosoftware.kite.janus.steps.GetStatsStep;
 import io.cosmosoftware.kite.janus.steps.JoinVideoRoomStep;
+import io.cosmosoftware.kite.janus.steps.LeaveDemoStep;
 import io.cosmosoftware.kite.janus.steps.StartDemoStep;
 import io.cosmosoftware.kite.util.TestUtils;
 import org.openqa.selenium.WebDriver;
@@ -32,6 +33,9 @@ public class JanusVideoRoomTest extends KiteBaseTest {
       if (this.takeScreenshotForEachTest()) {
         runner.addStep(new ScreenshotStep(webDriver));
       }
+
+      runner.addStep(new LeaveDemoStep(webDriver));
+
     } catch (Exception e) {
       logger.error(getStackTrace(e));
     }

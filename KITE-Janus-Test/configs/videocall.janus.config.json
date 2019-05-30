@@ -24,7 +24,7 @@
           "enabled": true,
           "statsCollectionTime": 2,
           "statsCollectionInterval": 1,
-          "peerConnections": ["videocall.webrtcStuff.pc", "videocall.webrtcStuff.remoteStream"],
+          "peerConnections": ["videocall.webrtcStuff.pc"],
           "selectedStats" : ["inbound-rtp", "outbound-rtp", "candidate-pair"]
         }
       }

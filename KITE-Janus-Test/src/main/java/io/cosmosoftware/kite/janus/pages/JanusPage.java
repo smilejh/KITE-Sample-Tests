@@ -13,6 +13,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
 import static io.cosmosoftware.kite.util.WebDriverUtils.loadPage;
@@ -108,7 +109,11 @@ public class JanusPage extends BasePage {
   private WebElement answerButton;
 
   @FindBy(xpath = "//button[contains(text(),'OK')]")
-  private WebElement waitingForPeerToAnswerButton;
+  private WebElement acceptAlertButton;
+
+
+  @FindBy(className = "bootbox-body")
+  private WebElement alertText;
 
 
   public JanusPage(WebDriver webDriver, Logger logger) {
@@ -149,7 +154,7 @@ public class JanusPage extends BasePage {
     click(streamWatchButton);
   }
 
-  public void startDemo () throws KiteInteractionException {
+  public void startOrStopDemo () throws KiteInteractionException {
     waitUntilVisibilityOf(startStopButton, 2);
     click(startStopButton);
   }
@@ -276,33 +281,26 @@ public class JanusPage extends BasePage {
     click(answerButton);
   }
 
-//  public void acceptAlert() {
-//    try {
-//      WebDriverWait wait = new WebDriverWait(this.webDriver, 4);
-//      wait.until(ExpectedConditions.alertIsPresent());
-//      Alert alert = this.webDriver.switchTo().alert();
-//      logger.info("Alert: " + alert.getText());
-//      alert.accept();
-//    } catch (Exception e) {
-//        return;
-//    }
-//  }
+  public String acceptAlert() throws KiteInteractionException {
+    try {
+      waitUntilVisibilityOf(acceptAlertButton,2);
 
-//  public String getAlertText() throws TimeoutException {
-//    WebDriverWait wait = new WebDriverWait(this.webDriver, 4);
-//    wait.until(ExpectedConditions.alertIsPresent());
-//    Alert alert = this.webDriver.switchTo().alert();
-//    return "Alert text: " +alert.getText();
-//  }
+    } catch (Exception e) {
+      return "No alert";
+    }
+    String text = alertText.getText();
+    click(acceptAlertButton);
+    return "Text of the alert : " + text ;
+  }
 
   public void waitForWaitingAnswerAlert(int timeoutInSeconds) throws KiteInteractionException {
-    waitUntilVisibilityOf(waitingForPeerToAnswerButton,timeoutInSeconds);
+    waitUntilVisibilityOf(acceptAlertButton,timeoutInSeconds);
   }
 
 
   public void waitUntilPeerAnswer(int timeoutInSeconds) throws TimeoutException {
     WebDriverWait wait = new WebDriverWait(webDriver, timeoutInSeconds);
-    wait.until(ExpectedConditions.invisibilityOf(waitingForPeerToAnswerButton));
+    wait.until(ExpectedConditions.invisibilityOf(acceptAlertButton));
   }
-  
+
 }

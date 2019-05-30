@@ -11,8 +11,7 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 
 import static io.cosmosoftware.kite.entities.Timeouts.ONE_SECOND_INTERVAL;
-import static io.cosmosoftware.kite.util.ReportUtils.saveScreenshotPNG;
-import static io.cosmosoftware.kite.util.ReportUtils.timestamp;
+
 import static io.cosmosoftware.kite.util.TestUtils.videoCheck;
 import static io.cosmosoftware.kite.util.TestUtils.waitAround;
 

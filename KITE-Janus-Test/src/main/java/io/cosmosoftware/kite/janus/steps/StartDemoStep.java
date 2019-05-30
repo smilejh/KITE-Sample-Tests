@@ -29,7 +29,7 @@ public class StartDemoStep extends TestStep {
     final JanusPage janusPage = new JanusPage(this.webDriver, this.logger);
     loadPage(this.webDriver, url, 10);
     waitAround(3*ONE_SECOND_INTERVAL);
-    janusPage.startDemo();
+    janusPage.startOrStopDemo();
 
   }
 }

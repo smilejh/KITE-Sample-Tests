@@ -5,7 +5,6 @@ import io.cosmosoftware.kite.report.Reporter;
 import io.cosmosoftware.kite.report.Status;
 import io.cosmosoftware.kite.steps.TestStep;
 import io.cosmosoftware.kite.util.TestUtils;
-import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.webrtc.kite.Utils;
 import org.webrtc.kite.config.Browser;

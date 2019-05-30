@@ -26,7 +26,7 @@
           "enabled": true,
           "statsCollectionTime": 2,
           "statsCollectionInterval": 1,
-          "peerConnections": ["echotest.webrtcStuff.pc", "echotest.webrtcStuff.remoteStream"],
+          "peerConnections": ["echotest.webrtcStuff.pc"],
           "selectedStats" : ["inbound-rtp", "outbound-rtp", "candidate-pair"]
         }
       }
