@@ -5,6 +5,7 @@
 package io.cosmosoftware.kite;
 
 import io.cosmosoftware.kite.simulcast.KiteMedoozeTest;
+import org.webrtc.kite.config.Tuple;
 import org.webrtc.kite.tests.KiteBaseTest;
 import junit.framework.TestCase;
 import org.openqa.selenium.WebDriver;
@@ -30,7 +31,7 @@ public class KiteMedoozeTestTest extends TestCase {
   private static final String CONFIG_FILE = "configs/local.simulcast.config.json";
 
   private List<WebDriver> webDriverList = new ArrayList<>();
-  private List<EndPoint> endPointList = getEndPointList(CONFIG_FILE, "browsers");
+  private Tuple endPointList = getEndPointList(CONFIG_FILE, "browsers");
 
   public void setUp() throws Exception {
     super.setUp();
