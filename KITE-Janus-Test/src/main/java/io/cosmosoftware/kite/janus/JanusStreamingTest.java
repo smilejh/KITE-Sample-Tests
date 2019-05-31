@@ -12,6 +12,9 @@ import org.webrtc.kite.tests.TestRunner;
 import static org.webrtc.kite.Utils.getStackTrace;
 
 public class JanusStreamingTest extends KiteBaseTest {
+
+  protected boolean sfu = false;
+
   @Override
   protected void populateTestSteps(TestRunner runner) {
     try {
@@ -22,7 +25,7 @@ public class JanusStreamingTest extends KiteBaseTest {
 
       //getStats does not work for now because I did not find a name in the website source code for the PeerConnection that match the other test
       if (this.getStats()) {
-        runner.addStep(new GetApprtcStatsStep(webDriver, getStatsConfig));
+        runner.addStep(new GetStatsStep(webDriver, getStatsConfig, sfu));
       }
       if (this.takeScreenshotForEachTest()) {
         runner.addStep(new ScreenshotStep(webDriver));
@@ -37,5 +40,11 @@ public class JanusStreamingTest extends KiteBaseTest {
     }
 
 
+  }
+
+  @Override
+  public void payloadHandling () {
+    super.payloadHandling();
+    sfu = payload.getBoolean("sfu", false);
   }
 }

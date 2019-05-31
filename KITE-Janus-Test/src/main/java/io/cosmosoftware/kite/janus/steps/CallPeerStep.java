@@ -20,10 +20,11 @@ public class CallPeerStep extends TestStep {
   @Override
   protected void step() throws KiteTestException {
     final JanusPage janusPage = new JanusPage(this.webDriver, this.logger);
+    int runnersPeerId = runnerId/2;
 
-    String peerName = (runnerId == 0)? "Bob" + testCaseName: "Alice" + testCaseName;
+    String peerName = (runnerId%2 == 0)? "Bob" + runnersPeerId + testCaseName: "Alice" + runnersPeerId + testCaseName;
 
-    if ((runnerId == 0)){
+    if ((runnerId%2 == 0)){
       janusPage.fillPeerName(peerName);
       janusPage.callPeer();
     }
@@ -32,11 +33,12 @@ public class CallPeerStep extends TestStep {
 
   @Override
   public String stepDescription() {
+    int runnersPeerId = runnerId/2;
 
-    if (this.runnerId == 0){
-      return "Call the user Bob" + testCaseName ;
+    if (this.runnerId%2 == 0){
+      return "Call the user Bob" + runnersPeerId + testCaseName ;
     } else {
-      return "Wait for the call from Alice" + testCaseName ;
+      return "Wait for the call from Alice" + runnersPeerId + testCaseName ;
     }
 
   }

@@ -30,6 +30,6 @@ public class SelectProfileStep extends TestStep {
   @Override
   protected void step() throws KiteTestException {
     janusPage.clickButton(rid, tid);
-    waitAround(3 * ONE_SECOND_INTERVAL);
+    waitAround(5 * ONE_SECOND_INTERVAL);
   }
 }

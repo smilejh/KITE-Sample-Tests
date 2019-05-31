@@ -7,9 +7,11 @@ import io.cosmosoftware.kite.util.TestUtils;
 import org.openqa.selenium.WebDriver;
 
 import static io.cosmosoftware.kite.entities.Timeouts.ONE_SECOND_INTERVAL;
+import static io.cosmosoftware.kite.util.TestUtils.idToString;
 import static io.cosmosoftware.kite.util.TestUtils.waitAround;
 
 public class RegisterUserToVideoCallStep extends TestStep {
+
 
   private final int runnerId;
   private final String testCaseName;
@@ -17,6 +19,7 @@ public class RegisterUserToVideoCallStep extends TestStep {
   public RegisterUserToVideoCallStep(WebDriver webDriver, int runnerId, String testCaseName) {
 
     super(webDriver);
+
     this.runnerId = runnerId;
     this.testCaseName = testCaseName;
 
@@ -24,21 +27,20 @@ public class RegisterUserToVideoCallStep extends TestStep {
 
   @Override
   public String stepDescription() {
-    if (this.runnerId == 0){
-      return "Register the user Alice"+ testCaseName;
+    int runnersPeerId = runnerId/2;
+    if (this.runnerId%2 == 0){
+      return "Register the user Alice" + runnersPeerId + testCaseName + " to answer" ;
     } else {
-      return "Register the user Bob" + testCaseName;
+      return "Register the user Bob" + runnersPeerId + testCaseName ;
     }
-
   }
 
   @Override
   protected void step() throws KiteTestException {
     final JanusPage janusPage = new JanusPage(this.webDriver, this.logger);
+    int runnersPeerId = runnerId/2;
 
-    //for now, tupleSize has to be equal to 2
-    //but need to adapt the following lines if we want to enable tupleSize>2
-    String callerName = (runnerId == 0)? "Alice" + testCaseName : "Bob" + testCaseName;
+    String callerName = (runnerId%2 == 0)? "Alice" + runnersPeerId + testCaseName : "Bob" + runnersPeerId + testCaseName;
     janusPage.fillCallerName(callerName);
     janusPage.registerUser();
 

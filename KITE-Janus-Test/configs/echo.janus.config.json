@@ -22,6 +22,7 @@
         "pageTitle": "Janus Echo Test",
         "takeScreenshotForEachTest": true,
         "testTimeout": 20,
+        "sfu": false,
         "getStats" : {
           "enabled": true,
           "statsCollectionTime": 2,

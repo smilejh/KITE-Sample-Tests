@@ -16,16 +16,18 @@
       "testImpl": "io.cosmosoftware.kite.janus.JanusVideoRoomTest",
       "payload":{
         "url": "https://janus.conf.meetecho.com/videoroomtest.html",
+        "_url": "https://janus.conf.meetecho.com/videoroomtest.html?simulcast=true",
         "rooms": ["1"],
         "usersPerRoom": 2,
         "pageTitle": "Janus",
         "takeScreenshotForEachTest": true,
         "testTimeout": 20,
+        "sfu": true,
         "getStats" : {
           "enabled": true,
           "statsCollectionTime": 2,
           "statsCollectionInterval": 1,
-          "peerConnections": ["sfutest.webrtcStuff.pc", "feeds[1].webrtcStuff.pc"],
+          "peerConnections": ["sfutest.webrtcStuff.pc", "feeds[1].webrtcStuff.pc","feeds[2].webrtcStuff.pc","feeds[3].webrtcStuff.pc","feeds[4].webrtcStuff.pc"],
           "selectedStats" : ["inbound-rtp", "outbound-rtp", "candidate-pair"]
         }
       }

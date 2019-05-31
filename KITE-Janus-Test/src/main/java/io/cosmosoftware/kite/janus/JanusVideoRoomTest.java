@@ -16,6 +16,7 @@ import static org.webrtc.kite.Utils.getStackTrace;
 
 public class JanusVideoRoomTest extends KiteBaseTest {
 
+  protected boolean sfu = false;
   @Override
   public void populateTestSteps(TestRunner runner) {
     try {
@@ -28,7 +29,7 @@ public class JanusVideoRoomTest extends KiteBaseTest {
       runner.addStep(new FirstVideoCheck(webDriver));
       runner.addStep(new AllVideoCheck(webDriver, getMaxUsersPerRoom()));
       if (this.getStats()) {
-        runner.addStep(new GetStatsStep(webDriver, getStatsConfig)); //need to find the name of the remote Peer connections
+        runner.addStep(new GetStatsStep(webDriver, getStatsConfig, sfu)); //need to find the name of the remote Peer connections
       }
       if (this.takeScreenshotForEachTest()) {
         runner.addStep(new ScreenshotStep(webDriver));
@@ -39,5 +40,11 @@ public class JanusVideoRoomTest extends KiteBaseTest {
     } catch (Exception e) {
       logger.error(getStackTrace(e));
     }
+  }
+
+  @Override
+  public void payloadHandling () {
+    super.payloadHandling();
+    sfu = payload.getBoolean("sfu", false);
   }
 }

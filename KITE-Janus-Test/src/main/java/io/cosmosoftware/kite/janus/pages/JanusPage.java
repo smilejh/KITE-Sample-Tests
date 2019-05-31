@@ -13,7 +13,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
 import static io.cosmosoftware.kite.util.WebDriverUtils.loadPage;
@@ -166,9 +165,7 @@ public class JanusPage extends BasePage {
    */
   public void waitForLocalStreamHeaderVisibility (int timeoutInSeconds) throws KiteInteractionException {
     waitUntilVisibilityOf(localStreamHeader, timeoutInSeconds);
-
   }
-
 
   /**
    *

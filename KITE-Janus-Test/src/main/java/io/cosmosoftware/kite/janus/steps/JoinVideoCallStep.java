@@ -22,10 +22,11 @@ public class JoinVideoCallStep extends TestStep {
 
   @Override
   public String stepDescription() {
-    if (this.runnerId == 0){
-      return "Wait for the user Bob" + testCaseName + " to answer" ;
+    int runnersPeerId = runnerId/2;
+    if (this.runnerId%2 == 0){
+      return "Wait for the user Bob" + runnersPeerId + testCaseName + " to answer" ;
     } else {
-      return "Answer the call from Alice" + testCaseName ;
+      return "Answer the call from Alice" + runnersPeerId + testCaseName ;
     }
 
   }
@@ -34,11 +35,7 @@ public class JoinVideoCallStep extends TestStep {
   protected void step() throws KiteTestException {
     final JanusPage janusPage = new JanusPage(this.webDriver, this.logger);
 
-    //for now, tupleSize has to be equal to 2
-    //but need to adapt the following lines if we want to enable tupleSize>2
-
-
-    if (runnerId == 1){
+    if (runnerId%2 == 1){
       janusPage.answerCall();
     }
 

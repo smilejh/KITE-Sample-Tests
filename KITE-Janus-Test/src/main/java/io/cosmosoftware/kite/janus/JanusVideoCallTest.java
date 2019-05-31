@@ -3,7 +3,6 @@ package io.cosmosoftware.kite.janus;
 import io.cosmosoftware.kite.janus.checks.FirstVideoCheck;
 import io.cosmosoftware.kite.janus.checks.ReceiverVideoCheck;
 import io.cosmosoftware.kite.janus.steps.*;
-import io.cosmosoftware.kite.util.TestUtils;
 import org.openqa.selenium.WebDriver;
 import org.webrtc.kite.config.App;
 import org.webrtc.kite.config.Browser;
@@ -16,16 +15,15 @@ import org.webrtc.kite.tests.TestRunner;
 import static org.webrtc.kite.Utils.getStackTrace;
 
 public class JanusVideoCallTest extends KiteBaseTest {
-
+  protected boolean sfu = false;
 
   @Override
   protected void populateTestSteps(TestRunner runner) {
     try {
       WebDriver webDriver = runner.getWebDriver();
       int runnerId = runner.getId();
-      logger.info("runner id : " + TestUtils.idToString(runnerId));
       String name = generateTestCaseName();
-      logger.info("test case name : " + name);
+
 
       runner.addStep(new StartDemoStep(webDriver, this.url));
       runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
@@ -42,17 +40,25 @@ public class JanusVideoCallTest extends KiteBaseTest {
       runner.addStep(new FirstVideoCheck(webDriver));
       runner.addStep(new ReceiverVideoCheck(webDriver));
       if (this.getStats()) {
-        runner.addStep(new GetApprtcStatsStep(webDriver, getStatsConfig)); //need to find the name of the remote Peer connections
+        runner.addStep(new GetStatsStep(webDriver, getStatsConfig, sfu)); //need to find the name of the remote Peer connections
+        runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
       }
       if (this.takeScreenshotForEachTest()) {
         runner.addStep(new ScreenshotStep(webDriver));
       }
+
       runner.addStep(new LeaveDemoStep(webDriver));
     } catch (Exception e) {
       logger.error(getStackTrace(e));
     }
 
 
+  }
+
+  @Override
+  public void payloadHandling () {
+    super.payloadHandling();
+    sfu = payload.getBoolean("sfu", false);
   }
 
   /**
