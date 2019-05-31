@@ -29,7 +29,7 @@
               <copy file="../KITE-Janus-Test/target/janus-test-0.1.4.jar" todir="target/"/>
               <copy file="../KITE-Jitsi-Test/target/jitsi-test-0.1.4.jar" todir="target/"/>
               <copy file="../KITE-Mediasoup-Test/target/mediasoup-test-0.1.4.jar" todir="target/"/>
-              <copy file="../KITE-Openvidu-Test/target/openvidu-test-0.1.4.jar" todir="target/"/>
+              <copy file="../KITE-OpenVidu-Test/target/openvidu-test-0.1.4.jar" todir="target/"/>
               <copy file="../KITE-Simulcast-Test/target/simulcast-test-0.1.4.jar" todir="target/"/>
             </tasks>
           </configuration>
