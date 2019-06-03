@@ -1,5 +1,5 @@
 const JanusBasepage = require('./JanusBasePage');
-const {By, Key} = require('selenium-webdriver');
+const {By, Key, until} = require('selenium-webdriver');
 const {TestUtils} = require('kite-common'); 
 const waitAround = TestUtils.waitAround;
 
@@ -14,7 +14,7 @@ const call = async function(stepInfo) {
   let peer = await stepInfo.driver.findElement(peerInput);
   await peer.sendKeys(stepInfo.sessionId + parseInt((stepInfo.id + 1)));
   await peer.sendKeys(Key.ENTER);
-  await waitAround(5000); // wait for modal to display
+  await waitAround(3000); // wait for modal to display
   
   let btns = await stepInfo.driver.findElements(btnElements);
   // If there are more than 6 buttons, it means
@@ -22,16 +22,20 @@ const call = async function(stepInfo) {
   if(btns.length > 6) {
     do {
       // To close the modal
+      await stepInfo.driver.wait(until.elementLocated(closeButton)); // attente du modal
       let close = await stepInfo.driver.findElement(closeButton);
       await close.click();
 
-      await waitAround(3000); // wait for element to display
+      await stepInfo.driver.wait(until.elementLocated(peerInput));
       peer = await stepInfo.driver.findElement(peerInput);
+      await stepInfo.driver.wait(until.elementIsVisible(peer) || 6000);
+      await stepInfo.driver.wait(until.elementIsEnabled(peer) || 6000);
+
       await peer.clear();
       await peer.sendKeys(stepInfo.sessionId + parseInt(stepInfo.id + 1));
       await peer.sendKeys(Key.ENTER);
 
-      await waitAround(5000); // wait for buttons to display
+      await waitAround(3000); // wait for buttons to display
       
       btns = await stepInfo.driver.findElements(btnElements);
     } while(btns.length > 6);

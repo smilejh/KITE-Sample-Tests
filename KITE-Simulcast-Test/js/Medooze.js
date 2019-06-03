@@ -1,5 +1,5 @@
-const {TestUtils, WebDriverFactory, KiteBaseTest} = require('kite-common'); 
-const {LoadPageStep, GetStatsStep, ScreenshotStep, SelectProfileStep} = require('./steps');
+const {TestUtils, WebDriverFactory, KiteBaseTest, ScreenshotStep} = require('kite-common'); 
+const {LoadPageStep, GetStatsStep, SelectProfileStep} = require('./steps');
 const {SenderVideoCheck, ReceivedVideoCheck, GaugesCheck} = require('./checks');
 const {MedoozePage} = require('./pages');
 

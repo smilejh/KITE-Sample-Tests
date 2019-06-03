@@ -1,5 +1,5 @@
-const {TestUtils, WebDriverFactory, KiteBaseTest} = require('./node_modules/kite-common'); 
-const {OpenJitsiUrlStep, ScreenshotStep, GetStatsStep} = require('./steps');
+const {TestUtils, WebDriverFactory, KiteBaseTest, ScreenshotStep} = require('./node_modules/kite-common'); 
+const {OpenJitsiUrlStep, GetStatsStep} = require('./steps');
 const {SentVideoCheck, ReceivedVideoCheck} = require('./checks');
 const {JitsiPage} = require('./pages');
 
@@ -35,7 +35,7 @@ class Jitsi extends KiteBaseTest {
       let screenshotStep = new ScreenshotStep(this);
       await screenshotStep.execute(this);
 
-      await TestUtils.waitAround(5000 * this.numberOfParticipant); // 5s per participant
+      await super.waitAllSteps();
     } catch (e) {
       console.log(e);
     } finally {

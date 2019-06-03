@@ -1,5 +1,5 @@
-const {TestUtils, WebDriverFactory, KiteBaseTest} = require('kite-common'); 
-const {JoinUrlStep, ScreenshotStep, GetStatsStep} = require('./steps');
+const {TestUtils, WebDriverFactory, KiteBaseTest, ScreenshotStep} = require('kite-common'); 
+const {JoinUrlStep, GetStatsStep} = require('./steps');
 const {FirstVideoCheck, AllVideoCheck} = require('./checks');
 // Page
 const {JanusEchoPage} = require('./pages');
@@ -38,8 +38,6 @@ class JanusEcho extends KiteBaseTest {
         let screenshotStep = new ScreenshotStep(this);
         await screenshotStep.execute(this);
       }
-
-      await TestUtils.waitAround(3000 * this.numberOfParticipant); // 3s per participant
 
     } catch (e) {
       console.log(e);

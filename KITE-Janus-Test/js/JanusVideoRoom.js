@@ -1,5 +1,5 @@
-const {TestUtils, WebDriverFactory, KiteBaseTest} = require('kite-common'); 
-const {JoinUrlStep, ScreenshotStep, GetStatsStep} = require('./steps');
+const {TestUtils, WebDriverFactory, KiteBaseTest, ScreenshotStep} = require('kite-common'); 
+const {JoinUrlStep, GetStatsStep} = require('./steps');
 const {FirstVideoCheck, AllVideoCheck} = require('./checks');
 const {JanusVideoRoomPage} = require('./pages'); 
 
@@ -37,7 +37,8 @@ class JanusVideoRoom extends KiteBaseTest {
         let screenshotStep = new ScreenshotStep(this);
         await screenshotStep.execute(this);
       }
-      
+      await super.waitAllSteps();
+      await this.page.stopVideo();
     } catch (e) {
       console.log(e);
     } finally {

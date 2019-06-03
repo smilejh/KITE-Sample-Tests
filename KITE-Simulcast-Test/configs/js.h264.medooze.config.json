@@ -16,6 +16,7 @@
       "testImpl": "Medooze.js",
       "payload":{
         "url": "https://playground.cosmosoftware.io/simulcast/index.html?codec=h264",
+        "port": 30000,
         "takeScreenshotForEachTest": true,
         "testTimeout": 20,
         "getStats" : {

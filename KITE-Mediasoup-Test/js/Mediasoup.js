@@ -1,5 +1,5 @@
-const {TestUtils, WebDriverFactory, KiteBaseTest} = require('kite-common'); 
-const {JoinVideoCallStep, GetStatsStep, ScreenshotStep} = require('./steps');
+const {TestUtils, WebDriverFactory, KiteBaseTest, ScreenshotStep} = require('kite-common'); 
+const {JoinVideoCallStep, GetStatsStep} = require('./steps');
 const {FirstVideoCheck, AllVideoCheck} = require('./checks');
 const {MediasoupPage} = require('./pages');
 
@@ -42,7 +42,7 @@ class Mediasoup extends KiteBaseTest {
       let screenshotStep = new ScreenshotStep(this);
       await screenshotStep.execute(this);
 
-      await TestUtils.waitAround(5000 * this.numberOfParticipant); // 5s per participant
+      await super.waitAllSteps();
 
     } catch (e) {
       console.log(e);

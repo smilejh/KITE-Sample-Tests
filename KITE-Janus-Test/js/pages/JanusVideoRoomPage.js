@@ -24,7 +24,6 @@ class JanusVideoRoomPage extends JanusBasepage {
 
   // This will stop the video broadcasting properly
   async stopVideo() {
-    await waitAround(5000); // waiting for checks to be done
     // stop button and start button are the same
     let stop = await this.driver.findElement(this.startButton);
     await stop.click();
