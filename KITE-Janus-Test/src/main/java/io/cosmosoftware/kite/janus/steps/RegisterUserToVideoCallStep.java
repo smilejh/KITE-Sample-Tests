@@ -29,7 +29,7 @@ public class RegisterUserToVideoCallStep extends TestStep {
   public String stepDescription() {
     int runnersPeerId = runnerId/2;
     if (this.runnerId%2 == 0){
-      return "Register the user Alice" + runnersPeerId + testCaseName + " to answer" ;
+      return "Register the user Alice" + runnersPeerId + testCaseName;
     } else {
       return "Register the user Bob" + runnersPeerId + testCaseName ;
     }

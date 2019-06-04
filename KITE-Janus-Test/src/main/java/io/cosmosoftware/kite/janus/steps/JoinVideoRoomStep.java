@@ -7,19 +7,27 @@ import org.openqa.selenium.WebDriver;
 
 public class JoinVideoRoomStep extends TestStep {
   private final String userName;
+  private final JanusPage janusPage;
 
-  public JoinVideoRoomStep(WebDriver webDriver, String userName) {
+  public JoinVideoRoomStep(WebDriver webDriver, String userName, JanusPage janusPage) {
     super(webDriver);
     this.userName = userName;
+    this.janusPage = janusPage;
   }
 
   @Override
   protected void step() throws KiteTestException {
-    final JanusPage janusPage = new JanusPage(webDriver, logger);
+    janusPage.setRegistrationState(false);
     janusPage.fillCallerName(userName);
     janusPage.registerUser();
     String alertText = janusPage.acceptAlert();
     logger.info(alertText);
+    if (alertText.equalsIgnoreCase("No alert")){
+      janusPage.setRegistrationState(true);
+      logger.info("user registered = " + userName);
+
+    }
+
 
   }
 

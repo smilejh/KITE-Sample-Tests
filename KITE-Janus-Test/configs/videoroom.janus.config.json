@@ -27,7 +27,7 @@
           "enabled": true,
           "statsCollectionTime": 2,
           "statsCollectionInterval": 1,
-          "peerConnections": ["sfutest.webrtcStuff.pc", "feeds[1].webrtcStuff.pc","feeds[2].webrtcStuff.pc","feeds[3].webrtcStuff.pc","feeds[4].webrtcStuff.pc"],
+          "peerConnections": ["sfutest.webrtcStuff.pc"],
           "selectedStats" : ["inbound-rtp", "outbound-rtp", "candidate-pair"]
         }
       }

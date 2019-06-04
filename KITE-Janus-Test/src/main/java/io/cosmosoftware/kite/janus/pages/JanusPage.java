@@ -12,6 +12,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -115,10 +116,24 @@ public class JanusPage extends BasePage {
   private WebElement alertText;
 
 
+  @FindBy(id="myvideo")
+  private WebElement localVideo;
+
+  private boolean userRegistered = true;
+
+  private List<Integer> remoteUserIndexList = new ArrayList<>();
+
   public JanusPage(WebDriver webDriver, Logger logger) {
     super(webDriver, logger);
   }
 
+  public void setRegistrationState (boolean registered){
+    userRegistered = registered;
+  }
+
+  public boolean getRegistrationState (){
+    return userRegistered;
+  }
   //not needed for now
   public void openDemosListDropdown() throws KiteInteractionException {
     waitUntilVisibilityOf(streamSetButton, 2);
@@ -149,9 +164,6 @@ public class JanusPage extends BasePage {
     click(streamWatchButton);
   }
 
-  public void joinVideoCall() throws KiteInteractionException {
-    click(streamWatchButton);
-  }
 
   public void startOrStopDemo () throws KiteInteractionException {
     waitUntilVisibilityOf(startStopButton, 2);
@@ -186,6 +198,20 @@ public class JanusPage extends BasePage {
     return videos;
   }
 
+  public List<WebElement> getAllRegisteredUsersVideos() {
+    List<WebElement> registeredVideo = new ArrayList<WebElement>();
+    registeredVideo.add(localVideo);
+    for (String videoId: getRemoteVideoIdList()){
+      By locator = By.id(videoId);
+      registeredVideo.add(webDriver.findElement(locator));
+    }
+    return registeredVideo;
+  }
+
+  public void waitUntilVisibilityOfFirstVideo(int timeoutInSeconds) throws KiteInteractionException {
+    By locator = By.tagName("video");
+    waitUntilVisibilityOf(locator, timeoutInSeconds);
+  }
 
   /**
    *
@@ -300,4 +326,56 @@ public class JanusPage extends BasePage {
     wait.until(ExpectedConditions.invisibilityOf(acceptAlertButton));
   }
 
+  /**
+   *  get the name of the
+   * @param index should be not greater than 5 (only 6 users can register in the video room)
+   * @return
+   */
+  public String getRemoteUserNameByIndex (int index){
+    By locator = By.id("remote" + index );
+    return webDriver.findElement(locator).getText();
+
+  }
+
+  public WebElement getVideoById(String id) {
+    By locator = By.id(id);
+
+    return webDriver.findElement(locator);
+  }
+  public WebElement getCurrentBitRatePrint() {
+    return currentBitRatePrint;
+  }
+
+  /**
+   * videoroom test
+   */
+
+  public void setUserIndexList (){
+    for (int i=1; i<6; i++ ){
+      String name = getRemoteUserNameByIndex(i);
+      logger.info("remote user name = " + name);
+      if (!(name == null)&&!(name.isEmpty())){
+        if (name.contains("user")){
+          remoteUserIndexList.add(i);
+        }
+      }
+    }
+  }
+
+  public List<String> getPeerConnections (){
+    List<String> peerConnectionsList = new ArrayList<String>();
+    for (int i: remoteUserIndexList){
+      peerConnectionsList.add("feeds["+ i + "].webrtcStuff.pc");
+    }
+    return peerConnectionsList;
+    }
+
+
+  public List<String> getRemoteVideoIdList (){
+    List<String> remoteIdList = new ArrayList<String>();
+    for (int i: remoteUserIndexList){
+          remoteIdList.add("remotevideo"+ i);
+    }
+    return remoteIdList;
+  }
 }

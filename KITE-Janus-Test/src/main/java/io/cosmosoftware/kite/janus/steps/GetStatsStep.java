@@ -1,6 +1,7 @@
 package io.cosmosoftware.kite.janus.steps;
 
 import io.cosmosoftware.kite.exception.KiteTestException;
+import io.cosmosoftware.kite.janus.pages.JanusPage;
 import io.cosmosoftware.kite.report.Reporter;
 import io.cosmosoftware.kite.report.Status;
 import io.cosmosoftware.kite.steps.TestStep;
@@ -13,6 +14,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import static io.cosmosoftware.kite.util.ReportUtils.getStackTrace;
+import static javax.json.stream.JsonCollectors.toJsonObject;
+import static org.glassfish.json.JsonUtil.toJson;
 import static org.webrtc.kite.stats.StatsUtils.*;
 
 public class GetStatsStep extends TestStep {
@@ -20,6 +23,7 @@ public class GetStatsStep extends TestStep {
 
   private final JsonObject getStatsConfig;
   private final boolean sfu;
+  private final JanusPage janusPage;
 
   /**
    * for Janus demo testing, the name of the local peer connection are like "pluginHandle" + webrtcStuff.pc in the website source code (https://janus.conf.meetecho.com)
@@ -33,8 +37,9 @@ public class GetStatsStep extends TestStep {
    *      see configs file to set the name of the peer connection for each test (key: 'peerConnection')
    */
 
-  public GetStatsStep(WebDriver webDriver, JsonObject getStatsConfig, boolean sfu) {
+  public GetStatsStep(WebDriver webDriver, JsonObject getStatsConfig, boolean sfu, JanusPage janusPage) {
     super(webDriver);
+    this.janusPage = janusPage;
     this.getStatsConfig = getStatsConfig;
     this.sfu = sfu;
   }
@@ -51,6 +56,14 @@ public class GetStatsStep extends TestStep {
 
     try {
       if(sfu){
+        List<String> peerConnections = janusPage.getPeerConnections();
+        for (String pc : peerConnections){
+          JsonValue pcJson = toJson(pc);
+          logger.info("pc " + pcJson);
+          getStatsConfig.getJsonArray("peerConnections").add(pcJson);
+
+        }
+        logger.info(getStatsConfig);
 
         List<JsonObject> stats = getPCStatOvertime(webDriver, getStatsConfig);
         JsonObject sentStats = stats.get(0);

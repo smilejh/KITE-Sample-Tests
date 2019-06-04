@@ -2,6 +2,7 @@ package io.cosmosoftware.kite.janus;
 
 import io.cosmosoftware.kite.janus.checks.FirstVideoCheck;
 import io.cosmosoftware.kite.janus.checks.ReceiverVideoCheck;
+import io.cosmosoftware.kite.janus.pages.JanusPage;
 import io.cosmosoftware.kite.janus.steps.*;
 import org.openqa.selenium.WebDriver;
 import org.webrtc.kite.config.App;
@@ -24,7 +25,7 @@ public class JanusVideoCallTest extends KiteBaseTest {
       int runnerId = runner.getId();
       String name = generateTestCaseName();
 
-
+      final JanusPage janusPage = new JanusPage(webDriver, logger);
       runner.addStep(new StartDemoStep(webDriver, this.url));
       runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
 
@@ -40,7 +41,7 @@ public class JanusVideoCallTest extends KiteBaseTest {
       runner.addStep(new FirstVideoCheck(webDriver));
       runner.addStep(new ReceiverVideoCheck(webDriver));
       if (this.getStats()) {
-        runner.addStep(new GetStatsStep(webDriver, getStatsConfig, sfu)); //need to find the name of the remote Peer connections
+        runner.addStep(new GetStatsStep(webDriver, getStatsConfig, sfu, janusPage)); //need to find the name of the remote Peer connections
         runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
       }
       if (this.takeScreenshotForEachTest()) {

@@ -30,8 +30,9 @@ public class FirstVideoCheck extends TestStep {
   protected void step() throws KiteTestException {
     try {
       final JanusPage janusPage = new JanusPage(this.webDriver, logger);
-      waitAround(10*ONE_SECOND_INTERVAL);
+
       logger.info("Looking for video object");
+      janusPage.waitUntilVisibilityOfFirstVideo(10);
       List<WebElement> videos = janusPage.getVideoElements();
 
       if (videos.isEmpty()) {
