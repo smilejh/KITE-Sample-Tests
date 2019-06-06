@@ -198,8 +198,8 @@ public class JanusPage extends BasePage {
     return videos;
   }
 
-  public List<WebElement> getAllRegisteredUsersVideos() {
-    List<WebElement> registeredVideo = new ArrayList<WebElement>();
+  public List<WebElement> getTestUsersVideos() {
+    List<WebElement> registeredVideo = new ArrayList<>();
     registeredVideo.add(localVideo);
     for (String videoId: getRemoteVideoIdList()){
       By locator = By.id(videoId);
@@ -334,14 +334,13 @@ public class JanusPage extends BasePage {
   public String getRemoteUserNameByIndex (int index){
     By locator = By.id("remote" + index );
     return webDriver.findElement(locator).getText();
-
   }
 
   public WebElement getVideoById(String id) {
     By locator = By.id(id);
-
     return webDriver.findElement(locator);
   }
+
   public WebElement getCurrentBitRatePrint() {
     return currentBitRatePrint;
   }
@@ -351,8 +350,9 @@ public class JanusPage extends BasePage {
    */
 
   public void setUserIndexList (){
+    String name;
     for (int i=1; i<6; i++ ){
-      String name = getRemoteUserNameByIndex(i);
+      name = getRemoteUserNameByIndex(i);
       logger.info("remote user name = " + name);
       if (!(name == null)&&!(name.isEmpty())){
         if (name.contains("user")){
@@ -362,7 +362,7 @@ public class JanusPage extends BasePage {
     }
   }
 
-  public List<String> getPeerConnections (){
+  public List<String> getRemotePC (){
     List<String> peerConnectionsList = new ArrayList<String>();
     for (int i: remoteUserIndexList){
       peerConnectionsList.add("feeds["+ i + "].webrtcStuff.pc");

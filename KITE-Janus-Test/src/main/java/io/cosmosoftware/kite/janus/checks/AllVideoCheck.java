@@ -43,7 +43,7 @@ public class AllVideoCheck extends TestStep {
       janusPage.setUserIndexList();
       List<String> remoteIdList = janusPage.getRemoteVideoIdList();
 
-      List<WebElement> videos = janusPage.getAllRegisteredUsersVideos();
+      List<WebElement> videos = janusPage.getTestUsersVideos();
 
       boolean flag = true;
       for (String videoId : remoteIdList) {
@@ -56,7 +56,7 @@ public class AllVideoCheck extends TestStep {
       while((videos.size() < remoteIdList.size() || !flag) && waitingTime < 10*numberOfParticipants) {
         flag = true;
         waitAround(ONE_SECOND_INTERVAL);
-        videos = janusPage.getAllRegisteredUsersVideos();
+        videos = janusPage.getTestUsersVideos();
         for (String videoId : remoteIdList) {
           String v2 = videoCheck(webDriver, videoId);
           flag = flag && "video".equalsIgnoreCase(v2);
