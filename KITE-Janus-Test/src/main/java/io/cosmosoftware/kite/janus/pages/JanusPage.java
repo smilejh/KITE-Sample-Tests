@@ -12,6 +12,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -104,12 +105,35 @@ public class JanusPage extends BasePage {
   @FindBy(id="call")
   private WebElement callHangupButton;
 
+  @FindBy(xpath = "//button[contains(text(),'Answer')]")
+  private WebElement answerButton;
 
+  @FindBy(xpath = "//button[contains(text(),'OK')]")
+  private WebElement acceptAlertButton;
+
+
+  @FindBy(className = "bootbox-body")
+  private WebElement alertText;
+
+
+  @FindBy(id="myvideo")
+  private WebElement localVideo;
+
+  private boolean userRegistered = true;
+
+  private List<Integer> remoteUserIndexList = new ArrayList<>();
 
   public JanusPage(WebDriver webDriver, Logger logger) {
     super(webDriver, logger);
   }
 
+  public void setRegistrationState (boolean registered){
+    userRegistered = registered;
+  }
+
+  public boolean getRegistrationState (){
+    return userRegistered;
+  }
   //not needed for now
   public void openDemosListDropdown() throws KiteInteractionException {
     waitUntilVisibilityOf(streamSetButton, 2);
@@ -140,11 +164,8 @@ public class JanusPage extends BasePage {
     click(streamWatchButton);
   }
 
-  public void joinVideoCall() throws KiteInteractionException {
-    click(streamWatchButton);
-  }
 
-  public void startDemo () throws KiteInteractionException {
+  public void startOrStopDemo () throws KiteInteractionException {
     waitUntilVisibilityOf(startStopButton, 2);
     click(startStopButton);
   }
@@ -156,10 +177,7 @@ public class JanusPage extends BasePage {
    */
   public void waitForLocalStreamHeaderVisibility (int timeoutInSeconds) throws KiteInteractionException {
     waitUntilVisibilityOf(localStreamHeader, timeoutInSeconds);
-
   }
-
-
 
   /**
    *
@@ -180,6 +198,20 @@ public class JanusPage extends BasePage {
     return videos;
   }
 
+  public List<WebElement> getTestUsersVideos() {
+    List<WebElement> registeredVideo = new ArrayList<>();
+    registeredVideo.add(localVideo);
+    for (String videoId: getRemoteVideoIdList()){
+      By locator = By.id(videoId);
+      registeredVideo.add(webDriver.findElement(locator));
+    }
+    return registeredVideo;
+  }
+
+  public void waitUntilVisibilityOfFirstVideo(int timeoutInSeconds) throws KiteInteractionException {
+    By locator = By.tagName("video");
+    waitUntilVisibilityOf(locator, timeoutInSeconds);
+  }
 
   /**
    *
@@ -245,13 +277,17 @@ public class JanusPage extends BasePage {
   }
 
   public void fillCallerName(String userName) throws KiteInteractionException {
-    waitUntilVisibilityOf(callerNameField, 1);
+    waitUntilVisibilityOf(callerNameField, 2);
     sendKeys(callerNameField, userName);
   }
 
   public void fillPeerName(String userName) throws KiteInteractionException {
-    waitUntilVisibilityOf(callerNameField, 1);
-    sendKeys(callerNameField, userName);
+    waitUntilVisibilityOf(peerNameField, 2);
+    sendKeys(peerNameField, userName);
+  }
+  
+  public void callPeer() throws KiteInteractionException {
+    click(callHangupButton);    
   }
 
   public void registerUser() throws KiteInteractionException {
@@ -261,5 +297,85 @@ public class JanusPage extends BasePage {
 
   public String getVideoIdByIndex(int i) {
     return videos.get(i).getAttribute("id");
+  }
+
+  public void answerCall () throws KiteInteractionException {
+    waitUntilVisibilityOf(answerButton,10);
+    click(answerButton);
+  }
+
+  public String acceptAlert() throws KiteInteractionException {
+    try {
+      waitUntilVisibilityOf(acceptAlertButton,2);
+
+    } catch (Exception e) {
+      return "No alert";
+    }
+    String text = alertText.getText();
+    click(acceptAlertButton);
+    return "Text of the alert : " + text ;
+  }
+
+  public void waitForWaitingAnswerAlert(int timeoutInSeconds) throws KiteInteractionException {
+    waitUntilVisibilityOf(acceptAlertButton,timeoutInSeconds);
+  }
+
+
+  public void waitUntilPeerAnswer(int timeoutInSeconds) throws TimeoutException {
+    WebDriverWait wait = new WebDriverWait(webDriver, timeoutInSeconds);
+    wait.until(ExpectedConditions.invisibilityOf(acceptAlertButton));
+  }
+
+  /**
+   *  get the name of the
+   * @param index should be not greater than 5 (only 6 users can register in the video room)
+   * @return
+   */
+  public String getRemoteUserNameByIndex (int index){
+    By locator = By.id("remote" + index );
+    return webDriver.findElement(locator).getText();
+  }
+
+  public WebElement getVideoById(String id) {
+    By locator = By.id(id);
+    return webDriver.findElement(locator);
+  }
+
+  public WebElement getCurrentBitRatePrint() {
+    return currentBitRatePrint;
+  }
+
+  /**
+   * videoroom test
+   */
+
+  public void setUserIndexList (){
+    String name;
+    for (int i=1; i<6; i++ ){
+      name = getRemoteUserNameByIndex(i);
+      logger.info("remote user name = " + name);
+      if (!(name == null)&&!(name.isEmpty())){
+        if (name.contains("user")){
+          remoteUserIndexList.add(i);
+        }
+      }
+    }
+  }
+
+  public List<String> getRemotePC (){
+    List<String> peerConnectionsList = new ArrayList<String>();
+    for (int i: remoteUserIndexList){
+      peerConnectionsList.add("feeds["+ i + "].webrtcStuff.pc");
+    }
+    return peerConnectionsList;
+    }
+
+
+  public List<String> getRemoteVideoIdList (){
+    List<String> remoteIdList = new ArrayList<String>();
+    for (int i: remoteUserIndexList){
+          remoteIdList.add("remotevideo"+ i);
+    }
+    return remoteIdList;
   }
 }

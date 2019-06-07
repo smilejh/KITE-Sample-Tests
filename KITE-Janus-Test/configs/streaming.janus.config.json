@@ -21,11 +21,12 @@
         "pageTitle": "Janus Streaming Test",
         "takeScreenshotForEachTest": true,
         "testTimeout": 20,
+        "sfu": false,
         "getStats" : {
           "enabled": true,
           "statsCollectionTime": 2,
           "statsCollectionInterval": 1,
-          "peerConnections": ["echotest.webrtcStuff.pc", "echotest.webrtcStuff.remoteStream"],
+          "peerConnections": ["streaming.webrtcStuff.pc"],
           "selectedStats" : ["inbound-rtp", "outbound-rtp", "candidate-pair"]
         }
       }

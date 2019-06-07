@@ -16,11 +16,13 @@
       "testImpl": "io.cosmosoftware.kite.janus.JanusVideoRoomTest",
       "payload":{
         "url": "https://janus.conf.meetecho.com/videoroomtest.html",
+        "_url": "https://janus.conf.meetecho.com/videoroomtest.html?simulcast=true",
         "rooms": ["1"],
         "usersPerRoom": 2,
         "pageTitle": "Janus",
         "takeScreenshotForEachTest": true,
         "testTimeout": 20,
+        "sfu": true,
         "getStats" : {
           "enabled": true,
           "statsCollectionTime": 2,

@@ -5,31 +5,39 @@ import io.cosmosoftware.kite.janus.pages.JanusPage;
 import io.cosmosoftware.kite.steps.TestStep;
 import org.openqa.selenium.WebDriver;
 
+
+
 public class JoinVideoCallStep extends TestStep {
 
-  private final String callerName;
-  private final String peerName;
+  private final int runnerId;
+  private final String testCaseName;
 
-  public JoinVideoCallStep(WebDriver webDriver, String callerName, String peerName) {
+  public JoinVideoCallStep(WebDriver webDriver, int runnerId, String testCaseName) {
 
     super(webDriver);
-    this.callerName = callerName;
-    this.peerName = peerName;
+    this.runnerId = runnerId;
+    this.testCaseName = testCaseName;
 
   }
 
   @Override
   public String stepDescription() {
-    return "Register the user on the call and call another user" ;
+    int runnersPeerId = runnerId/2;
+    if (this.runnerId%2 == 0){
+      return "Wait for the user Bob" + runnersPeerId + testCaseName + " to answer" ;
+    } else {
+      return "Answer the call from Alice" + runnersPeerId + testCaseName ;
+    }
+
   }
 
   @Override
   protected void step() throws KiteTestException {
     final JanusPage janusPage = new JanusPage(this.webDriver, this.logger);
-    janusPage.fillCallerName(callerName);
-    janusPage.fillPeerName(peerName);
-    janusPage.registerUser();
 
+    if (runnerId%2 == 1){
+      janusPage.answerCall();
+    }
 
   }
 }

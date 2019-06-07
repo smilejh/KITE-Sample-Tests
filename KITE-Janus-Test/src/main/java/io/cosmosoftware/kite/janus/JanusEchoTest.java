@@ -15,6 +15,7 @@ public class JanusEchoTest extends KiteBaseTest {
 
   private final String[] rids = {"a", "b", "c"};
   private final int[] tids = {0, 1, 2};
+  protected boolean sfu = false;
 
 
   @Override
@@ -26,9 +27,9 @@ public class JanusEchoTest extends KiteBaseTest {
       runner.addStep(new FirstVideoCheck(webDriver));
       runner.addStep(new ScreenshotStep(webDriver));
       runner.addStep(new ReceiverVideoCheck(webDriver));
-
+      final JanusPage janusPage = new JanusPage(webDriver, logger);
       if (this.getStats()) {
-        runner.addStep(new GetStatsStep( webDriver, getStatsConfig));
+        runner.addStep(new GetStatsStep( webDriver, getStatsConfig, sfu, janusPage));
 
       }
       if (this.takeScreenshotForEachTest()) {
@@ -39,7 +40,7 @@ public class JanusEchoTest extends KiteBaseTest {
         for (String rid : rids) {
           for (int tid : tids) {
 
-            final JanusPage janusPage = new JanusPage(webDriver, logger);
+
             runner.addStep(new SelectProfileStep(webDriver, janusPage, rid, tid));
             runner.addStep(new GaugesCheck(webDriver, janusPage, rid, tid));
           }
@@ -51,11 +52,10 @@ public class JanusEchoTest extends KiteBaseTest {
   }
 
 
-
-
   @Override
   public void payloadHandling () {
     super.payloadHandling();
+    sfu = payload.getBoolean("sfu", false);
   }
 }
 

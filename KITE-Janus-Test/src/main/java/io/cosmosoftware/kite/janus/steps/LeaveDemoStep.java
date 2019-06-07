@@ -5,25 +5,21 @@ import io.cosmosoftware.kite.janus.pages.JanusPage;
 import io.cosmosoftware.kite.steps.TestStep;
 import org.openqa.selenium.WebDriver;
 
-public class JoinStreamingStep extends TestStep {
-
-  private final String streamSet;
-
-  public JoinStreamingStep(WebDriver webDriver, String streamSet) {
+public class LeaveDemoStep extends TestStep {
+  public LeaveDemoStep(WebDriver webDriver) {
     super(webDriver);
-    this.streamSet = streamSet;
   }
 
   @Override
   protected void step() throws KiteTestException {
     final JanusPage janusPage = new JanusPage(this.webDriver, logger);
-    janusPage.openStreamSetList();
-    janusPage.selectStreamSet(this.streamSet);
-    janusPage.launchStreaming();
+
+    janusPage.startOrStopDemo();
+
   }
 
   @Override
   public String stepDescription() {
-    return "Select a stream set and watch or listen it";
+    return "Leave the janus demo test";
   }
 }
