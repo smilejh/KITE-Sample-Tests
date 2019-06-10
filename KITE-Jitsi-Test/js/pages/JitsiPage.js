@@ -16,15 +16,16 @@ const getPeerConnectionScript = function() {
 }
 
 class JitsiPage {
-  constructor() {}
+  constructor(driver) {
+    this.driver = driver;
+  }
 
   async open(stepInfo) {
     await TestUtils.open(stepInfo);
   }
 
-  async enterRoom(stepInfo, room) {
-    const roomId = room + stepInfo.uuid;
-    let meeting = await stepInfo.driver.findElement(meetingRoom);
+  async enterRoom(roomId) {
+    let meeting = await this.driver.findElement(meetingRoom);
     await meeting.sendKeys(roomId); // Fill out the field and add some random numbers
     await meeting.sendKeys(Key.ENTER); // Press ENTER to enter in the room
   }

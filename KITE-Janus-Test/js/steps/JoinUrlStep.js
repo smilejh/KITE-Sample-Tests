@@ -16,7 +16,7 @@ const description = function(stepInfo) {
 const executeStep = async function(stepInfo) {
   if (stepInfo.page instanceof JanusEchoPage || stepInfo.page instanceof JanusStreamingPage) {
     await stepInfo.page.open(stepInfo);
-    await stepInfo.page.joinSession(stepInfo);
+    await stepInfo.page.joinSession();
   }
   if (stepInfo.page instanceof JanusVideoCallPage) {
     await stepInfo.page.open(stepInfo);
@@ -24,7 +24,7 @@ const executeStep = async function(stepInfo) {
   }
   if (stepInfo.page instanceof JanusVideoRoomPage) {
     await stepInfo.page.open(stepInfo);
-    await stepInfo.page.joinSession(stepInfo, 'VideoRoom');
+    await stepInfo.page.joinSession('VideoRoom' + stepInfo.uuid + stepInfo.id);
   }
 }
 
