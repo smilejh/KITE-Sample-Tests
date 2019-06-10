@@ -9,7 +9,7 @@ import org.webrtc.kite.config.Tuple;
 import org.webrtc.kite.tests.KiteBaseTest;
 import junit.framework.TestCase;
 import org.openqa.selenium.WebDriver;
-import org.webrtc.kite.config.EndPoint;
+import org.webrtc.kite.config.client.Client;
 
 import javax.json.JsonObject;
 import java.text.SimpleDateFormat;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.webrtc.kite.Utils.getEndPointList;
+import static org.webrtc.kite.Utils.getFirstTuple;
 import static org.webrtc.kite.Utils.getPayload;
 
 public class KiteMedoozeTestTest extends TestCase {
@@ -31,7 +31,7 @@ public class KiteMedoozeTestTest extends TestCase {
   private static final String CONFIG_FILE = "configs/local.simulcast.config.json";
 
   private List<WebDriver> webDriverList = new ArrayList<>();
-  private Tuple endPointList = getEndPointList(CONFIG_FILE, "browsers");
+  private Tuple tuple = getFirstTuple(CONFIG_FILE);
 
   public void setUp() throws Exception {
     super.setUp();
@@ -51,7 +51,7 @@ public class KiteMedoozeTestTest extends TestCase {
     KiteBaseTest test = new KiteMedoozeTest();
     test.setDescription(TEST_NAME);
     test.setPayload(getPayload(CONFIG_FILE, 0));
-    test.setEndPointList(endPointList);
-    JsonObject testResult = test.execute();
+    test.setTuple(tuple);
+    Object testResult = test.execute();
   }
 }
