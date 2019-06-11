@@ -16,7 +16,6 @@
       "testImpl": "io.cosmosoftware.kite.janus.JanusStreamingTest",
       "payload":{
         "url": "https://janus.conf.meetecho.com/streamingtest.html",
-        "rooms": ["1"],
         "usersPerRoom": 1,
         "pageTitle": "Janus Streaming Test",
         "takeScreenshotForEachTest": true,
