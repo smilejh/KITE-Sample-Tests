@@ -16,6 +16,7 @@
       "testImpl": "JanusVideoCall.js",
       "payload":{
         "url": "https://janus.conf.meetecho.com/videocalltest.html",
+        "port": 30000,
         "takeScreenshotForEachTest": true,
         "testTimeout": 60,
         "getStats" : {
