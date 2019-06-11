@@ -1,6 +1,5 @@
 package io.cosmosoftware.kite.janus;
 
-import io.cosmosoftware.kite.exception.KiteInteractionException;
 import io.cosmosoftware.kite.exception.KiteTestException;
 import io.cosmosoftware.kite.janus.checks.AllVideoCheck;
 import io.cosmosoftware.kite.janus.checks.FirstVideoCheck;
@@ -37,7 +36,7 @@ public class JanusVideoRoomTest extends KiteBaseTest {
         runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
 
         if (this.getStats()) {
-          runner.addStep(new GetStatsStep(webDriver, getStatsConfig, sfu, janusPage)); //need to find the name of the remote Peer connections
+          runner.addStep(new GetStatsStep(webDriver, getStatsConfig, sfu, janusPage));
           runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
         }
 

@@ -21,6 +21,7 @@
           "hackathonRoom_02",
           "hackathonRoom_03"
         ],
+        "port": 30000,
         "usersPerRoom": 2,
         "takeScreenshotForEachTest": true,
         "testTimeout": 60,

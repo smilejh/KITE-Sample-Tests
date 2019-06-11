@@ -40,7 +40,6 @@ public class FirstVideoCheck extends TestStep {
             "Unable to find any <video> element on the page", Status.FAILED);
       }
       String firstVideoId = janusPage.getVideoIdByIndex(0);
-      logger.info("first video id= " + firstVideoId);
       if (!firstVideoId.equalsIgnoreCase("myvideo")){
         logger.info("the first video is not local user's video");
       }

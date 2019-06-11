@@ -1,0 +1,46 @@
+{
+  "type": 1,
+  "name": "js.openvidu.webinar.config.json %ts",
+  "remotes": [
+    {
+      "type": "local",
+      "remoteAddress": "http://localhost:4444/wd/hub"
+    }
+  ],
+  "tests": [
+    {
+      "name": "Webinar OpenVidu Test %ts",
+      "description":"Webinar OpenVidu Test",
+      "tupleSize": 2,
+      "noOfThreads": 1,
+      "testImpl": "Webinar.js",
+      "payload":{
+        "url": "https://demos.openvidu.io/basic-webinar/",
+        "port": 30000,
+        "takeScreenshotForEachTest": true,
+        "testTimeout": 60,
+        "getStats" : {
+          "enabled": false,
+          "statsCollectionTime": 2,
+          "statsCollectionInterval": 1,
+          "peerConnections": [],
+          "selectedStats" : ["inbound-rtp", "outbound-rtp", "candidate-pair"]
+        }
+      }
+    }
+  ],
+  "browsers": [
+    {
+      "browserName": "chrome",
+      "version": "74",
+      "platform": "localhost",
+      "headless": false
+    },
+    {
+      "browserName": "firefox",
+      "version": "66",
+      "platform": "localhost",
+      "headless": false
+    }
+  ]
+}

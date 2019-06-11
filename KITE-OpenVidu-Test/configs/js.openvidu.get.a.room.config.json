@@ -1,0 +1,46 @@
+{
+  "type": 1,
+  "name": "js.opemvidu.get.a.room.config.json %ts",
+  "remotes": [
+    {
+      "type": "local",
+      "remoteAddress": "http://localhost:4444/wd/hub"
+    }
+  ],
+  "tests": [
+    {
+      "name": "GetARoom OpenVidu Test %ts",
+      "description":"GetARoom OpenVidu Test",
+      "tupleSize": 2,
+      "noOfThreads": 1,
+      "testImpl": "GetARoom.js",
+      "payload":{
+        "url": "https://demos.openvidu.io/getaroom/#",
+        "port": 30000,
+        "takeScreenshotForEachTest": true,
+        "testTimeout": 60,
+        "getStats" : {
+          "enabled": false,
+          "statsCollectionTime": 2,
+          "statsCollectionInterval": 1,
+          "peerConnections": [],
+          "selectedStats" : ["inbound-rtp", "outbound-rtp", "candidate-pair"]
+        }
+      }
+    }
+  ],
+  "browsers": [
+    {
+      "browserName": "chrome",
+      "version": "74",
+      "platform": "localhost",
+      "headless": false
+    },
+    {
+      "browserName": "firefox",
+      "version": "66",
+      "platform": "localhost",
+      "headless": false
+    }
+  ]
+}

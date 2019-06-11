@@ -47,7 +47,6 @@ public class AllVideoCheck extends TestStep {
 
       boolean flag = true;
       for (String videoId : remoteIdList) {
-        logger.info("video id= " + videoId);
         String v2 = videoCheck(webDriver, videoId);
         flag = flag && "video".equalsIgnoreCase(v2);
       }
