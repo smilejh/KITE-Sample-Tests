@@ -7,7 +7,7 @@ import io.cosmosoftware.kite.steps.TestStep;
 import io.cosmosoftware.kite.util.TestUtils;
 import org.openqa.selenium.WebDriver;
 import org.webrtc.kite.Utils;
-import org.webrtc.kite.config.Browser;
+import org.webrtc.kite.config.client.Browser;
 
 import java.io.File;
 import java.io.FileInputStream;

@@ -2,10 +2,10 @@
   "type": 1,
   "name": "Mediasoup Interop Local",
   "permute": false,
-  "remotes": [
+  "grids": [
     {
       "type": "local",
-      "remoteAddress": "http://localhost:4444/wd/hub"
+      "url": "http://localhost:4444/wd/hub"
     }
   ],
   "tests": [
@@ -31,7 +31,7 @@
       }
     }
   ],
-  "browsers": [
+  "clients": [
     {
       "browserName": "chrome",
       "version": "74",
