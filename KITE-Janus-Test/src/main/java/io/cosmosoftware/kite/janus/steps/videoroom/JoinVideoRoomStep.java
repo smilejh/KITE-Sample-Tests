@@ -1,4 +1,4 @@
-package io.cosmosoftware.kite.janus.steps;
+package io.cosmosoftware.kite.janus.steps.videoroom;
 
 import io.cosmosoftware.kite.exception.KiteTestException;
 import io.cosmosoftware.kite.janus.pages.JanusPage;
@@ -25,10 +25,7 @@ public class JoinVideoRoomStep extends TestStep {
     if (alertText.equalsIgnoreCase("No alert")){
       janusPage.setRegistrationState(true);
       logger.info("user registered = " + userName);
-
     }
-
-
   }
 
   @Override

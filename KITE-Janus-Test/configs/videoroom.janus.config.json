@@ -17,7 +17,7 @@
       "payload":{
         "url": "https://janus.conf.meetecho.com/videoroomtest.html",
         "_url": "https://janus.conf.meetecho.com/videoroomtest.html?simulcast=true",
-        "rooms": ["1"],
+        "_rooms": ["1"],
         "usersPerRoom": 2,
         "pageTitle": "Janus",
         "takeScreenshotForEachTest": true,

@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import static io.cosmosoftware.kite.util.WebDriverUtils.loadPage;
 
 public class JanusPage extends BasePage {
 
@@ -36,11 +35,6 @@ public class JanusPage extends BasePage {
   @FindBy(id="start")
   private WebElement startStopButton;
 
-  @FindBy(xpath = "//h3[contains(text(),'Local Stream')]")
-  private WebElement localStreamHeader;
-
-  @FindBy(id="curbitrate")
-  private WebElement currentBitRatePrint;
 
   @FindBy(id="curres")
   private WebElement currentResolutionPrint;
@@ -134,11 +128,47 @@ public class JanusPage extends BasePage {
   public boolean getRegistrationState (){
     return userRegistered;
   }
+
+  public void startOrStopDemo () throws KiteInteractionException {
+    waitUntilVisibilityOf(startStopButton, 2);
+    click(startStopButton, true);
+  }
+
+  /**
+   * wait until the local video is published and has finished publishing
+   * @param timeout
+   * @throws TimeoutException if the element is not invisible within the timeout
+   */
+  public void firstVideoIsPublishing(int timeout) throws TimeoutException {
+    WebDriverWait wait = new WebDriverWait(webDriver, timeout);
+    WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(PUBLISHING)));
+    wait.until(ExpectedConditions.invisibilityOf(element));
+  }
+
+  /**
+   *
+   * @return the list of video elements
+   */
+  public List<WebElement> getVideoElements() {
+    return videos;
+  }
+
+  public void waitUntilVisibilityOfFirstVideo(int timeoutInSeconds) throws KiteInteractionException {
+    By locator = By.tagName("video");
+    waitUntilVisibilityOf(locator, timeoutInSeconds);
+  }
+
+  public String getVideoIdByIndex(int i) {
+    return videos.get(i).getAttribute("id");
+  }
+
+  /**
+   * Streaming test
+   */
   //not needed for now
   public void openDemosListDropdown() throws KiteInteractionException {
     waitUntilVisibilityOf(streamSetButton, 2);
     click(streamSetButton);
-
   }
 
   public void openStreamSetList() throws KiteInteractionException {
@@ -162,55 +192,6 @@ public class JanusPage extends BasePage {
 
   public void launchStreaming() throws KiteInteractionException {
     click(streamWatchButton);
-  }
-
-
-  public void startOrStopDemo () throws KiteInteractionException {
-    waitUntilVisibilityOf(startStopButton, 2);
-    click(startStopButton);
-  }
-
-  /**
-   *  ensure that the demo page is displayed
-    * @param timeoutInSeconds
-   * @throws KiteInteractionException if the element is not visible within the timeout
-   */
-  public void waitForLocalStreamHeaderVisibility (int timeoutInSeconds) throws KiteInteractionException {
-    waitUntilVisibilityOf(localStreamHeader, timeoutInSeconds);
-  }
-
-  /**
-   *
-   * @param timeout
-   * @throws TimeoutException if the element is not invisible within the timeout
-   */
-  public void videoIsPublishing(int timeout) throws TimeoutException {
-    WebDriverWait wait = new WebDriverWait(webDriver, timeout);
-    WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(PUBLISHING)));
-    wait.until(ExpectedConditions.invisibilityOf(element));
-  }
-
-  /**
-   *
-   * @return the list of video elements
-   */
-  public List<WebElement> getVideoElements() {
-    return videos;
-  }
-
-  public List<WebElement> getTestUsersVideos() {
-    List<WebElement> registeredVideo = new ArrayList<>();
-    registeredVideo.add(localVideo);
-    for (String videoId: getRemoteVideoIdList()){
-      By locator = By.id(videoId);
-      registeredVideo.add(webDriver.findElement(locator));
-    }
-    return registeredVideo;
-  }
-
-  public void waitUntilVisibilityOfFirstVideo(int timeoutInSeconds) throws KiteInteractionException {
-    By locator = By.tagName("video");
-    waitUntilVisibilityOf(locator, timeoutInSeconds);
   }
 
   /**
@@ -248,27 +229,6 @@ public class JanusPage extends BasePage {
     }
   }
 
-  //should be removed or adapted for the test on demo version
-  /**
-   * Load the web page at url
-   * @param url the url of the page to load
-   */
-  public void load(String url) {
-
-    loadPage(webDriver, url, 20);
-
-    //try reloading 3 times as it sometimes gets stuck at 'publishing...'
-    for (int i = 0; i < 3; i++) {
-      try {
-        this.videoIsPublishing( 10);
-        logger.info("Page loaded successfully");
-        break;
-      } catch (TimeoutException e) {
-        logger.warn(" reloading the page (" + (i + 1) + "/3)");
-        loadPage(webDriver, url, 20);
-      }
-    }
-  }
 
   public LoopbackStats getLoopbackStats() {
     String r = currentResolutionPrint.getText();
@@ -295,9 +255,6 @@ public class JanusPage extends BasePage {
     click(userRegisterButton);
   }
 
-  public String getVideoIdByIndex(int i) {
-    return videos.get(i).getAttribute("id");
-  }
 
   public void answerCall () throws KiteInteractionException {
     waitUntilVisibilityOf(answerButton,10);
@@ -327,26 +284,24 @@ public class JanusPage extends BasePage {
   }
 
   /**
-   *  get the name of the
+   * videoroom test
+   */
+
+
+
+  /**
+   *  get the name of the user whose video is displayed at the given index
    * @param index should be not greater than 5 (only 6 users can register in the video room)
    * @return
    */
+
   public String getRemoteUserNameByIndex (int index){
     By locator = By.id("remote" + index );
     return webDriver.findElement(locator).getText();
   }
 
-  public WebElement getVideoById(String id) {
-    By locator = By.id(id);
-    return webDriver.findElement(locator);
-  }
-
-  public WebElement getCurrentBitRatePrint() {
-    return currentBitRatePrint;
-  }
-
   /**
-   * videoroom test
+   *  get the list of index corresponding to a user registered for the test
    */
 
   public void setUserIndexList (){
@@ -377,5 +332,15 @@ public class JanusPage extends BasePage {
           remoteIdList.add("remotevideo"+ i);
     }
     return remoteIdList;
+  }
+
+  public List<WebElement> getTestUsersVideos() {
+    List<WebElement> registeredVideo = new ArrayList<>();
+    registeredVideo.add(localVideo);
+    for (String videoId: getRemoteVideoIdList()){
+      By locator = By.id(videoId);
+      registeredVideo.add(webDriver.findElement(locator));
+    }
+    return registeredVideo;
   }
 }

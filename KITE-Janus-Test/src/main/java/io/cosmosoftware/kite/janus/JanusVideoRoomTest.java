@@ -1,11 +1,11 @@
 package io.cosmosoftware.kite.janus;
 
-import io.cosmosoftware.kite.exception.KiteInteractionException;
 import io.cosmosoftware.kite.exception.KiteTestException;
 import io.cosmosoftware.kite.janus.checks.AllVideoCheck;
 import io.cosmosoftware.kite.janus.checks.FirstVideoCheck;
 import io.cosmosoftware.kite.janus.pages.JanusPage;
 import io.cosmosoftware.kite.janus.steps.*;
+import io.cosmosoftware.kite.janus.steps.videoroom.JoinVideoRoomStep;
 import io.cosmosoftware.kite.report.Status;
 import io.cosmosoftware.kite.util.TestUtils;
 import org.openqa.selenium.WebDriver;

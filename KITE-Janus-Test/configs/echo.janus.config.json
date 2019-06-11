@@ -17,8 +17,7 @@
       "payload":{
         "_url": "https://janus.conf.meetecho.com/echotest.html",
         "url": "https://janus.conf.meetecho.com/echotest.html?simulcast=true",
-        "rooms": ["1"],
-        "usersPerRoom": 2,
+        "_usersPerRoom": 1,
         "pageTitle": "Janus Echo Test",
         "takeScreenshotForEachTest": true,
         "testTimeout": 20,

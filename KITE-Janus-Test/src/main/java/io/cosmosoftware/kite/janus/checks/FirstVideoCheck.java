@@ -10,12 +10,10 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
-import static io.cosmosoftware.kite.entities.Timeouts.ONE_SECOND_INTERVAL;
-
 import static io.cosmosoftware.kite.util.TestUtils.videoCheck;
-import static io.cosmosoftware.kite.util.TestUtils.waitAround;
 
-public class FirstVideoCheck extends TestStep {
+
+public class FirstVideoCheck extends VideoCheckBase {
 
   public FirstVideoCheck(WebDriver webDriver) {
     super(webDriver);
@@ -28,32 +26,32 @@ public class FirstVideoCheck extends TestStep {
 
   @Override
   protected void step() throws KiteTestException {
-    try {
-      final JanusPage janusPage = new JanusPage(this.webDriver, logger);
+    final JanusPage janusPage = new JanusPage(this.webDriver, logger);
 
-      logger.info("Looking for video object");
-      janusPage.waitUntilVisibilityOfFirstVideo(10);
-      List<WebElement> videos = janusPage.getVideoElements();
-
-      if (videos.isEmpty()) {
-        throw new KiteTestException(
-            "Unable to find any <video> element on the page", Status.FAILED);
-      }
-      String firstVideoId = janusPage.getVideoIdByIndex(0);
-      logger.info("first video id= " + firstVideoId);
-      if (!firstVideoId.equalsIgnoreCase("myvideo")){
-        logger.info("the first video is not local user's video");
-      }
-      String videoCheck = videoCheck(webDriver, 0);
-
-      if (!"video".equalsIgnoreCase(videoCheck)) {
-        Reporter.getInstance().textAttachment(report, "Sent Video", videoCheck, "plain");
-        throw new KiteTestException("The first video is " + videoCheck, Status.FAILED);
-      }
-    } catch (KiteTestException e) {
-      throw e;
-    } catch (Exception e) {
-      throw new KiteTestException("Error looking for the video", Status.BROKEN, e);
-    }
+    logger.info("Looking for video object");
+    janusPage.firstVideoIsPublishing(10);
+    step("sent");
+//      List<WebElement> videos = janusPage.getVideoElements();
+//
+//      if (videos.isEmpty()) {
+//        throw new KiteTestException(
+//            "Unable to find any <video> element on the page", Status.FAILED);
+//      }
+//      String firstVideoId = janusPage.getVideoIdByIndex(0);
+//      logger.info("first video id= " + firstVideoId);
+//      if (!firstVideoId.equalsIgnoreCase("myvideo")){
+//        logger.info("the first video is not local user's video");
+//      }
+//      String videoCheck = videoCheck(webDriver, 0);
+//
+//      if (!"video".equalsIgnoreCase(videoCheck)) {
+//        Reporter.getInstance().textAttachment(report, "Sent Video", videoCheck, "plain");
+//        throw new KiteTestException("The first video is " + videoCheck, Status.FAILED);
+//      }
+//    } catch (KiteTestException e) {
+//      throw e;
+//    } catch (Exception e) {
+//      throw new KiteTestException("Error looking for the video", Status.BROKEN, e);
+//    }
   }
 }
