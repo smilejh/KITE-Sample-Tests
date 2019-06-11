@@ -15,9 +15,8 @@
       "tupleSize": 1,
       "testImpl": "io.cosmosoftware.kite.janus.JanusEchoTest",
       "payload":{
-        "_url": "https://janus.conf.meetecho.com/echotest.html",
-        "url": "https://janus.conf.meetecho.com/echotest.html?simulcast=true",
-        "rooms": ["1"],
+        "url": "https://janus.conf.meetecho.com/echotest.html",
+        "_url": "https://janus.conf.meetecho.com/echotest.html?simulcast=true",
         "usersPerRoom": 2,
         "pageTitle": "Janus Echo Test",
         "takeScreenshotForEachTest": true,

@@ -13,8 +13,6 @@ import static org.webrtc.kite.Utils.getStackTrace;
 
 public class JanusEchoTest extends KiteBaseTest {
 
-  private final String[] rids = {"a", "b", "c"};
-  private final int[] tids = {0, 1, 2};
   protected boolean sfu = false;
 
 
@@ -36,16 +34,6 @@ public class JanusEchoTest extends KiteBaseTest {
         runner.addStep(new ScreenshotStep(webDriver));
       }
 
-      if (url.contains("simulcast=true")){
-        for (String rid : rids) {
-          for (int tid : tids) {
-
-
-            runner.addStep(new SelectProfileStep(webDriver, janusPage, rid, tid));
-            runner.addStep(new GaugesCheck(webDriver, janusPage, rid, tid));
-          }
-        }
-      }
       } catch(Exception e){
         logger.error(getStackTrace(e));
       }

@@ -36,38 +36,12 @@ public class JanusPage extends BasePage {
   @FindBy(id="start")
   private WebElement startStopButton;
 
-  @FindBy(xpath = "//h3[contains(text(),'Local Stream')]")
-  private WebElement localStreamHeader;
-
   @FindBy(id="curbitrate")
   private WebElement currentBitRatePrint;
 
   @FindBy(id="curres")
   private WebElement currentResolutionPrint;
 
-  /**
-   * Echo Test
-   */
-
-  //when simulcast=true
-
-  @FindBy(id="sl-0")
-  private WebElement sl0Button;
-
-  @FindBy(id="sl-1")
-  private WebElement sl1Button;
-
-  @FindBy(id="sl-2")
-  private WebElement sl2Button;
-
-  @FindBy(id="tl-0")
-  private WebElement tl0Button;
-
-  @FindBy(id="tl-1")
-  private WebElement tl1Button;
-
-  @FindBy(id="tl-2")
-  private WebElement tl2Button;
 
   /**
    * Streaming Test
@@ -111,10 +85,8 @@ public class JanusPage extends BasePage {
   @FindBy(xpath = "//button[contains(text(),'OK')]")
   private WebElement acceptAlertButton;
 
-
   @FindBy(className = "bootbox-body")
   private WebElement alertText;
-
 
   @FindBy(id="myvideo")
   private WebElement localVideo;
@@ -158,19 +130,9 @@ public class JanusPage extends BasePage {
     click(streamWatchButton);
   }
 
-
   public void startOrStopDemo () throws KiteInteractionException {
     waitUntilVisibilityOf(startStopButton, 2);
     click(startStopButton);
-  }
-
-  /**
-   *  ensure that the demo page is displayed
-    * @param timeoutInSeconds
-   * @throws KiteInteractionException if the element is not visible within the timeout
-   */
-  public void waitForLocalStreamHeaderVisibility (int timeoutInSeconds) throws KiteInteractionException {
-    waitUntilVisibilityOf(localStreamHeader, timeoutInSeconds);
   }
 
   /**
@@ -207,47 +169,6 @@ public class JanusPage extends BasePage {
     waitUntilVisibilityOf(locator, timeoutInSeconds);
   }
 
-  /**
-   *
-   * Click a button
-   *
-   * @param rid the rid
-   * @param tid the tid
-   */
-
-  public void clickButton(String rid, int tid) throws KiteInteractionException {
-    switch (rid) {
-      case "a":
-        click(sl2Button);
-        break;
-      case "b":
-        click(sl1Button);
-        break;
-      case "c":
-        click(sl0Button);
-        break;
-    }
-    switch (tid) {
-      case 0:
-        click(tl0Button);
-        break;
-      case 1:
-        click(tl1Button);
-        break;
-      case 2:
-        click(tl2Button);
-        break;
-      default:
-        break;
-    }
-  }
-
-
-  public LoopbackStats getLoopbackStats() {
-    String r = currentResolutionPrint.getText();
-    StringTokenizer st = new StringTokenizer(r, "x");
-    return new LoopbackStats("1280", "720", "0", "0", st.nextToken(), st.nextToken(), "0", "0");
-  }
 
   public void fillCallerName(String userName) throws KiteInteractionException {
     waitUntilVisibilityOf(callerNameField, 2);
