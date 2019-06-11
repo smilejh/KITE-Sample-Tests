@@ -134,12 +134,6 @@ public class JanusPage extends BasePage {
   public boolean getRegistrationState (){
     return userRegistered;
   }
-  //not needed for now
-  public void openDemosListDropdown() throws KiteInteractionException {
-    waitUntilVisibilityOf(streamSetButton, 2);
-    click(streamSetButton);
-
-  }
 
   public void openStreamSetList() throws KiteInteractionException {
     waitUntilVisibilityOf(streamSetButton, 2);
@@ -248,27 +242,6 @@ public class JanusPage extends BasePage {
     }
   }
 
-  //should be removed or adapted for the test on demo version
-  /**
-   * Load the web page at url
-   * @param url the url of the page to load
-   */
-  public void load(String url) {
-
-    loadPage(webDriver, url, 20);
-
-    //try reloading 3 times as it sometimes gets stuck at 'publishing...'
-    for (int i = 0; i < 3; i++) {
-      try {
-        this.videoIsPublishing( 10);
-        logger.info("Page loaded successfully");
-        break;
-      } catch (TimeoutException e) {
-        logger.warn(" reloading the page (" + (i + 1) + "/3)");
-        loadPage(webDriver, url, 20);
-      }
-    }
-  }
 
   public LoopbackStats getLoopbackStats() {
     String r = currentResolutionPrint.getText();
@@ -316,15 +289,6 @@ public class JanusPage extends BasePage {
     return "Text of the alert : " + text ;
   }
 
-  public void waitForWaitingAnswerAlert(int timeoutInSeconds) throws KiteInteractionException {
-    waitUntilVisibilityOf(acceptAlertButton,timeoutInSeconds);
-  }
-
-
-  public void waitUntilPeerAnswer(int timeoutInSeconds) throws TimeoutException {
-    WebDriverWait wait = new WebDriverWait(webDriver, timeoutInSeconds);
-    wait.until(ExpectedConditions.invisibilityOf(acceptAlertButton));
-  }
 
   /**
    *  get the name of the
@@ -353,7 +317,6 @@ public class JanusPage extends BasePage {
     String name;
     for (int i=1; i<6; i++ ){
       name = getRemoteUserNameByIndex(i);
-      logger.info("remote user name = " + name);
       if (!(name == null)&&!(name.isEmpty())){
         if (name.contains("user")){
           remoteUserIndexList.add(i);

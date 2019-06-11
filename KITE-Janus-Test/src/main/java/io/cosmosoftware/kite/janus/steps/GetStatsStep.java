@@ -66,7 +66,6 @@ public class GetStatsStep extends TestStep {
             getStatsConfig.getInt("statsCollectionTime"),
             getStatsConfig.getInt("statsCollectionInterval"),
             getStatsConfig.getJsonArray("selectedStats"));
-        logger.info("sentStats: " + sentStats);
         JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
         List<JsonObject> receivedStats = new ArrayList<>();
         for (int i = 1; i < remotePC.size() + 1; i++) {

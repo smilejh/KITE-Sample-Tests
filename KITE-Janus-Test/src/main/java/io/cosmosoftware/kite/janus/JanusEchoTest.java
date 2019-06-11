@@ -35,7 +35,7 @@ public class JanusEchoTest extends KiteBaseTest {
       if (this.takeScreenshotForEachTest()) {
         runner.addStep(new ScreenshotStep(webDriver));
       }
-      //the next if part can be removed
+
       if (url.contains("simulcast=true")){
         for (String rid : rids) {
           for (int tid : tids) {
