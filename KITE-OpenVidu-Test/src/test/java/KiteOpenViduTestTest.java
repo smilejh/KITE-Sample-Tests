@@ -1,7 +1,7 @@
 import io.cosmosoftware.kite.openvidu.KiteOpenViduTest;
 import junit.framework.TestCase;
 import org.webrtc.kite.config.client.Client;
-import org.webrtc.kite.config.Tuple;
+import org.webrtc.kite.config.test.Tuple;
 import org.webrtc.kite.tests.KiteBaseTest;
 
 import javax.json.JsonObject;

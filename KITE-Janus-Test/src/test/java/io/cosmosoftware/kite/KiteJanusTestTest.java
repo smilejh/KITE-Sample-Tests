@@ -7,7 +7,7 @@ package io.cosmosoftware.kite;
 import io.cosmosoftware.kite.janus.JanusVideoRoomTest;
 import junit.framework.TestCase;
 import org.openqa.selenium.WebDriver;
-import org.webrtc.kite.config.Tuple;
+import org.webrtc.kite.config.test.Tuple;
 import org.webrtc.kite.tests.KiteBaseTest;
 
 import javax.json.JsonObject;

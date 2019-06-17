@@ -5,7 +5,7 @@
 package io.cosmosoftware.kite;
 
 import io.cosmosoftware.kite.mediasoup.KiteMediasoupTest;
-import org.webrtc.kite.config.Tuple;
+import org.webrtc.kite.config.test.Tuple;
 import org.webrtc.kite.tests.KiteBaseTest;
 import io.cosmosoftware.kite.util.TestHelper;
 import junit.framework.TestCase;

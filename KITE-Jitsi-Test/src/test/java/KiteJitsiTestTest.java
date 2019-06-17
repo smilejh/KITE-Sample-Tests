@@ -1,6 +1,6 @@
 import io.cosmosoftware.kite.jitsi.KiteJitsiTest;
 import junit.framework.TestCase;
-import org.webrtc.kite.config.Tuple;
+import org.webrtc.kite.config.test.Tuple;
 import org.webrtc.kite.tests.KiteBaseTest;
 
 import javax.json.JsonObject;
