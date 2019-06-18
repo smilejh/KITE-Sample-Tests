@@ -1,9 +1,11 @@
 package io.cosmosoftware.kite.janus;
 
 
-import io.cosmosoftware.kite.janus.checks.*;
+import io.cosmosoftware.kite.janus.checks.FirstVideoCheck;
+import io.cosmosoftware.kite.janus.checks.ReceiverVideoCheck;
 import io.cosmosoftware.kite.janus.pages.JanusPage;
-import io.cosmosoftware.kite.janus.steps.*;
+import io.cosmosoftware.kite.janus.steps.GetStatsStep;
+import io.cosmosoftware.kite.janus.steps.StartDemoStep;
 import org.openqa.selenium.WebDriver;
 import org.webrtc.kite.steps.ScreenshotStep;
 import org.webrtc.kite.tests.KiteBaseTest;

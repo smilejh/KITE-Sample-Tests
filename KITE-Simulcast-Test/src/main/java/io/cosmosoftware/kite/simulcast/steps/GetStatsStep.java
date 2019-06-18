@@ -6,7 +6,6 @@ import io.cosmosoftware.kite.report.Status;
 import io.cosmosoftware.kite.steps.TestStep;
 import org.openqa.selenium.WebDriver;
 
-import javax.json.JsonArray;
 import javax.json.JsonObject;
 
 import static org.webrtc.kite.stats.StatsUtils.getPCStatOvertime;

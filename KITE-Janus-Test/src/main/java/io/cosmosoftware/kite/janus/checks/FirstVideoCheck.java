@@ -10,10 +10,7 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
-import static io.cosmosoftware.kite.entities.Timeouts.ONE_SECOND_INTERVAL;
-
 import static io.cosmosoftware.kite.util.TestUtils.videoCheck;
-import static io.cosmosoftware.kite.util.TestUtils.waitAround;
 
 public class FirstVideoCheck extends TestStep {
 

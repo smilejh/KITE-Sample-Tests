@@ -2,8 +2,7 @@ package io.cosmosoftware.kite.janus.pages;
 
 import io.cosmosoftware.kite.exception.KiteInteractionException;
 import io.cosmosoftware.kite.pages.BasePage;
-import io.cosmosoftware.kite.janus.*;
-import org.apache.log4j.Logger;
+import io.cosmosoftware.kite.report.KiteLogger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -14,9 +13,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
-
-import static io.cosmosoftware.kite.util.WebDriverUtils.loadPage;
 
 public class JanusPage extends BasePage {
 
@@ -95,7 +91,7 @@ public class JanusPage extends BasePage {
 
   private List<Integer> remoteUserIndexList = new ArrayList<>();
 
-  public JanusPage(WebDriver webDriver, Logger logger) {
+  public JanusPage(WebDriver webDriver, KiteLogger logger) {
     super(webDriver, logger);
   }
 

@@ -3,9 +3,8 @@ import junit.framework.TestCase;
 import org.webrtc.kite.config.test.Tuple;
 import org.webrtc.kite.tests.KiteBaseTest;
 
-import javax.json.JsonObject;
-
-import static org.webrtc.kite.Utils.*;
+import static org.webrtc.kite.Utils.getFirstTuple;
+import static org.webrtc.kite.Utils.getPayload;
 
 public class KiteJitsiTestTest extends TestCase {
   private static final String CONFIG_FILE = "configs/local.jitsi.config.json";

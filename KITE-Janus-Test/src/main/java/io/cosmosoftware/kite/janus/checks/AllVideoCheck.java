@@ -15,7 +15,8 @@ import javax.json.JsonObjectBuilder;
 import java.util.List;
 
 import static io.cosmosoftware.kite.entities.Timeouts.ONE_SECOND_INTERVAL;
-import static io.cosmosoftware.kite.util.TestUtils.*;
+import static io.cosmosoftware.kite.util.TestUtils.executeJsScript;
+import static io.cosmosoftware.kite.util.TestUtils.waitAround;
 
 public class AllVideoCheck extends TestStep {
 

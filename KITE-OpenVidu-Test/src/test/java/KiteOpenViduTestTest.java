@@ -1,14 +1,10 @@
 import io.cosmosoftware.kite.openvidu.KiteOpenViduTest;
 import junit.framework.TestCase;
-import org.webrtc.kite.config.client.Client;
 import org.webrtc.kite.config.test.Tuple;
 import org.webrtc.kite.tests.KiteBaseTest;
 
-import javax.json.JsonObject;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.webrtc.kite.Utils.*;
+import static org.webrtc.kite.Utils.getFirstTuple;
+import static org.webrtc.kite.Utils.getPayload;
 
 public class KiteOpenViduTestTest extends TestCase {
   private static final String CONFIG_FILE = "configs/local.openvidu.config.json";

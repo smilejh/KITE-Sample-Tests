@@ -6,14 +6,13 @@ import io.cosmosoftware.kite.mediasoup.pages.MediasoupPage;
 import io.cosmosoftware.kite.report.Reporter;
 import io.cosmosoftware.kite.report.Status;
 import io.cosmosoftware.kite.steps.TestStep;
-
-import static io.cosmosoftware.kite.util.TestUtils.videoCheck;
-import static io.cosmosoftware.kite.util.TestUtils.waitAround;
-
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
+
+import static io.cosmosoftware.kite.util.TestUtils.videoCheck;
+import static io.cosmosoftware.kite.util.TestUtils.waitAround;
 
 public class AllVideoCheck extends TestStep {
 

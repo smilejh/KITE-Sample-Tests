@@ -1,13 +1,13 @@
 package io.cosmosoftware.kite.jitsi.pages;
 
 import io.cosmosoftware.kite.pages.BasePage;
-import org.apache.log4j.Logger;
+import io.cosmosoftware.kite.report.KiteLogger;
 import org.openqa.selenium.WebDriver;
 
 import static io.cosmosoftware.kite.util.WebDriverUtils.loadPage;
 
 public class JoinPage extends BasePage {
-  public JoinPage(WebDriver webDriver, Logger logger) {
+  public JoinPage(WebDriver webDriver, KiteLogger logger) {
     super(webDriver, logger);
   }
 

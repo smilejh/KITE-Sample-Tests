@@ -3,12 +3,7 @@ package io.cosmosoftware.kite.janus.steps;
 import io.cosmosoftware.kite.exception.KiteTestException;
 import io.cosmosoftware.kite.janus.pages.JanusPage;
 import io.cosmosoftware.kite.steps.TestStep;
-import io.cosmosoftware.kite.util.TestUtils;
 import org.openqa.selenium.WebDriver;
-
-import static io.cosmosoftware.kite.entities.Timeouts.ONE_SECOND_INTERVAL;
-import static io.cosmosoftware.kite.util.TestUtils.idToString;
-import static io.cosmosoftware.kite.util.TestUtils.waitAround;
 
 public class RegisterUserToVideoCallStep extends TestStep {
 
