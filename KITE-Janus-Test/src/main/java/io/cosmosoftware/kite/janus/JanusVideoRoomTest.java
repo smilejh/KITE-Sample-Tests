@@ -5,15 +5,13 @@ import io.cosmosoftware.kite.janus.checks.AllVideoCheck;
 import io.cosmosoftware.kite.janus.checks.FirstVideoCheck;
 import io.cosmosoftware.kite.janus.pages.JanusPage;
 import io.cosmosoftware.kite.janus.steps.GetStatsStep;
-import io.cosmosoftware.kite.janus.steps.JoinVideoRoomStep;
 import io.cosmosoftware.kite.janus.steps.LeaveDemoStep;
 import io.cosmosoftware.kite.janus.steps.StartDemoStep;
 import io.cosmosoftware.kite.janus.steps.videoroom.JoinVideoRoomStep;
 import io.cosmosoftware.kite.report.Status;
+import io.cosmosoftware.kite.steps.ScreenshotStep;
+import io.cosmosoftware.kite.steps.WaitForOthersStep;
 import io.cosmosoftware.kite.util.TestUtils;
-import org.openqa.selenium.WebDriver;
-import org.webrtc.kite.steps.ScreenshotStep;
-import org.webrtc.kite.steps.WaitForOthersStep;
 import org.webrtc.kite.tests.KiteBaseTest;
 import org.webrtc.kite.tests.TestRunner;
 
@@ -25,30 +23,29 @@ public class JanusVideoRoomTest extends KiteBaseTest {
   @Override
   public void populateTestSteps(TestRunner runner) {
     try {
-      WebDriver webDriver = runner.getWebDriver();
       String userName = "user" + TestUtils.idToString(runner.getId());
 
-      final JanusPage janusPage = new JanusPage(webDriver, logger);
-      runner.addStep(new StartDemoStep(webDriver, this.url));
+      final JanusPage janusPage = new JanusPage(runner);
+      runner.addStep(new StartDemoStep(runner, this.url));
       //find a way to have no more than 6 user per room with the room manager(flag?) or accept the pop up if there is too many users in the room
-      runner.addStep(new JoinVideoRoomStep(webDriver, userName, janusPage));
+      runner.addStep(new JoinVideoRoomStep(runner, userName, janusPage));
       if(janusPage.getRegistrationState()){
-        runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
+        runner.addStep(new WaitForOthersStep(runner, this, runner.getLastStep()));
 
-        runner.addStep(new FirstVideoCheck(webDriver));
-        runner.addStep(new AllVideoCheck(webDriver, getMaxUsersPerRoom(), janusPage));
-        runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
+        runner.addStep(new FirstVideoCheck(runner));
+        runner.addStep(new AllVideoCheck(runner, getMaxUsersPerRoom(), janusPage));
+        runner.addStep(new WaitForOthersStep(runner, this, runner.getLastStep()));
 
         if (this.getStats()) {
-          runner.addStep(new GetStatsStep(webDriver, getStatsConfig, sfu, janusPage));
-          runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
+          runner.addStep(new GetStatsStep(runner, getStatsConfig, sfu, janusPage));
+          runner.addStep(new WaitForOthersStep(runner, this, runner.getLastStep()));
         }
 
         if (this.takeScreenshotForEachTest()) {
-          runner.addStep(new ScreenshotStep(webDriver));
+          runner.addStep(new ScreenshotStep(runner));
         }
 
-        runner.addStep(new LeaveDemoStep(webDriver));
+        runner.addStep(new LeaveDemoStep(runner));
       }else{
         throw new KiteTestException("Videoroom is too crowded", Status.BROKEN);
       }

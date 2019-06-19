@@ -1,6 +1,7 @@
 package io.cosmosoftware.kite.simulcast.steps;
 
 import io.cosmosoftware.kite.exception.KiteTestException;
+import io.cosmosoftware.kite.interfaces.Runner;
 import io.cosmosoftware.kite.steps.TestStep;
 import org.openqa.selenium.WebDriver;
 
@@ -13,8 +14,8 @@ public class LoadPageStep extends TestStep {
   private final String url;
 
   
-  public LoadPageStep(WebDriver webDriver, String url) {
-    super(webDriver);
+  public LoadPageStep(Runner runner, String url) {
+    super(runner);
     this.url = url;
   }
   

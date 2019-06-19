@@ -1,11 +1,11 @@
 package io.cosmosoftware.kite.janus.checks;
 
 import io.cosmosoftware.kite.exception.KiteTestException;
+import io.cosmosoftware.kite.interfaces.Runner;
 import io.cosmosoftware.kite.janus.pages.JanusPage;
 import io.cosmosoftware.kite.report.Reporter;
 import io.cosmosoftware.kite.report.Status;
 import io.cosmosoftware.kite.steps.TestStep;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
@@ -18,9 +18,11 @@ import static io.cosmosoftware.kite.util.TestUtils.waitAround;
 
 public abstract class VideoCheckBase extends TestStep {
 
-
-  public VideoCheckBase(WebDriver webDriver) {
-    super(webDriver);
+  protected final JanusPage janusPage;
+  
+  public VideoCheckBase(Runner runner) {
+    super(runner);
+    this.janusPage =  new JanusPage(runner);
   }
 
   @Override
@@ -30,7 +32,6 @@ public abstract class VideoCheckBase extends TestStep {
 
   protected void step(String direction) throws KiteTestException {
     try {
-      final JanusPage janusPage = new JanusPage(this.webDriver, logger);
       List<WebElement> videos = janusPage.getVideoElements();
       if (videos.isEmpty()) {
         throw new KiteTestException(

@@ -1,9 +1,9 @@
 package io.cosmosoftware.kite.jitsi.steps;
 
 import io.cosmosoftware.kite.exception.KiteTestException;
+import io.cosmosoftware.kite.interfaces.Runner;
 import io.cosmosoftware.kite.report.Status;
 import io.cosmosoftware.kite.steps.TestStep;
-import org.openqa.selenium.WebDriver;
 
 import javax.json.JsonObject;
 import java.io.IOException;
@@ -27,8 +27,8 @@ public class StartGetStatsSDKStep extends TestStep {
     private final String userNameCommand;
     private final String roomNameCommand;
 
-    public StartGetStatsSDKStep(WebDriver webDriver, String testName, JsonObject getStatsSdk) {
-        super(webDriver);
+    public StartGetStatsSDKStep(Runner runner, String testName, JsonObject getStatsSdk) {
+        super(runner);
         this.pathToGetStats =  getStatsSdk.getString("pathToGetStatsSdk");
         this.testName = testName;
         this.testId =  "\"" + getStatsSdk.getString("testId", testName + "_"

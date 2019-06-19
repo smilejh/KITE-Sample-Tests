@@ -2,6 +2,7 @@ package io.cosmosoftware.kite.mediasoup.checks;
 
 import io.cosmosoftware.kite.entities.Timeouts;
 import io.cosmosoftware.kite.exception.KiteTestException;
+import io.cosmosoftware.kite.interfaces.Runner;
 import io.cosmosoftware.kite.mediasoup.pages.MediasoupPage;
 import io.cosmosoftware.kite.report.Reporter;
 import io.cosmosoftware.kite.report.Status;
@@ -18,10 +19,12 @@ public class AllVideoCheck extends TestStep {
 
   
   private final int numberOfParticipants;
+  private final MediasoupPage mediasoupPage;
 
-  public AllVideoCheck(WebDriver webDriver, int numberOfParticipants) {
-    super(webDriver);
+  public AllVideoCheck(Runner runner, int numberOfParticipants) {
+    super(runner);
     this.numberOfParticipants = numberOfParticipants;
+    this.mediasoupPage = new MediasoupPage(runner);
   }
 
   @Override
@@ -31,7 +34,6 @@ public class AllVideoCheck extends TestStep {
 
   @Override
   protected void step() throws KiteTestException {
-    final MediasoupPage mediasoupPage = new MediasoupPage(this.webDriver, logger);
     try {
       //wait a while to allow all videos to load.
       waitAround(numberOfParticipants * 3 * Timeouts.ONE_SECOND_INTERVAL);

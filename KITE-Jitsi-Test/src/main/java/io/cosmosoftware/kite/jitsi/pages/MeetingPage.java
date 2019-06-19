@@ -1,11 +1,10 @@
 package io.cosmosoftware.kite.jitsi.pages;
 
 import io.cosmosoftware.kite.exception.KiteTestException;
+import io.cosmosoftware.kite.interfaces.Runner;
 import io.cosmosoftware.kite.pages.BasePage;
-import io.cosmosoftware.kite.report.KiteLogger;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -24,8 +23,8 @@ public class MeetingPage extends BasePage {
   @FindBy(xpath = "//*[@id=\"new-toolbox\"]/div[2]/div[3]/div[1]/div/div")
   private WebElement manyTilesVideoToggle;
 
-  public MeetingPage(WebDriver webDriver, KiteLogger logger) throws KiteTestException {
-    super(webDriver, logger);
+  public MeetingPage(Runner runner) {
+    super(runner);
   }
 
   public String getPeerConnectionScript() {

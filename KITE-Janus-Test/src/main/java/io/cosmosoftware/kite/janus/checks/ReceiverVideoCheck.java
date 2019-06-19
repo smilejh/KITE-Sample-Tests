@@ -1,6 +1,7 @@
 package io.cosmosoftware.kite.janus.checks;
 
 import io.cosmosoftware.kite.exception.KiteTestException;
+import io.cosmosoftware.kite.interfaces.Runner;
 import io.cosmosoftware.kite.janus.pages.JanusPage;
 import io.cosmosoftware.kite.report.Reporter;
 import io.cosmosoftware.kite.report.Status;
@@ -19,15 +20,14 @@ import static io.cosmosoftware.kite.util.TestUtils.waitAround;
 public class ReceiverVideoCheck extends VideoCheckBase {
 
 
-  public ReceiverVideoCheck(WebDriver webDriver, JanusPage janusPage) {
-    super(webDriver);
+  public ReceiverVideoCheck(Runner runner) {
+    super(runner);
   }
 
 
   @Override
   protected void step() throws KiteTestException {
     try{
-    final JanusPage janusPage = new JanusPage(this.webDriver, logger);
 
     List<WebElement> videos = janusPage.getVideoElements();
     if (videos.isEmpty()) {

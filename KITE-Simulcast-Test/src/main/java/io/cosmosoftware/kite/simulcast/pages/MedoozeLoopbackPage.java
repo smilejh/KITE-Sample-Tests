@@ -1,5 +1,6 @@
 package io.cosmosoftware.kite.simulcast.pages;
 
+import io.cosmosoftware.kite.interfaces.Runner;
 import io.cosmosoftware.kite.report.KiteLogger;
 import io.cosmosoftware.kite.simulcast.LoopbackStats;
 import org.openqa.selenium.Keys;
@@ -28,8 +29,8 @@ public class MedoozeLoopbackPage extends SimulcastPageBase {
   @FindBy(tagName="button")
   private List<WebElement> buttons;
 
-  public MedoozeLoopbackPage(WebDriver webDriver, KiteLogger logger) {
-    super(webDriver, logger);
+  public MedoozeLoopbackPage(Runner runner) {
+    super(runner);
     PageFactory.initElements(webDriver, this);
   }
 

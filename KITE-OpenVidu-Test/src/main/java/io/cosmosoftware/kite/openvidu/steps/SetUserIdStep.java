@@ -1,16 +1,20 @@
 package io.cosmosoftware.kite.openvidu.steps;
 
 import io.cosmosoftware.kite.exception.KiteTestException;
+import io.cosmosoftware.kite.interfaces.Runner;
 import io.cosmosoftware.kite.openvidu.pages.JoinPage;
 import io.cosmosoftware.kite.steps.TestStep;
 import org.openqa.selenium.WebDriver;
 
 public class SetUserIdStep extends TestStep {
+  
   private final String userId;
+  private final JoinPage joinPage;
 
-  public SetUserIdStep(WebDriver webDriver, String userId) {
-    super(webDriver);
+  public SetUserIdStep(Runner runner, String userId) {
+    super(runner);
     this.userId = userId;
+    this.joinPage = new JoinPage(runner);
   }
 
   @Override
@@ -20,7 +24,6 @@ public class SetUserIdStep extends TestStep {
 
   @Override
   protected void step() throws KiteTestException {
-    JoinPage joinPage = new JoinPage(webDriver, logger);
     joinPage.enterNickName(userId);
   }
 }

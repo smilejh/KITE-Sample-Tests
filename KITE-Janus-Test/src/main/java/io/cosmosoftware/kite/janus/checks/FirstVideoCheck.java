@@ -1,11 +1,10 @@
 package io.cosmosoftware.kite.janus.checks;
 
 import io.cosmosoftware.kite.exception.KiteTestException;
+import io.cosmosoftware.kite.interfaces.Runner;
 import io.cosmosoftware.kite.janus.pages.JanusPage;
 import io.cosmosoftware.kite.report.Reporter;
 import io.cosmosoftware.kite.report.Status;
-import io.cosmosoftware.kite.steps.TestStep;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
@@ -15,8 +14,9 @@ import static io.cosmosoftware.kite.util.TestUtils.videoCheck;
 
 public class FirstVideoCheck extends VideoCheckBase {
 
-  public FirstVideoCheck(WebDriver webDriver) {
-    super(webDriver);
+  
+  public FirstVideoCheck(Runner runner) {
+    super(runner);
   }
 
   @Override
@@ -26,8 +26,7 @@ public class FirstVideoCheck extends VideoCheckBase {
 
   @Override
   protected void step() throws KiteTestException {
-    final JanusPage janusPage = new JanusPage(this.webDriver, logger);
-
+    try {
       logger.info("Looking for video object");
       janusPage.waitUntilVisibilityOfFirstVideo(10);
       List<WebElement> videos = janusPage.getVideoElements();
@@ -46,8 +45,6 @@ public class FirstVideoCheck extends VideoCheckBase {
         Reporter.getInstance().textAttachment(report, "Sent Video", videoCheck, "plain");
         throw new KiteTestException("The first video is " + videoCheck, Status.FAILED);
       }
-    } catch (KiteTestException e) {
-      throw e;
     } catch (Exception e) {
       throw new KiteTestException("Error looking for the video", Status.BROKEN, e);
     }

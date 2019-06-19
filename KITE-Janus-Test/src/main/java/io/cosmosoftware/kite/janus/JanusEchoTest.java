@@ -6,8 +6,7 @@ import io.cosmosoftware.kite.janus.checks.ReceiverVideoCheck;
 import io.cosmosoftware.kite.janus.pages.JanusPage;
 import io.cosmosoftware.kite.janus.steps.GetStatsStep;
 import io.cosmosoftware.kite.janus.steps.StartDemoStep;
-import org.openqa.selenium.WebDriver;
-import org.webrtc.kite.steps.ScreenshotStep;
+import io.cosmosoftware.kite.steps.ScreenshotStep;
 import org.webrtc.kite.tests.KiteBaseTest;
 import org.webrtc.kite.tests.TestRunner;
 
@@ -21,19 +20,18 @@ public class JanusEchoTest extends KiteBaseTest {
   @Override
   public void populateTestSteps(TestRunner runner) {
     try {
-
-      WebDriver webDriver = runner.getWebDriver();
-      runner.addStep(new StartDemoStep(webDriver, this.url));
-      runner.addStep(new FirstVideoCheck(webDriver));
-      runner.addStep(new ScreenshotStep(webDriver));
-      runner.addStep(new ReceiverVideoCheck(webDriver));
-      final JanusPage janusPage = new JanusPage(webDriver, logger);
+      
+      runner.addStep(new StartDemoStep(runner, this.url));
+      runner.addStep(new FirstVideoCheck(runner));
+      runner.addStep(new ScreenshotStep(runner));
+      runner.addStep(new ReceiverVideoCheck(runner));
+      final JanusPage janusPage = new JanusPage(runner);
       if (this.getStats()) {
-        runner.addStep(new GetStatsStep( webDriver, getStatsConfig, sfu, janusPage));
+        runner.addStep(new GetStatsStep( runner, getStatsConfig, sfu, janusPage));
 
       }
       if (this.takeScreenshotForEachTest()) {
-        runner.addStep(new ScreenshotStep(webDriver));
+        runner.addStep(new ScreenshotStep(runner));
       }
 
       } catch(Exception e){

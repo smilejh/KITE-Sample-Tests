@@ -5,8 +5,7 @@ import io.cosmosoftware.kite.openvidu.checks.FirstVideoCheck;
 import io.cosmosoftware.kite.openvidu.steps.GoJoinPageStep;
 import io.cosmosoftware.kite.openvidu.steps.JoinRoomStep;
 import io.cosmosoftware.kite.openvidu.steps.SetUserIdStep;
-import org.openqa.selenium.WebDriver;
-import org.webrtc.kite.steps.ScreenshotStep;
+import io.cosmosoftware.kite.steps.ScreenshotStep;
 import org.webrtc.kite.tests.KiteBaseTest;
 import org.webrtc.kite.tests.TestRunner;
 
@@ -20,16 +19,15 @@ public class KiteOpenViduTest extends KiteBaseTest {
   @Override
   protected void populateTestSteps(TestRunner runner) {
     try {
-      WebDriver webDriver = runner.getWebDriver();
-      runner.addStep(new GoJoinPageStep(webDriver, getRoomManager().getRoomUrl()));
-      runner.addStep(new SetUserIdStep(webDriver, "user" + runner.getId()));
-      runner.addStep(new JoinRoomStep(webDriver));
+      runner.addStep(new GoJoinPageStep(runner, getRoomManager().getRoomUrl()));
+      runner.addStep(new SetUserIdStep(runner, "user" + runner.getId()));
+      runner.addStep(new JoinRoomStep(runner));
       if (!fastRampUp()) {
-        runner.addStep(new FirstVideoCheck(webDriver));
-        runner.addStep(new AllVideoCheck(webDriver, getMaxUsersPerRoom()));
+        runner.addStep(new FirstVideoCheck(runner));
+        runner.addStep(new AllVideoCheck(runner, getMaxUsersPerRoom()));
       }
       if (takeScreenshotForEachTest()) {
-        runner.addStep(new ScreenshotStep(webDriver));
+        runner.addStep(new ScreenshotStep(runner));
       }
     } catch (Exception e) {
       logger.error(getStackTrace(e));

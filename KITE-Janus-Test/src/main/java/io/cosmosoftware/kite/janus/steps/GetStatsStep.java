@@ -1,6 +1,7 @@
 package io.cosmosoftware.kite.janus.steps;
 
 import io.cosmosoftware.kite.exception.KiteTestException;
+import io.cosmosoftware.kite.interfaces.Runner;
 import io.cosmosoftware.kite.janus.pages.JanusPage;
 import io.cosmosoftware.kite.report.Reporter;
 import io.cosmosoftware.kite.report.Status;
@@ -37,8 +38,8 @@ public class GetStatsStep extends TestStep {
    * see configs file to set the name of the peer connection for each test (key: 'peerConnection')
    */
 
-  public GetStatsStep(WebDriver webDriver, JsonObject getStatsConfig, boolean sfu, JanusPage janusPage) {
-    super(webDriver);
+  public GetStatsStep(Runner runner, JsonObject getStatsConfig, boolean sfu, JanusPage janusPage) {
+    super(runner);
     this.janusPage = janusPage;
     this.getStatsConfig = getStatsConfig;
     this.sfu = sfu;

@@ -2,6 +2,7 @@ package io.cosmosoftware.kite.janus.checks;
 
 import io.cosmosoftware.kite.action.JSActionScript;
 import io.cosmosoftware.kite.exception.KiteTestException;
+import io.cosmosoftware.kite.interfaces.Runner;
 import io.cosmosoftware.kite.janus.pages.JanusPage;
 import io.cosmosoftware.kite.report.Reporter;
 import io.cosmosoftware.kite.report.Status;
@@ -25,8 +26,8 @@ public class AllVideoCheck extends TestStep {
   private final JanusPage janusPage;
 
 
-  public AllVideoCheck(WebDriver webDriver, int numberOfParticipants, JanusPage janusPage) {
-    super(webDriver);
+  public AllVideoCheck(Runner runner, int numberOfParticipants, JanusPage janusPage) {
+    super(runner);
     this.numberOfParticipants = numberOfParticipants;
     this.janusPage = janusPage;
   }

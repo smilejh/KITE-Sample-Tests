@@ -1,6 +1,7 @@
 package io.cosmosoftware.kite.openvidu.checks;
 
 import io.cosmosoftware.kite.exception.KiteTestException;
+import io.cosmosoftware.kite.interfaces.Runner;
 import io.cosmosoftware.kite.openvidu.pages.MeetingPage;
 import io.cosmosoftware.kite.report.Reporter;
 import io.cosmosoftware.kite.report.Status;
@@ -16,8 +17,11 @@ import static io.cosmosoftware.kite.util.TestUtils.waitAround;
 
 public class FirstVideoCheck extends TestStep {
 
-  public FirstVideoCheck(WebDriver webDriver) {
-    super(webDriver);
+  private final MeetingPage meetingPage;
+  
+  public FirstVideoCheck(Runner runner) {
+    super(runner);
+    this.meetingPage = new MeetingPage(runner);
   }
 
   @Override
@@ -29,7 +33,6 @@ public class FirstVideoCheck extends TestStep {
   protected void step() throws KiteTestException {
     try {
       waitForVideoToLoad(5);
-      final MeetingPage meetingPage = new MeetingPage(this.webDriver, logger);
       logger.info("Looking for video object");
       List<WebElement> videos = meetingPage.getVideoElements();
       if (videos.isEmpty()) {

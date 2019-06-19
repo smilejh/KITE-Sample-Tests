@@ -1,10 +1,9 @@
 package io.cosmosoftware.kite.mediasoup.pages;
 
+import io.cosmosoftware.kite.interfaces.Runner;
 import io.cosmosoftware.kite.pages.BasePage;
-import io.cosmosoftware.kite.report.KiteLogger;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -22,8 +21,8 @@ public class MediasoupPage extends BasePage {
   private List<WebElement> videos;
 
 
-  public MediasoupPage(WebDriver webDriver, KiteLogger logger) {
-    super(webDriver, logger);
+  public MediasoupPage(Runner runner) {
+    super(runner);
     PageFactory.initElements(webDriver, this);
   }
 

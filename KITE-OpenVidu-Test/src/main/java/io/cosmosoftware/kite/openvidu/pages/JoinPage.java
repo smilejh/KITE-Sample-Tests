@@ -1,15 +1,14 @@
 package io.cosmosoftware.kite.openvidu.pages;
 
+import io.cosmosoftware.kite.interfaces.Runner;
 import io.cosmosoftware.kite.pages.BasePage;
-import io.cosmosoftware.kite.report.KiteLogger;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 public class JoinPage extends BasePage {
 
-  public JoinPage(WebDriver webDriver, KiteLogger logger) {
-    super(webDriver, logger);
+  public JoinPage(Runner runner) {
+    super(runner);
   }
 
   @FindBy(id = "mat-input-0")
