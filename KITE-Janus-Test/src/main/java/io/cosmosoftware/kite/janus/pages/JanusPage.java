@@ -244,7 +244,6 @@ public class JanusPage extends BasePage {
     String name;
     for (int i = 1; i < 6; i++) {
       name = getRemoteUserNameByIndex(i);
-      logger.info("remote user name = " + name);
       if (!(name == null) && !(name.isEmpty())) {
         if (name.contains("user")) {
           remoteUserIndexList.add(i);
