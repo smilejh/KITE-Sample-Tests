@@ -58,7 +58,10 @@ After running the test, you can open the Allure dashboard with the command `a`.
 ```
 cd %KITE_HOME%\KITE-Janus-Test
 a
-# or:
+```
+
+or:
+```
 allure serve kite-allure-reports\
 ```
 

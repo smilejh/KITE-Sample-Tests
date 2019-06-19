@@ -194,41 +194,28 @@ public class JanusPage extends BasePage {
     click(streamWatchButton);
   }
 
-  /**
-   *
-   * Click a button
-   *
-   * @param rid the rid
-   * @param tid the tid
-   */
 
-  public void clickButton(String rid, int tid) throws KiteInteractionException {
-    switch (rid) {
-      case "a":
-        click(sl2Button);
-        break;
-      case "b":
-        click(sl1Button);
-        break;
-      case "c":
-        click(sl0Button);
-        break;
-    }
-    switch (tid) {
-      case 0:
-        click(tl0Button);
-        break;
-      case 1:
-        click(tl1Button);
-        break;
-      case 2:
-        click(tl2Button);
-        break;
-      default:
-        break;
-    }
+  public void startOrStopDemo () throws KiteInteractionException {
+    waitUntilVisibilityOf(startStopButton, 2);
+    click(startStopButton, true);
   }
 
+  /**
+   * wait until the local video is published and has finished publishing
+   * @param timeout
+   * @throws TimeoutException if the element is not invisible within the timeout
+   */
+  public void firstVideoIsPublishing(int timeout) throws TimeoutException {
+    WebDriverWait wait = new WebDriverWait(webDriver, timeout);
+    WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(PUBLISHING)));
+    wait.until(ExpectedConditions.invisibilityOf(element));
+  }
+
+
+  public void waitUntilVisibilityOfFirstVideo(int timeoutInSeconds) throws KiteInteractionException {
+    By locator = By.tagName("video");
+    waitUntilVisibilityOf(locator, timeoutInSeconds);
+  }
 
   public LoopbackStats getLoopbackStats() {
     String r = currentResolutionPrint.getText();
@@ -290,11 +277,11 @@ public class JanusPage extends BasePage {
 
 
   /**
+   * videoroom test
    *  get the name of the user whose video is displayed at the given index
    * @param index should be not greater than 5 (only 6 users can register in the video room)
    * @return
    */
-
   public String getRemoteUserNameByIndex (int index){
     By locator = By.id("remote" + index );
     return webDriver.findElement(locator).getText();
