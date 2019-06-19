@@ -12,7 +12,8 @@ import java.util.List;
 
 import static io.cosmosoftware.kite.util.TestUtils.videoCheck;
 
-public class FirstVideoCheck extends TestStep {
+
+public class FirstVideoCheck extends VideoCheckBase {
 
   public FirstVideoCheck(WebDriver webDriver) {
     super(webDriver);
@@ -25,8 +26,7 @@ public class FirstVideoCheck extends TestStep {
 
   @Override
   protected void step() throws KiteTestException {
-    try {
-      final JanusPage janusPage = new JanusPage(this.webDriver, logger);
+    final JanusPage janusPage = new JanusPage(this.webDriver, logger);
 
       logger.info("Looking for video object");
       janusPage.waitUntilVisibilityOfFirstVideo(10);

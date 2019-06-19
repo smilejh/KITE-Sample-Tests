@@ -1,7 +1,7 @@
 package io.cosmosoftware.kite.openvidu.pages;
 
 import io.cosmosoftware.kite.pages.BasePage;
-import org.apache.log4j.Logger;
+import io.cosmosoftware.kite.report.KiteLogger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -9,7 +9,7 @@ import org.openqa.selenium.support.FindBy;
 import java.util.List;
 
 public class MeetingPage extends BasePage {
-  public MeetingPage(WebDriver webDriver, Logger logger) {
+  public MeetingPage(WebDriver webDriver, KiteLogger logger) {
     super(webDriver, logger);
   }
 

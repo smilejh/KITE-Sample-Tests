@@ -35,12 +35,33 @@ public class JanusPage extends BasePage {
   @FindBy(id="start")
   private WebElement startStopButton;
 
-  @FindBy(id="curbitrate")
-  private WebElement currentBitRatePrint;
 
   @FindBy(id="curres")
   private WebElement currentResolutionPrint;
 
+  /**
+   * Echo Test
+   */
+
+  //when simulcast=true
+
+  @FindBy(id="sl-0")
+  private WebElement sl0Button;
+
+  @FindBy(id="sl-1")
+  private WebElement sl1Button;
+
+  @FindBy(id="sl-2")
+  private WebElement sl2Button;
+
+  @FindBy(id="tl-0")
+  private WebElement tl0Button;
+
+  @FindBy(id="tl-1")
+  private WebElement tl1Button;
+
+  @FindBy(id="tl-2")
+  private WebElement tl2Button;
 
   /**
    * Streaming Test
@@ -84,8 +105,10 @@ public class JanusPage extends BasePage {
   @FindBy(xpath = "//button[contains(text(),'OK')]")
   private WebElement acceptAlertButton;
 
+
   @FindBy(className = "bootbox-body")
   private WebElement alertText;
+
 
   @FindBy(id="myvideo")
   private WebElement localVideo;
@@ -104,29 +127,6 @@ public class JanusPage extends BasePage {
 
   public boolean getRegistrationState (){
     return userRegistered;
-  }
-
-  public void openStreamSetList() throws KiteInteractionException {
-    waitUntilVisibilityOf(streamSetButton, 2);
-    click(streamSetButton);
-  }
-
-  public void selectStreamSet(String streamSet) throws KiteInteractionException {
-    switch (streamSet) {
-      case "videoLive":
-        click(streamVideoSet);
-        break;
-      case "audioLive":
-        click(streamAudioSet);
-        break;
-      case "videoOnDemand":
-        click(streamVideoOnDemandSet);
-        break;
-    }
-  }
-
-  public void launchStreaming() throws KiteInteractionException {
-    click(streamWatchButton);
   }
 
   public void startOrStopDemo () throws KiteInteractionException {
@@ -158,6 +158,70 @@ public class JanusPage extends BasePage {
     waitUntilVisibilityOf(locator, timeoutInSeconds);
   }
 
+  public String getVideoIdByIndex(int i) {
+    return videos.get(i).getAttribute("id");
+  }
+
+  /**
+   * Streaming test
+   */
+  //not needed for now
+  public void openDemosListDropdown() throws KiteInteractionException {
+    waitUntilVisibilityOf(streamSetButton, 2);
+    click(streamSetButton);
+  }
+
+  public void openStreamSetList() throws KiteInteractionException {
+    waitUntilVisibilityOf(streamSetButton, 2);
+    click(streamSetButton);
+  }
+
+  public void selectStreamSet(String streamSet) throws KiteInteractionException {
+    switch (streamSet) {
+      case "videoLive":
+        click(streamVideoSet);
+        break;
+      case "audioLive":
+        click(streamAudioSet);
+        break;
+      case "videoOnDemand":
+        click(streamVideoOnDemandSet);
+        break;
+    }
+  }
+
+  public void launchStreaming() throws KiteInteractionException {
+    click(streamWatchButton);
+  }
+
+
+  public void startOrStopDemo () throws KiteInteractionException {
+    waitUntilVisibilityOf(startStopButton, 2);
+    click(startStopButton, true);
+  }
+
+  /**
+   * wait until the local video is published and has finished publishing
+   * @param timeout
+   * @throws TimeoutException if the element is not invisible within the timeout
+   */
+  public void firstVideoIsPublishing(int timeout) throws TimeoutException {
+    WebDriverWait wait = new WebDriverWait(webDriver, timeout);
+    WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(PUBLISHING)));
+    wait.until(ExpectedConditions.invisibilityOf(element));
+  }
+
+
+  public void waitUntilVisibilityOfFirstVideo(int timeoutInSeconds) throws KiteInteractionException {
+    By locator = By.tagName("video");
+    waitUntilVisibilityOf(locator, timeoutInSeconds);
+  }
+
+  public LoopbackStats getLoopbackStats() {
+    String r = currentResolutionPrint.getText();
+    StringTokenizer st = new StringTokenizer(r, "x");
+    return new LoopbackStats("1280", "720", "0", "0", st.nextToken(), st.nextToken(), "0", "0");
+  }
 
   public void fillCallerName(String userName) throws KiteInteractionException {
     waitUntilVisibilityOf(callerNameField, 2);
@@ -178,9 +242,6 @@ public class JanusPage extends BasePage {
     click(userRegisterButton);
   }
 
-  public String getVideoIdByIndex(int i) {
-    return videos.get(i).getAttribute("id");
-  }
 
   public void answerCall () throws KiteInteractionException {
     waitUntilVisibilityOf(answerButton,10);
@@ -199,6 +260,15 @@ public class JanusPage extends BasePage {
     return "Text of the alert : " + text ;
   }
 
+  public void waitForWaitingAnswerAlert(int timeoutInSeconds) throws KiteInteractionException {
+    waitUntilVisibilityOf(acceptAlertButton,timeoutInSeconds);
+  }
+
+
+  public void waitUntilPeerAnswer(int timeoutInSeconds) throws TimeoutException {
+    WebDriverWait wait = new WebDriverWait(webDriver, timeoutInSeconds);
+    wait.until(ExpectedConditions.invisibilityOf(acceptAlertButton));
+  }
 
   /**
    * videoroom test
@@ -207,11 +277,11 @@ public class JanusPage extends BasePage {
 
 
   /**
+   * videoroom test
    *  get the name of the user whose video is displayed at the given index
    * @param index should be not greater than 5 (only 6 users can register in the video room)
    * @return
    */
-
   public String getRemoteUserNameByIndex (int index){
     By locator = By.id("remote" + index );
     return webDriver.findElement(locator).getText();
@@ -225,6 +295,7 @@ public class JanusPage extends BasePage {
     String name;
     for (int i=1; i<6; i++ ){
       name = getRemoteUserNameByIndex(i);
+      logger.info("remote user name = " + name);
       if (!(name == null)&&!(name.isEmpty())){
         if (name.contains("user")){
           remoteUserIndexList.add(i);

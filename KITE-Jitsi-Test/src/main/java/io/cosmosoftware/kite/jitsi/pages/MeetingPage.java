@@ -2,7 +2,7 @@ package io.cosmosoftware.kite.jitsi.pages;
 
 import io.cosmosoftware.kite.exception.KiteTestException;
 import io.cosmosoftware.kite.pages.BasePage;
-import org.apache.log4j.Logger;
+import io.cosmosoftware.kite.report.KiteLogger;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -24,7 +24,7 @@ public class MeetingPage extends BasePage {
   @FindBy(xpath = "//*[@id=\"new-toolbox\"]/div[2]/div[3]/div[1]/div/div")
   private WebElement manyTilesVideoToggle;
 
-  public MeetingPage(WebDriver webDriver, Logger logger) throws KiteTestException {
+  public MeetingPage(WebDriver webDriver, KiteLogger logger) throws KiteTestException {
     super(webDriver, logger);
   }
 

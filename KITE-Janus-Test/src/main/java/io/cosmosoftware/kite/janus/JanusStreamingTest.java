@@ -3,7 +3,10 @@ package io.cosmosoftware.kite.janus;
 
 import io.cosmosoftware.kite.janus.checks.StreamingVideoCheck;
 import io.cosmosoftware.kite.janus.pages.JanusPage;
-import io.cosmosoftware.kite.janus.steps.*;
+import io.cosmosoftware.kite.janus.steps.GetStatsStep;
+import io.cosmosoftware.kite.janus.steps.JoinStreamingStep;
+import io.cosmosoftware.kite.janus.steps.LeaveDemoStep;
+import io.cosmosoftware.kite.janus.steps.StartDemoStep;
 import io.cosmosoftware.kite.janus.steps.streaming.JoinStreamingStep;
 import org.openqa.selenium.WebDriver;
 import org.webrtc.kite.steps.ScreenshotStep;

@@ -1,18 +1,17 @@
 package io.cosmosoftware.kite.jitsi.steps;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import io.cosmosoftware.kite.exception.KiteTestException;
 import io.cosmosoftware.kite.report.Status;
 import io.cosmosoftware.kite.steps.TestStep;
 import org.openqa.selenium.WebDriver;
 
 import javax.json.JsonObject;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static io.cosmosoftware.kite.util.TestUtils.executeJsScript;
 import static io.cosmosoftware.kite.util.TestUtils.waitAround;

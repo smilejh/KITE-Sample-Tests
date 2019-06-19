@@ -19,7 +19,7 @@ import static io.cosmosoftware.kite.util.TestUtils.waitAround;
 public class ReceiverVideoCheck extends VideoCheckBase {
 
 
-  public ReceiverVideoCheck(WebDriver webDriver) {
+  public ReceiverVideoCheck(WebDriver webDriver, JanusPage janusPage) {
     super(webDriver);
   }
 

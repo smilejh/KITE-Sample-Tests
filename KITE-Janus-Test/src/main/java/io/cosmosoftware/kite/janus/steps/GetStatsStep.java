@@ -5,22 +5,18 @@ import io.cosmosoftware.kite.janus.pages.JanusPage;
 import io.cosmosoftware.kite.report.Reporter;
 import io.cosmosoftware.kite.report.Status;
 import io.cosmosoftware.kite.steps.TestStep;
-import org.json.JSONObject;
 import org.openqa.selenium.WebDriver;
-import org.webrtc.kite.Utils;
-import org.webrtc.kite.stats.StatsUtils;
 
-import javax.json.*;
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 import static io.cosmosoftware.kite.util.ReportUtils.getStackTrace;
-import static javax.json.stream.JsonCollectors.toJsonObject;
-import static org.glassfish.json.JsonUtil.toJson;
 import static org.webrtc.kite.stats.StatsUtils.*;
-import static org.webrtc.kite.stats.StatsUtils.getPCStatOvertime;
 
 public class GetStatsStep extends TestStep {
 
