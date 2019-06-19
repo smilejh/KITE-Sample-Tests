@@ -39,29 +39,6 @@ public class JanusPage extends BasePage {
   @FindBy(id="curres")
   private WebElement currentResolutionPrint;
 
-  /**
-   * Echo Test
-   */
-
-  //when simulcast=true
-
-  @FindBy(id="sl-0")
-  private WebElement sl0Button;
-
-  @FindBy(id="sl-1")
-  private WebElement sl1Button;
-
-  @FindBy(id="sl-2")
-  private WebElement sl2Button;
-
-  @FindBy(id="tl-0")
-  private WebElement tl0Button;
-
-  @FindBy(id="tl-1")
-  private WebElement tl1Button;
-
-  @FindBy(id="tl-2")
-  private WebElement tl2Button;
 
   /**
    * Streaming Test
@@ -194,40 +171,6 @@ public class JanusPage extends BasePage {
     click(streamWatchButton);
   }
 
-  /**
-   *
-   * Click a button
-   *
-   * @param rid the rid
-   * @param tid the tid
-   */
-
-  public void clickButton(String rid, int tid) throws KiteInteractionException {
-    switch (rid) {
-      case "a":
-        click(sl2Button);
-        break;
-      case "b":
-        click(sl1Button);
-        break;
-      case "c":
-        click(sl0Button);
-        break;
-    }
-    switch (tid) {
-      case 0:
-        click(tl0Button);
-        break;
-      case 1:
-        click(tl1Button);
-        break;
-      case 2:
-        click(tl2Button);
-        break;
-      default:
-        break;
-    }
-  }
 
 
   public LoopbackStats getLoopbackStats() {
