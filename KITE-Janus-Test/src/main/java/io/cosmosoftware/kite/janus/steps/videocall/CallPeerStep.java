@@ -1,4 +1,4 @@
-package io.cosmosoftware.kite.janus.steps;
+package io.cosmosoftware.kite.janus.steps.videocall;
 
 import io.cosmosoftware.kite.exception.KiteTestException;
 import io.cosmosoftware.kite.janus.pages.JanusPage;

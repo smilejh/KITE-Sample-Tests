@@ -16,7 +16,8 @@ import static io.cosmosoftware.kite.util.ReportUtils.timestamp;
 import static io.cosmosoftware.kite.util.TestUtils.videoCheck;
 import static io.cosmosoftware.kite.util.TestUtils.waitAround;
 
-public class VideoCheckBase extends TestStep {
+public abstract class VideoCheckBase extends TestStep {
+
 
   public VideoCheckBase(WebDriver webDriver) {
     super(webDriver);

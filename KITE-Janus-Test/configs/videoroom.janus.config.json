@@ -12,7 +12,7 @@
     {
       "name": "Janus Video Room Test %ts",
       "description":"Video Room Test for Janus",
-      "tupleSize": 4,
+      "tupleSize": 2,
       "testImpl": "io.cosmosoftware.kite.janus.JanusVideoRoomTest",
       "payload":{
         "url": "https://janus.conf.meetecho.com/videoroomtest.html",

@@ -7,6 +7,7 @@ import io.cosmosoftware.kite.janus.steps.GetStatsStep;
 import io.cosmosoftware.kite.janus.steps.JoinStreamingStep;
 import io.cosmosoftware.kite.janus.steps.LeaveDemoStep;
 import io.cosmosoftware.kite.janus.steps.StartDemoStep;
+import io.cosmosoftware.kite.janus.steps.streaming.JoinStreamingStep;
 import org.openqa.selenium.WebDriver;
 import org.webrtc.kite.steps.ScreenshotStep;
 import org.webrtc.kite.tests.KiteBaseTest;
