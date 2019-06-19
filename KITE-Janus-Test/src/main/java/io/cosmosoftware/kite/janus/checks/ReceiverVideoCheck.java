@@ -2,11 +2,8 @@ package io.cosmosoftware.kite.janus.checks;
 
 import io.cosmosoftware.kite.exception.KiteTestException;
 import io.cosmosoftware.kite.interfaces.Runner;
-import io.cosmosoftware.kite.janus.pages.JanusPage;
 import io.cosmosoftware.kite.report.Reporter;
 import io.cosmosoftware.kite.report.Status;
-import io.cosmosoftware.kite.steps.TestStep;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
@@ -19,51 +16,44 @@ import static io.cosmosoftware.kite.util.TestUtils.waitAround;
 
 public class ReceiverVideoCheck extends VideoCheckBase {
 
-
   public ReceiverVideoCheck(Runner runner) {
     super(runner);
   }
 
-
   @Override
   protected void step() throws KiteTestException {
-    try{
+    try {
 
-    List<WebElement> videos = janusPage.getVideoElements();
-    if (videos.isEmpty()) {
-      throw new KiteTestException(
-          "Unable to find any <video> element on the page", Status.FAILED);
+      List<WebElement> videos = janusPage.getVideoElements();
+      if (videos.isEmpty()) {
+        throw new KiteTestException(
+            "Unable to find any <video> element on the page", Status.FAILED);
+      }
+
+      String videoCheck = videoCheck(webDriver, 1);
+      int ct = 0;
+      while (!"video".equalsIgnoreCase(videoCheck) && ct < 3) {
+        videoCheck = videoCheck(webDriver, 1);
+        ct++;
+        waitAround(3 * ONE_SECOND_INTERVAL);
+      }
+      if (!"video".equalsIgnoreCase(videoCheck)) {
+        Reporter.getInstance().textAttachment(report, "received" + " video", videoCheck, "plain");
+        Reporter.getInstance()
+            .screenshotAttachment(
+                report, "received" + "_video_" + timestamp(), saveScreenshotPNG(webDriver));
+        throw new KiteTestException(
+            "The received video is " + videoCheck, Status.FAILED, null, true);
+      }
+      logger.info("received video is OK");
+    } catch (KiteTestException e) {
+
+      throw e;
+    } catch (Exception e) {
+
+      throw new KiteTestException("Error looking for the video", Status.BROKEN, e);
     }
-
-    String videoCheck = videoCheck(webDriver, 1);
-    int ct = 0;
-    while (!"video".equalsIgnoreCase(videoCheck) && ct < 3) {
-      videoCheck = videoCheck(webDriver, 1);
-      ct++;
-      waitAround(3 * ONE_SECOND_INTERVAL);
-    }
-    if (!"video".equalsIgnoreCase(videoCheck)) {
-      Reporter.getInstance().textAttachment(report, "received" + " video", videoCheck, "plain");
-      Reporter.getInstance().screenshotAttachment(report,
-          "received" + "_video_" + timestamp(), saveScreenshotPNG(webDriver));
-      throw new KiteTestException("The received video is " + videoCheck, Status.FAILED, null, true);
-    }
-    logger.info("received video is OK");
-  } catch(
-  KiteTestException e)
-
-  {
-    throw e;
-  } catch(
-  Exception e)
-
-  {
-    throw new KiteTestException("Error looking for the video", Status.BROKEN, e);
   }
-
-}
-
-
 
   @Override
   public String stepDescription() {
