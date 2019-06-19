@@ -24,7 +24,6 @@ public class JoinVideoRoomStep extends TestStep {
     logger.info(alertText);
     if (alertText.equalsIgnoreCase("No alert")){
       janusPage.setRegistrationState(true);
-      logger.info("user registered = " + userName);
     }
   }
 

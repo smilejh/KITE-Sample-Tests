@@ -1,24 +1,24 @@
 import io.cosmosoftware.kite.openvidu.KiteOpenViduTest;
 import junit.framework.TestCase;
-import org.webrtc.kite.config.EndPoint;
-import org.webrtc.kite.config.Tuple;
+import org.webrtc.kite.config.client.Client;
+import org.webrtc.kite.config.test.Tuple;
 import org.webrtc.kite.tests.KiteBaseTest;
 
 import javax.json.JsonObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.webrtc.kite.Utils.getEndPointList;
-import static org.webrtc.kite.Utils.getPayload;
+import static org.webrtc.kite.Utils.*;
 
 public class KiteOpenViduTestTest extends TestCase {
   private static final String CONFIG_FILE = "configs/local.openvidu.config.json";
-  private Tuple endPointList = getEndPointList(CONFIG_FILE, "browsers");
-
+  private Tuple tuple = getFirstTuple(CONFIG_FILE);
+  
+  
   public void testTestScript() throws Exception {
     KiteBaseTest test = new KiteOpenViduTest();
     test.setPayload(getPayload(CONFIG_FILE, 0));
-    test.setEndPointList(endPointList);
-    JsonObject testResult = test.execute();
+    test.setTuple(tuple);
+    Object testResult = test.execute();
   }
 }

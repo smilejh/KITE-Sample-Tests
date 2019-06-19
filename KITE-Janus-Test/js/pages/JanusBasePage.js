@@ -7,7 +7,8 @@ const startButton = By.id('start');
 const videoElements = By.css('video');
 
 class JanusBasePage {
-  constructor() {
+  constructor(driver) {
+    this.driver = driver;
     this.startButton = startButton;
     this.videos = videoElements;
   }

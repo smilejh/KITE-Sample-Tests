@@ -37,7 +37,7 @@ public class JanusVideoRoomTest extends KiteBaseTest {
         runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
 
         if (this.getStats()) {
-          runner.addStep(new GetStatsStep(webDriver, getStatsConfig, sfu, janusPage)); //need to find the name of the remote Peer connections
+          runner.addStep(new GetStatsStep(webDriver, getStatsConfig, sfu, janusPage));
           runner.addStep(new WaitForOthersStep(webDriver, this, runner.getLastStep()));
         }
 

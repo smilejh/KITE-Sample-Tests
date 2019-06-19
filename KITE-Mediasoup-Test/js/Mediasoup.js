@@ -1,5 +1,5 @@
-const {TestUtils, WebDriverFactory, KiteBaseTest} = require('kite-common'); 
-const {JoinVideoCallStep, GetStatsStep, ScreenshotStep} = require('./steps');
+const {TestUtils, WebDriverFactory, KiteBaseTest, ScreenshotStep} = require('kite-common'); 
+const {JoinVideoCallStep, GetStatsStep} = require('./steps');
 const {FirstVideoCheck, AllVideoCheck} = require('./checks');
 const {MediasoupPage} = require('./pages');
 
@@ -7,7 +7,6 @@ const {MediasoupPage} = require('./pages');
 const globalVariables = TestUtils.getGlobalVariables(process);
 const capabilities = require(globalVariables.capabilitiesPath);
 const payload = require(globalVariables.payloadPath);
-
 
 function getRoomUrl(id) {
   const roomid = Math.floor(id / payload.usersPerRoom);
@@ -18,17 +17,15 @@ function getRoomUrl(id) {
   return payload.url + payload.rooms[roomid] + '&username=user' + Array(Math.max(3 - String(id).length + 1, 0)).join(0) + id;
 }
 
-
-
 class Mediasoup extends KiteBaseTest {
   constructor(name, globalVariables, capabilities, payload) {
     super(name, globalVariables, capabilities, payload);
-    this.page = new MediasoupPage();
   }
   
   async testScript() {
     try {
       this.driver = await WebDriverFactory.getDriver(capabilities, capabilities.remoteAddress);
+      this.page = new MediasoupPage(this.driver);
 
       let joinVideoCallStep = new JoinVideoCallStep(this, getRoomUrl(this.id));
       await joinVideoCallStep.execute(this);
@@ -45,7 +42,7 @@ class Mediasoup extends KiteBaseTest {
       let screenshotStep = new ScreenshotStep(this);
       await screenshotStep.execute(this);
 
-      await TestUtils.waitAround(5000 * this.numberOfParticipant); // 5s per participant
+      await super.waitAllSteps();
 
     } catch (e) {
       console.log(e);

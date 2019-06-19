@@ -16,7 +16,7 @@ class OpenJitsiUrlStep extends TestStep {
 
   async step() {
     await this.page.open(this);
-    await this.page.enterRoom(this, "ChooseYourOwnRoomName");
+    await this.page.enterRoom("ChooseYourOwnRoomName" + this.uuid);
   }
 }
 

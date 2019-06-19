@@ -1,0 +1,126 @@
+{
+  "type": 1,
+  "name": "All Janus Demos Local",
+  "permute": true,
+  "grids": [
+    {
+      "type": "local",
+      "url": "http://localhost:4444/wd/hub"
+    }
+  ],
+  "tests": [
+    {
+      "name": "Janus Echo Test Local Grid %ts",
+      "description": "echo test for Janus",
+      "tupleSize": 1,
+      "testImpl": "io.cosmosoftware.kite.janus.JanusEchoTest",
+      "payload": {
+        "url": "https://janus.conf.meetecho.com/echotest.html",
+        "_url": "https://janus.conf.meetecho.com/echotest.html?simulcast=true",
+        "usersPerRoom": 2,
+        "pageTitle": "Janus Echo Test",
+        "takeScreenshotForEachTest": true,
+        "testTimeout": 20,
+        "sfu": false,
+        "getStats": {
+          "enabled": true,
+          "statsCollectionTime": 2,
+          "statsCollectionInterval": 1,
+          "peerConnections": [
+            "echotest.webrtcStuff.pc"
+          ],
+          "selectedStats": [
+            "inbound-rtp",
+            "outbound-rtp",
+            "candidate-pair"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Janus Streaming Test Local Grid %ts",
+      "description":"Streaming Test for Janus",
+      "tupleSize": 1,
+      "testImpl": "io.cosmosoftware.kite.janus.JanusStreamingTest",
+      "payload":{
+        "url": "https://janus.conf.meetecho.com/streamingtest.html",
+        "usersPerRoom": 1,
+        "pageTitle": "Janus Streaming Test",
+        "takeScreenshotForEachTest": true,
+        "testTimeout": 20,
+        "sfu": false,
+        "getStats" : {
+          "enabled": true,
+          "statsCollectionTime": 2,
+          "statsCollectionInterval": 1,
+          "peerConnections": ["streaming.webrtcStuff.pc"],
+          "selectedStats" : ["inbound-rtp", "outbound-rtp", "candidate-pair"]
+        }
+      }
+    },
+    {
+      "name": "Janus Video Call Test Local Grid %ts",
+      "description": "video call test for Janus",
+      "tupleSize": 2,
+      "testImpl": "io.cosmosoftware.kite.janus.JanusVideoCallTest",
+      "payload": {
+        "url": "https://janus.conf.meetecho.com/videocalltest.html",
+        "_url": "https://janus.conf.meetecho.com/videocalltest.html?simulcast=true",
+        "usersPerRoom": 2,
+        "pageTitle": "Janus Video Call Test",
+        "takeScreenshotForEachTest": true,
+        "testTimeout": 20,
+        "sfu": false,
+        "getStats": {
+          "enabled": true,
+          "statsCollectionTime": 2,
+          "statsCollectionInterval": 1,
+          "peerConnections": [
+            "videocall.webrtcStuff.pc"
+          ],
+          "selectedStats": [
+            "inbound-rtp",
+            "outbound-rtp",
+            "candidate-pair"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Janus Video Room Test %ts",
+      "description":"Video Room Test for Janus",
+      "tupleSize": 2,
+      "testImpl": "io.cosmosoftware.kite.janus.JanusVideoRoomTest",
+      "payload":{
+        "url": "https://janus.conf.meetecho.com/videoroomtest.html",
+        "_url": "https://janus.conf.meetecho.com/videoroomtest.html?simulcast=true",
+        "usersPerRoom": 2,
+        "pageTitle": "Janus",
+        "takeScreenshotForEachTest": true,
+        "testTimeout": 20,
+        "sfu": true,
+        "getStats" : {
+          "enabled": true,
+          "statsCollectionTime": 2,
+          "statsCollectionInterval": 1,
+          "peerConnections": ["sfutest.webrtcStuff.pc"],
+          "selectedStats" : ["inbound-rtp", "outbound-rtp", "candidate-pair"]
+        }
+      }
+    }
+  ],
+  "clients": [
+    {
+      "browserName": "chrome",
+      "version": "74",
+      "platform": "localhost",
+      "headless": false
+    },
+    {
+      "browserName": "firefox",
+      "version": "66",
+      "platform": "localhost",
+      "headless": false
+    }
+  ]
+}
