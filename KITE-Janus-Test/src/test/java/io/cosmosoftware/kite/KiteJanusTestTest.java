@@ -7,16 +7,15 @@ package io.cosmosoftware.kite;
 import io.cosmosoftware.kite.janus.JanusVideoRoomTest;
 import junit.framework.TestCase;
 import org.openqa.selenium.WebDriver;
-import org.webrtc.kite.config.Tuple;
+import org.webrtc.kite.config.test.Tuple;
 import org.webrtc.kite.tests.KiteBaseTest;
 
-import javax.json.JsonObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.webrtc.kite.Utils.getEndPointList;
+import static org.webrtc.kite.Utils.getFirstTuple;
 import static org.webrtc.kite.Utils.getPayload;
 
 public class KiteJanusTestTest extends TestCase {
@@ -30,7 +29,7 @@ public class KiteJanusTestTest extends TestCase {
   private static final String CONFIG_FILE = "configs/local.janus.config.json";
 
   private List<WebDriver> webDriverList = new ArrayList<>();
-  private Tuple endPointList = getEndPointList(CONFIG_FILE, "browsers");
+  private Tuple tuple = getFirstTuple(CONFIG_FILE);
 
   public void setUp() throws Exception {
     super.setUp();
@@ -49,7 +48,7 @@ public class KiteJanusTestTest extends TestCase {
     KiteBaseTest test = new JanusVideoRoomTest();
     test.setDescription(TEST_NAME);
     test.setPayload(getPayload(CONFIG_FILE, 0));
-    test.setEndPointList(endPointList);
-    JsonObject testResult = test.execute();
+    test.setTuple(tuple);
+    Object testResult = test.execute();
   }
 }

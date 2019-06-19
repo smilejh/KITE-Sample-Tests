@@ -1,5 +1,5 @@
-const {TestUtils, WebDriverFactory, KiteBaseTest} = require('kite-common'); 
-const {LoadPageStep, GetStatsStep, ScreenshotStep, SelectProfileStep} = require('./steps');
+const {TestUtils, WebDriverFactory, KiteBaseTest, ScreenshotStep} = require('kite-common'); 
+const {LoadPageStep, GetStatsStep, SelectProfileStep} = require('./steps');
 const {SenderVideoCheck, ReceivedVideoCheck, GaugesCheck} = require('./checks');
 const {MedoozePage} = require('./pages');
 
@@ -16,12 +16,12 @@ const tids = [0, 1, 2];
 class Medooze extends KiteBaseTest {
   constructor(name, globalVariables, capabilities, payload) {
     super(name, globalVariables, capabilities, payload);
-    this.page = new MedoozePage();
   }
   
   async testScript() {
     try {
       this.driver = await WebDriverFactory.getDriver(capabilities, capabilities.remoteAddress);
+      this.page = new MedoozePage(this.driver);
 
       let loadPageStep = new LoadPageStep(this);
       await loadPageStep.execute(this);

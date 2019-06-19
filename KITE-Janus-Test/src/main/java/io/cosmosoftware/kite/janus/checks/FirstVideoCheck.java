@@ -28,30 +28,28 @@ public class FirstVideoCheck extends VideoCheckBase {
   protected void step() throws KiteTestException {
     final JanusPage janusPage = new JanusPage(this.webDriver, logger);
 
-    logger.info("Looking for video object");
-    janusPage.firstVideoIsPublishing(10);
-    step("sent");
-//      List<WebElement> videos = janusPage.getVideoElements();
-//
-//      if (videos.isEmpty()) {
-//        throw new KiteTestException(
-//            "Unable to find any <video> element on the page", Status.FAILED);
-//      }
-//      String firstVideoId = janusPage.getVideoIdByIndex(0);
-//      logger.info("first video id= " + firstVideoId);
-//      if (!firstVideoId.equalsIgnoreCase("myvideo")){
-//        logger.info("the first video is not local user's video");
-//      }
-//      String videoCheck = videoCheck(webDriver, 0);
-//
-//      if (!"video".equalsIgnoreCase(videoCheck)) {
-//        Reporter.getInstance().textAttachment(report, "Sent Video", videoCheck, "plain");
-//        throw new KiteTestException("The first video is " + videoCheck, Status.FAILED);
-//      }
-//    } catch (KiteTestException e) {
-//      throw e;
-//    } catch (Exception e) {
-//      throw new KiteTestException("Error looking for the video", Status.BROKEN, e);
-//    }
+      logger.info("Looking for video object");
+      janusPage.waitUntilVisibilityOfFirstVideo(10);
+      List<WebElement> videos = janusPage.getVideoElements();
+
+      if (videos.isEmpty()) {
+        throw new KiteTestException(
+            "Unable to find any <video> element on the page", Status.FAILED);
+      }
+      String firstVideoId = janusPage.getVideoIdByIndex(0);
+      if (!firstVideoId.equalsIgnoreCase("myvideo")){
+        logger.info("the first video is not local user's video");
+      }
+      String videoCheck = videoCheck(webDriver, 0);
+
+      if (!"video".equalsIgnoreCase(videoCheck)) {
+        Reporter.getInstance().textAttachment(report, "Sent Video", videoCheck, "plain");
+        throw new KiteTestException("The first video is " + videoCheck, Status.FAILED);
+      }
+    } catch (KiteTestException e) {
+      throw e;
+    } catch (Exception e) {
+      throw new KiteTestException("Error looking for the video", Status.BROKEN, e);
+    }
   }
 }

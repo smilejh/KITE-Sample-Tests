@@ -5,21 +5,18 @@
 package io.cosmosoftware.kite;
 
 import io.cosmosoftware.kite.mediasoup.KiteMediasoupTest;
-import org.webrtc.kite.config.Tuple;
-import org.webrtc.kite.tests.KiteBaseTest;
-import io.cosmosoftware.kite.util.TestHelper;
+import io.cosmosoftware.kite.report.KiteLogger;
 import junit.framework.TestCase;
-import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
-import org.webrtc.kite.config.EndPoint;
+import org.webrtc.kite.config.test.Tuple;
+import org.webrtc.kite.tests.KiteBaseTest;
 
-import javax.json.JsonObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.webrtc.kite.Utils.getEndPointList;
+import static org.webrtc.kite.Utils.getFirstTuple;
 import static org.webrtc.kite.Utils.getPayload;
 
 public class KiteMediasoupTestTest extends TestCase {
@@ -29,14 +26,15 @@ public class KiteMediasoupTestTest extends TestCase {
     System.setProperty("current.date", dateFormat.format(new Date()));
   }
 
-  //Logger must be called after setting the system property "current.data"
-  private final Logger logger = Logger.getLogger(this.getClass().getName());
+  //KiteLogger must be called after setting the system property "current.data"
+  private final KiteLogger logger = KiteLogger.getLogger(this.getClass().getName());
 
   private static final String TEST_NAME = "Mediasoup UnitTest";
   private static final String CONFIG_FILE = "configs/local.mediasoup.config.json";
 
   private List<WebDriver> webDriverList = new ArrayList<>();
-  private Tuple endPointList = getEndPointList(CONFIG_FILE, "browsers");
+  private Tuple tuple = getFirstTuple(CONFIG_FILE);
+
 
   public void setUp() throws Exception {
     super.setUp();
@@ -56,7 +54,7 @@ public class KiteMediasoupTestTest extends TestCase {
     KiteBaseTest test = new KiteMediasoupTest();
     test.setDescription(TEST_NAME);
     test.setPayload(getPayload(CONFIG_FILE, 0));
-    test.setEndPointList(endPointList);
-    JsonObject testResult = test.execute();
+    test.setTuple(tuple);
+    Object testResult = test.execute();
   }
 }

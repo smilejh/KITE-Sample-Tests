@@ -1,9 +1,12 @@
 package io.cosmosoftware.kite.janus;
 
 
-import io.cosmosoftware.kite.janus.checks.FirstVideoCheck;
+import io.cosmosoftware.kite.janus.checks.StreamingVideoCheck;
 import io.cosmosoftware.kite.janus.pages.JanusPage;
-import io.cosmosoftware.kite.janus.steps.*;
+import io.cosmosoftware.kite.janus.steps.GetStatsStep;
+import io.cosmosoftware.kite.janus.steps.JoinStreamingStep;
+import io.cosmosoftware.kite.janus.steps.LeaveDemoStep;
+import io.cosmosoftware.kite.janus.steps.StartDemoStep;
 import io.cosmosoftware.kite.janus.steps.streaming.JoinStreamingStep;
 import org.openqa.selenium.WebDriver;
 import org.webrtc.kite.steps.ScreenshotStep;
@@ -24,9 +27,8 @@ public class JanusStreamingTest extends KiteBaseTest {
       final JanusPage janusPage = new JanusPage(webDriver, logger);
       runner.addStep(new StartDemoStep(webDriver, this.url));
       runner.addStep(new JoinStreamingStep(webDriver, "videoLive"));
-      runner.addStep(new FirstVideoCheck(webDriver));
+      runner.addStep(new StreamingVideoCheck(webDriver));
 
-      //getStats does not work for now because I did not find a name in the website source code for the PeerConnection that match the other test
       if (this.getStats()) {
 
         runner.addStep(new GetStatsStep(webDriver, getStatsConfig, sfu, janusPage));

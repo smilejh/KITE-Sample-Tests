@@ -8,9 +8,9 @@ import io.cosmosoftware.kite.janus.steps.videocall.CallPeerStep;
 import io.cosmosoftware.kite.janus.steps.videocall.JoinVideoCallStep;
 import io.cosmosoftware.kite.janus.steps.videocall.RegisterUserToVideoCallStep;
 import org.openqa.selenium.WebDriver;
-import org.webrtc.kite.config.App;
-import org.webrtc.kite.config.Browser;
-import org.webrtc.kite.config.EndPoint;
+import org.webrtc.kite.config.client.App;
+import org.webrtc.kite.config.client.Browser;
+import org.webrtc.kite.config.client.Client;
 import org.webrtc.kite.steps.ScreenshotStep;
 import org.webrtc.kite.steps.WaitForOthersStep;
 import org.webrtc.kite.tests.KiteBaseTest;
@@ -75,14 +75,14 @@ public class JanusVideoCallTest extends KiteBaseTest {
   protected String generateTestCaseName (){
     StringBuilder name = new StringBuilder();
 
-    for(int index = 0; index < this.endPointList.size(); ++index) {
-      EndPoint endPoint = this.endPointList.get(index);
-      name.append(endPoint.getPlatform().substring(0, 3));
-      if (endPoint instanceof Browser) {
-        name.append(((Browser)endPoint).getBrowserName().substring(0, 2));
-        name.append(((Browser)endPoint).getVersion());
+    for(int index = 0; index < this.tuple.size(); ++index) {
+      Client client = this.tuple.get(index);
+      name.append(client.retrievePlatform().name(), 0, 3);
+      if (client instanceof Browser) {
+        name.append(((Browser)client).getBrowserName(), 0, 2);
+        name.append(((Browser)client).getVersion());
       } else {
-        name.append(((App)endPoint).getDeviceName().substring(0, 2));
+        name.append(((App)client).retrieveDeviceName(), 0, 2);
       }
 
     }

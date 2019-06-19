@@ -2,10 +2,10 @@
   "type": 1,
   "name": "JS Mediasoup Interop",
   "permute": false,
-  "remotes": [
+  "grids": [
     {
       "type": "local",
-      "remoteAddress": "http://localhost:4444/wd/hub"
+      "url": "http://localhost:4444/wd/hub"
     }
   ],
   "tests": [
@@ -21,6 +21,7 @@
           "hackathonRoom_02",
           "hackathonRoom_03"
         ],
+        "port": 30000,
         "usersPerRoom": 2,
         "takeScreenshotForEachTest": true,
         "testTimeout": 60,
@@ -35,7 +36,7 @@
       }
     }
   ],
-  "browsers": [
+  "clients": [
     {
       "browserName": "chrome",
       "version": "74",

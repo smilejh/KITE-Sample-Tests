@@ -20,11 +20,6 @@ const executeStep = async function(stepInfo) {
       error = true;
     }
   }
-  
-  // Only for VideoRoom test
-  if (stepInfo.page instanceof JanusVideoRoomPage) {
-    await stepInfo.page.stopVideo(stepInfo);
-  }
 
   if (error) {
     stepInfo.testReporter.textAttachment(stepInfo.report, "Received videos", result, "plain");

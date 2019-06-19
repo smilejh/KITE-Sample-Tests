@@ -7,7 +7,9 @@ const verifyVideoDisplayByIndex = TestUtils.verifyVideoDisplayByIndex;
 const videoElements = By.css('video'); 
 
 class MediasoupPage {
-  constructor() {}
+  constructor(driver) {
+    this.driver = driver;
+  }
 
   async open(stepInfo) {
     await TestUtils.open(stepInfo);

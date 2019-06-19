@@ -1,10 +1,10 @@
 {
   "type": 1,
   "name": "js.janus.video.room.config.json %ts",
-  "remotes": [
+  "grids": [
     {
       "type": "local",
-      "remoteAddress": "http://localhost:4444/wd/hub"
+      "url": "http://localhost:4444/wd/hub"
     }
   ],
   "tests": [
@@ -16,6 +16,7 @@
       "testImpl": "JanusVideoRoom.js",
       "payload":{
         "url": "https://janus.conf.meetecho.com/videoroomtest.html",
+        "port": 30000,
         "takeScreenshotForEachTest": true,
         "testTimeout": 60,
         "getStats" : {
@@ -28,7 +29,7 @@
       }
     }
   ],
-  "browsers": [
+  "clients": [
     {
       "browserName": "chrome",
       "version": "74",

@@ -1,8 +1,12 @@
 package io.cosmosoftware.kite.simulcast;
 
-import io.cosmosoftware.kite.simulcast.checks.*;
-import io.cosmosoftware.kite.simulcast.pages.*;
-import io.cosmosoftware.kite.simulcast.steps.*;
+import io.cosmosoftware.kite.simulcast.checks.GaugesCheck;
+import io.cosmosoftware.kite.simulcast.checks.ReceiverVideoCheck;
+import io.cosmosoftware.kite.simulcast.checks.SenderVideoCheck;
+import io.cosmosoftware.kite.simulcast.pages.MedoozeLoopbackPage;
+import io.cosmosoftware.kite.simulcast.steps.GetStatsStep;
+import io.cosmosoftware.kite.simulcast.steps.LoadPageStep;
+import io.cosmosoftware.kite.simulcast.steps.SelectProfileStep;
 import org.openqa.selenium.WebDriver;
 import org.webrtc.kite.steps.ScreenshotStep;
 import org.webrtc.kite.tests.KiteBaseTest;

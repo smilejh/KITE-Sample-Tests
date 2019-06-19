@@ -2,10 +2,10 @@
   "type": 1,
   "name": "Janus Echo Local",
   "permute": true,
-  "remotes": [
+  "grids": [
     {
       "type": "local",
-      "remoteAddress": "http://localhost:4444/wd/hub"
+      "url": "http://localhost:4444/wd/hub"
     }
   ],
   "tests": [
@@ -15,9 +15,9 @@
       "tupleSize": 1,
       "testImpl": "io.cosmosoftware.kite.janus.JanusEchoTest",
       "payload":{
-        "_url": "https://janus.conf.meetecho.com/echotest.html",
-        "url": "https://janus.conf.meetecho.com/echotest.html?simulcast=true",
-        "_usersPerRoom": 1,
+        "url": "https://janus.conf.meetecho.com/echotest.html",
+        "_url": "https://janus.conf.meetecho.com/echotest.html?simulcast=true",
+        "usersPerRoom": 2,
         "pageTitle": "Janus Echo Test",
         "takeScreenshotForEachTest": true,
         "testTimeout": 20,
@@ -32,7 +32,7 @@
       }
     }
   ],
-  "browsers": [
+  "clients": [
     {
       "browserName": "chrome",
       "version": "74",

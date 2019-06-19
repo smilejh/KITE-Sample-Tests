@@ -2,10 +2,10 @@
   "type": 1,
   "name": "Janus Video Room Test",
   "permute": true,
-  "remotes": [
+  "grids": [
     {
       "type": "local",
-      "remoteAddress": "http://localhost:4444/wd/hub"
+      "url": "http://localhost:4444/wd/hub"
     }
   ],
   "tests": [
@@ -17,7 +17,6 @@
       "payload":{
         "url": "https://janus.conf.meetecho.com/videoroomtest.html",
         "_url": "https://janus.conf.meetecho.com/videoroomtest.html?simulcast=true",
-        "_rooms": ["1"],
         "usersPerRoom": 2,
         "pageTitle": "Janus",
         "takeScreenshotForEachTest": true,
@@ -33,7 +32,7 @@
       }
     }
   ],
-  "browsers": [
+  "clients": [
     {
       "browserName": "chrome",
       "version": "74",
