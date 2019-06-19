@@ -42,7 +42,7 @@ public class AllVideoCheck extends TestStep {
       //wait a while to allow all videos to load.;
       janusPage.setUserIndexList();
       List<String> remoteIdList = janusPage.getRemoteVideoIdList();
-
+      
       List<WebElement> videos = janusPage.getTestUsersVideos();
 
       boolean flag = true;
