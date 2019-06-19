@@ -2,6 +2,7 @@ package io.cosmosoftware.kite.janus.checks;
 
 import io.cosmosoftware.kite.action.JSActionScript;
 import io.cosmosoftware.kite.exception.KiteTestException;
+import io.cosmosoftware.kite.interfaces.Runner;
 import io.cosmosoftware.kite.janus.pages.JanusPage;
 import io.cosmosoftware.kite.report.Reporter;
 import io.cosmosoftware.kite.report.Status;
@@ -15,7 +16,8 @@ import javax.json.JsonObjectBuilder;
 import java.util.List;
 
 import static io.cosmosoftware.kite.entities.Timeouts.ONE_SECOND_INTERVAL;
-import static io.cosmosoftware.kite.util.TestUtils.*;
+import static io.cosmosoftware.kite.util.TestUtils.executeJsScript;
+import static io.cosmosoftware.kite.util.TestUtils.waitAround;
 
 public class AllVideoCheck extends TestStep {
 
@@ -24,8 +26,8 @@ public class AllVideoCheck extends TestStep {
   private final JanusPage janusPage;
 
 
-  public AllVideoCheck(WebDriver webDriver, int numberOfParticipants, JanusPage janusPage) {
-    super(webDriver);
+  public AllVideoCheck(Runner runner, int numberOfParticipants, JanusPage janusPage) {
+    super(runner);
     this.numberOfParticipants = numberOfParticipants;
     this.janusPage = janusPage;
   }
@@ -42,7 +44,7 @@ public class AllVideoCheck extends TestStep {
       //wait a while to allow all videos to load.;
       janusPage.setUserIndexList();
       List<String> remoteIdList = janusPage.getRemoteVideoIdList();
-
+      
       List<WebElement> videos = janusPage.getTestUsersVideos();
 
       boolean flag = true;

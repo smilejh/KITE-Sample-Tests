@@ -1,15 +1,20 @@
 package io.cosmosoftware.kite.mediasoup.steps;
 
 import io.cosmosoftware.kite.exception.KiteTestException;
+import io.cosmosoftware.kite.interfaces.Runner;
 import io.cosmosoftware.kite.mediasoup.pages.MediasoupPage;
 import io.cosmosoftware.kite.steps.TestStep;
 import org.openqa.selenium.WebDriver;
 
 public class SetUserIdStep extends TestStep {
-  String userId;
-  public SetUserIdStep(WebDriver webDriver, String userId) {
-    super(webDriver);
+
+  private final String userId;
+  private final MediasoupPage mediasoupPage;
+  
+  public SetUserIdStep(Runner runner, String userId) {
+    super(runner);
     this.userId = userId;
+    this.mediasoupPage = new MediasoupPage(runner);
   }
 
   @Override
@@ -19,7 +24,6 @@ public class SetUserIdStep extends TestStep {
 
   @Override
   protected void step() throws KiteTestException {
-    MediasoupPage page = new MediasoupPage(webDriver, logger);
-    page.setUserId(userId);
+    mediasoupPage.setUserId(userId);
   }
 }

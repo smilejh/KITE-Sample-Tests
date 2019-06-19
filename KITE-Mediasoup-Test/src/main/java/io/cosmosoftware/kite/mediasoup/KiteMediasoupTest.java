@@ -6,9 +6,8 @@ import io.cosmosoftware.kite.mediasoup.steps.GetStatsStep;
 import io.cosmosoftware.kite.mediasoup.steps.JoinVideoCallStep;
 import io.cosmosoftware.kite.mediasoup.steps.SetUserIdStep;
 import io.cosmosoftware.kite.mediasoup.steps.StartGetStatsSDKStep;
-import org.openqa.selenium.WebDriver;
-import org.webrtc.kite.steps.ScreenshotStep;
-import org.webrtc.kite.steps.StayInMeetingStep;
+import io.cosmosoftware.kite.steps.ScreenshotStep;
+import io.cosmosoftware.kite.steps.StayInMeetingStep;
 import org.webrtc.kite.tests.KiteBaseTest;
 import org.webrtc.kite.tests.TestRunner;
 
@@ -31,23 +30,22 @@ public class KiteMediasoupTest extends KiteBaseTest {
   @Override
   public void populateTestSteps(TestRunner runner) {
     try {
-      WebDriver webDriver = runner.getWebDriver();
-      runner.addStep(new JoinVideoCallStep(webDriver, getRoomManager().getRoomUrl()));
-      runner.addStep(new SetUserIdStep(webDriver, "user" + runner.getId()));
+      runner.addStep(new JoinVideoCallStep(runner, getRoomManager().getRoomUrl()));
+      runner.addStep(new SetUserIdStep(runner, "user" + runner.getId()));
       if (!this.fastRampUp()) {
-        runner.addStep(new FirstVideoCheck(webDriver));
+        runner.addStep(new FirstVideoCheck(runner));
         if (this.getStatsSdk != null) {
-          runner.addStep(new StartGetStatsSDKStep(runner.getWebDriver(), this.name, this.getStatsSdk));
+          runner.addStep(new StartGetStatsSDKStep(runner, this.name, this.getStatsSdk));
         }
-        runner.addStep(new AllVideoCheck(webDriver, getMaxUsersPerRoom()));
+        runner.addStep(new AllVideoCheck(runner, getMaxUsersPerRoom()));
         if (this.getStats()) {
-          runner.addStep(new GetStatsStep( webDriver, getStatsConfig));
+          runner.addStep(new GetStatsStep( runner, getStatsConfig));
         }
         if (this.takeScreenshotForEachTest()) {
-          runner.addStep(new ScreenshotStep(webDriver));
+          runner.addStep(new ScreenshotStep(runner));
         }
         if (this.meetingDuration > 0) {
-          runner.addStep(new StayInMeetingStep(webDriver, meetingDuration));
+          runner.addStep(new StayInMeetingStep(runner, meetingDuration));
         }
       }
     } catch (Exception e) {

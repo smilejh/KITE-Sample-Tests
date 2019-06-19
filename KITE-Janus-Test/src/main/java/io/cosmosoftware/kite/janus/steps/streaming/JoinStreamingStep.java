@@ -1,6 +1,7 @@
-package io.cosmosoftware.kite.janus.steps;
+package io.cosmosoftware.kite.janus.steps.streaming;
 
 import io.cosmosoftware.kite.exception.KiteTestException;
+import io.cosmosoftware.kite.interfaces.Runner;
 import io.cosmosoftware.kite.janus.pages.JanusPage;
 import io.cosmosoftware.kite.steps.TestStep;
 import org.openqa.selenium.WebDriver;
@@ -8,15 +9,16 @@ import org.openqa.selenium.WebDriver;
 public class JoinStreamingStep extends TestStep {
 
   private final String streamSet;
-
-  public JoinStreamingStep(WebDriver webDriver, String streamSet) {
-    super(webDriver);
+  private final JanusPage janusPage;
+  
+  public JoinStreamingStep(Runner runner, String streamSet) {
+    super(runner);
     this.streamSet = streamSet;
+    this.janusPage = new JanusPage(runner);
   }
 
   @Override
   protected void step() throws KiteTestException {
-    final JanusPage janusPage = new JanusPage(this.webDriver, logger);
     janusPage.openStreamSetList();
     janusPage.selectStreamSet(this.streamSet);
     janusPage.launchStreaming();

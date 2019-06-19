@@ -1,17 +1,19 @@
 package io.cosmosoftware.kite.jitsi.steps;
 
 import io.cosmosoftware.kite.exception.KiteTestException;
+import io.cosmosoftware.kite.interfaces.Runner;
 import io.cosmosoftware.kite.jitsi.pages.MeetingPage;
 import io.cosmosoftware.kite.steps.TestStep;
-import org.openqa.selenium.WebDriver;
 
 public class SetUserIdStep extends TestStep {
   
   private final String userId;
+  private final MeetingPage meetingPage;
   
-  public SetUserIdStep(WebDriver webDriver, String userId) {
-    super(webDriver);
+  public SetUserIdStep(Runner runner, String userId) {
+    super(runner);
     this.userId = userId;
+    this.meetingPage = new MeetingPage(runner);
   }
 
   @Override
@@ -21,8 +23,7 @@ public class SetUserIdStep extends TestStep {
 
   @Override
   protected void step() throws KiteTestException {
-    MeetingPage page = new MeetingPage(webDriver, logger);
-    page.changeLocalDisplayName(userId);
+    meetingPage.changeLocalDisplayName(userId);
   }
 
 }

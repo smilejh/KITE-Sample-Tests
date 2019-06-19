@@ -1,8 +1,8 @@
 package io.cosmosoftware.kite.simulcast;
 
 import io.cosmosoftware.kite.exception.KiteTestException;
+import io.cosmosoftware.kite.report.KiteLogger;
 import io.cosmosoftware.kite.report.Status;
-import org.apache.log4j.Logger;
 
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -44,7 +44,7 @@ public class LoopbackStats {
     return jsonObjectBuilder.build();
   }
 
-  public void validate(String rid, Logger logger) throws KiteTestException {
+  public void validate(String rid, KiteLogger logger) throws KiteTestException {
     int factor = "a".equalsIgnoreCase(rid) ? 1 : "b".equalsIgnoreCase(rid) ? 2 : 4;
     int expectedWidth = Integer.parseInt(sentWidth.trim())/factor;
     int expectedHeight = Integer.parseInt(sentHeight.trim())/factor;

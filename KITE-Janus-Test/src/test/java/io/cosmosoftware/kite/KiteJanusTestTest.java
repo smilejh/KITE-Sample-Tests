@@ -10,13 +10,13 @@ import org.openqa.selenium.WebDriver;
 import org.webrtc.kite.config.test.Tuple;
 import org.webrtc.kite.tests.KiteBaseTest;
 
-import javax.json.JsonObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.webrtc.kite.Utils.*;
+import static org.webrtc.kite.Utils.getFirstTuple;
+import static org.webrtc.kite.Utils.getPayload;
 
 public class KiteJanusTestTest extends TestCase {
 

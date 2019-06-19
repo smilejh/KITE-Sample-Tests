@@ -1,6 +1,7 @@
 package io.cosmosoftware.kite.janus.steps;
 
 import io.cosmosoftware.kite.exception.KiteTestException;
+import io.cosmosoftware.kite.interfaces.Runner;
 import io.cosmosoftware.kite.janus.pages.JanusPage;
 import io.cosmosoftware.kite.steps.TestStep;
 import org.openqa.selenium.WebDriver;
@@ -12,11 +13,13 @@ import static io.cosmosoftware.kite.util.WebDriverUtils.loadPage;
 public class StartDemoStep extends TestStep {
   
   private final String url;
+  private final JanusPage janusPage;
 
   
-  public StartDemoStep(WebDriver webDriver, String url) {
-    super(webDriver);
+  public StartDemoStep(Runner runner, String url) {
+    super(runner);
     this.url = url;
+    this.janusPage = new JanusPage(runner);
   }
   
   @Override
@@ -26,7 +29,6 @@ public class StartDemoStep extends TestStep {
   
   @Override
   protected void step() throws KiteTestException {
-    final JanusPage janusPage = new JanusPage(this.webDriver, this.logger);
     loadPage(this.webDriver, url, 10);
     waitAround(3*ONE_SECOND_INTERVAL);
     janusPage.startOrStopDemo();

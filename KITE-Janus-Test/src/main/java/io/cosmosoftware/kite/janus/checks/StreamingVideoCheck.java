@@ -1,6 +1,7 @@
 package io.cosmosoftware.kite.janus.checks;
 
 import io.cosmosoftware.kite.exception.KiteTestException;
+import io.cosmosoftware.kite.interfaces.Runner;
 import io.cosmosoftware.kite.janus.pages.JanusPage;
 import io.cosmosoftware.kite.report.Reporter;
 import io.cosmosoftware.kite.report.Status;
@@ -17,14 +18,17 @@ import static io.cosmosoftware.kite.util.TestUtils.videoCheck;
 import static io.cosmosoftware.kite.util.TestUtils.waitAround;
 
 public class StreamingVideoCheck extends TestCheck {
-  public StreamingVideoCheck(WebDriver webDriver) {
-    super(webDriver);
+  
+  private final JanusPage janusPage;
+  
+  public StreamingVideoCheck(Runner runner) {
+    super(runner);
+    this.janusPage = new JanusPage(runner);
   }
 
   @Override
   protected void step() throws KiteTestException {
     try {
-      final JanusPage janusPage = new JanusPage(this.webDriver, logger);
       waitAround(3*ONE_SECOND_INTERVAL);
       List<WebElement> videos = janusPage.getVideoElements();
       if (videos.isEmpty()) {

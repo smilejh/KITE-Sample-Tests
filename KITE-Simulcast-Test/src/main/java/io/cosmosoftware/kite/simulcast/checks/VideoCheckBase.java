@@ -1,9 +1,10 @@
 package io.cosmosoftware.kite.simulcast.checks;
 
 import io.cosmosoftware.kite.exception.KiteTestException;
+import io.cosmosoftware.kite.interfaces.Runner;
 import io.cosmosoftware.kite.report.Reporter;
 import io.cosmosoftware.kite.report.Status;
-import io.cosmosoftware.kite.simulcast.pages.*;
+import io.cosmosoftware.kite.simulcast.pages.SimulcastPageBase;
 import io.cosmosoftware.kite.steps.TestStep;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -20,8 +21,8 @@ public abstract class VideoCheckBase extends TestStep {
 
   protected final SimulcastPageBase page;
 
-  public VideoCheckBase(WebDriver webDriver, SimulcastPageBase page) {
-    super(webDriver);
+  public VideoCheckBase(Runner runner, SimulcastPageBase page) {
+    super(runner);
     this.page = page;
   }
 

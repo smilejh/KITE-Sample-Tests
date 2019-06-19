@@ -1,6 +1,7 @@
 package io.cosmosoftware.kite.openvidu.steps;
 
 import io.cosmosoftware.kite.exception.KiteTestException;
+import io.cosmosoftware.kite.interfaces.Runner;
 import io.cosmosoftware.kite.steps.TestStep;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -11,8 +12,8 @@ import static io.cosmosoftware.kite.util.WebDriverUtils.waitForElement;
 public class GoJoinPageStep extends TestStep {
   private final String roomUrl;
 
-  public GoJoinPageStep(WebDriver webDriver, String roomUrl) {
-    super(webDriver);
+  public GoJoinPageStep(Runner runner, String roomUrl) {
+    super(runner);
     this.roomUrl = roomUrl;
   }
 

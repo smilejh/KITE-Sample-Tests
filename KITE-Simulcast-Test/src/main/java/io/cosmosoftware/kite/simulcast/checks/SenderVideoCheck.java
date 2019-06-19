@@ -1,6 +1,7 @@
 package io.cosmosoftware.kite.simulcast.checks;
 
 import io.cosmosoftware.kite.exception.KiteTestException;
+import io.cosmosoftware.kite.interfaces.Runner;
 import io.cosmosoftware.kite.simulcast.pages.SimulcastPageBase;
 import org.openqa.selenium.WebDriver;
 
@@ -9,8 +10,8 @@ import static io.cosmosoftware.kite.util.TestUtils.waitAround;
 
 public class SenderVideoCheck extends VideoCheckBase {
 
-  public SenderVideoCheck(WebDriver webDriver, SimulcastPageBase page) {
-    super(webDriver, page);
+  public SenderVideoCheck(Runner runner, SimulcastPageBase page) {
+    super(runner, page);
   }
 
   @Override

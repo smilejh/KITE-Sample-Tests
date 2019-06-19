@@ -1,23 +1,24 @@
 package io.cosmosoftware.kite.jitsi.checks;
 
 import io.cosmosoftware.kite.exception.KiteTestException;
+import io.cosmosoftware.kite.interfaces.Runner;
 import io.cosmosoftware.kite.jitsi.pages.MeetingPage;
 import io.cosmosoftware.kite.report.Reporter;
 import io.cosmosoftware.kite.report.Status;
 import io.cosmosoftware.kite.steps.TestStep;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
-import static io.cosmosoftware.kite.entities.Timeouts.ONE_SECOND_INTERVAL;
 import static io.cosmosoftware.kite.util.TestUtils.videoCheck;
-import static io.cosmosoftware.kite.util.TestUtils.waitAround;
 
 public class FirstVideoCheck extends TestStep {
 
-  public FirstVideoCheck(WebDriver webDriver) {
-    super(webDriver);
+  private final MeetingPage meetingPage;
+  
+  public FirstVideoCheck(Runner runner) {
+    super(runner);
+    this.meetingPage = new MeetingPage(runner);
   }
 
   @Override
@@ -28,7 +29,6 @@ public class FirstVideoCheck extends TestStep {
   @Override
   protected void step() throws KiteTestException {
     try {
-      final MeetingPage meetingPage = new MeetingPage(this.webDriver, logger);
       meetingPage.videoIsPublishing(10);
       logger.info("Looking for video object");
       List<WebElement> videos = meetingPage.getVideoElements();
