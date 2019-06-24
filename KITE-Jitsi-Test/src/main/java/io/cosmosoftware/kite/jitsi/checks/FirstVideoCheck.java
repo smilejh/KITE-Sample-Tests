@@ -39,7 +39,7 @@ public class FirstVideoCheck extends TestStep {
 
       String videoCheck = videoCheck(webDriver, 0);
       if (!"video".equalsIgnoreCase(videoCheck)) {
-        Reporter.getInstance().textAttachment(report, "Sent Video", videoCheck, "plain");
+        reporter.textAttachment(report, "Sent Video", videoCheck, "plain");
         throw new KiteTestException("The first video is " + videoCheck, Status.FAILED);
       }
     } catch (KiteTestException e) {
