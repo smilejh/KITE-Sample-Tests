@@ -33,7 +33,7 @@ public class GetStatsStep extends TestStep {
     ((JavascriptExecutor) webDriver).executeScript(meetingPage.getPeerConnectionScript());
     JsonObject rawStats = getPCStatOvertime(webDriver, getStatsConfig).get(0);
     JsonObject statsSummary = extractStats(rawStats, "both").build();
-    Reporter.getInstance().jsonAttachment(report, "getStatsRaw", rawStats);
-    Reporter.getInstance().jsonAttachment(report, "getStatsSummary", statsSummary);
+    reporter.jsonAttachment(report, "getStatsRaw", rawStats);
+    reporter.jsonAttachment(report, "getStatsSummary", statsSummary);
   }
 }

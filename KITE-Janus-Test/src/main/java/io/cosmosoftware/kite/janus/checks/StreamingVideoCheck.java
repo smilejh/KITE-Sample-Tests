@@ -44,8 +44,8 @@ public class StreamingVideoCheck extends TestCheck {
         waitAround(3 * ONE_SECOND_INTERVAL);
       }
       if (!"video".equalsIgnoreCase(videoCheck)) {
-        Reporter.getInstance().textAttachment(report, "received" +" video", videoCheck, "plain");
-        Reporter.getInstance().screenshotAttachment(report,
+        reporter.textAttachment(report, "received" +" video", videoCheck, "plain");
+        reporter.screenshotAttachment(report,
             "received" + "_video_" + timestamp(), saveScreenshotPNG(webDriver));
         throw new KiteTestException("The received video is " + videoCheck, Status.FAILED, null, true);
       }

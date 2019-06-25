@@ -34,8 +34,8 @@ public class GaugesCheck extends TestStep {
   @Override
   protected void step() throws KiteTestException {
     LoopbackStats loopbackStats = loopbackPage.getLoopbackStats();
-    Reporter.getInstance().jsonAttachment(report, "stats", loopbackStats.getJson());
-    Reporter.getInstance().screenshotAttachment(report,
+    reporter.jsonAttachment(report, "stats", loopbackStats.getJson());
+    reporter.screenshotAttachment(report,
       "Gauges_" + rid + tid + "_" + timestamp(), saveScreenshotPNG(webDriver));
     loopbackStats.validate(rid, logger);
   }

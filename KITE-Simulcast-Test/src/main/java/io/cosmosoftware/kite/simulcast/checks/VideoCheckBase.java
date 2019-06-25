@@ -41,8 +41,8 @@ public abstract class VideoCheckBase extends TestStep {
         waitAround(3 * ONE_SECOND_INTERVAL);
       }
       if (!"video".equalsIgnoreCase(videoCheck)) {
-        Reporter.getInstance().textAttachment(report, direction +" video", videoCheck, "plain");
-        Reporter.getInstance().screenshotAttachment(report,
+        reporter.textAttachment(report, direction +" video", videoCheck, "plain");
+        reporter.screenshotAttachment(report,
           direction + "_video_" + timestamp(), saveScreenshotPNG(webDriver));
         throw new KiteTestException("The " + direction + " video is " + videoCheck, Status.FAILED, null, true);
       }
