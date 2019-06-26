@@ -79,14 +79,14 @@ public class GetStatsStep extends TestStep {
         JsonObjectBuilder builder = Json.createObjectBuilder();
         builder.add("local", sentStats);
         builder.add("remote", arrayBuilder);
-        Reporter.getInstance().jsonAttachment(report, "getStatsRaw", builder.build());
-        Reporter.getInstance().jsonAttachment(report, "getStatsSummary", json);
+        reporter.jsonAttachment(report, "getStatsRaw", builder.build());
+        reporter.jsonAttachment(report, "getStatsSummary", json);
       } else {
         JsonObject stats = getPCStatOvertime(webDriver, getStatsConfig).get(0);
         JsonObject statsSummary = buildstatSummary(stats, getStatsConfig.getJsonArray("selectedStats"));
         results = statsHashMap(statsSummary);
-        Reporter.getInstance().jsonAttachment(report, "getStatsRaw", stats);
-        Reporter.getInstance().jsonAttachment(this.report, "Stats Summary", statsSummary);
+        reporter.jsonAttachment(report, "getStatsRaw", stats);
+        reporter.jsonAttachment(this.report, "Stats Summary", statsSummary);
       }
 
     } catch (Exception e) {

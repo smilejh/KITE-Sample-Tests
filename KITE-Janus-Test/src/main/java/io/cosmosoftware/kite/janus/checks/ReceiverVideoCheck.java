@@ -38,8 +38,8 @@ public class ReceiverVideoCheck extends VideoCheckBase {
         waitAround(3 * ONE_SECOND_INTERVAL);
       }
       if (!"video".equalsIgnoreCase(videoCheck)) {
-        Reporter.getInstance().textAttachment(report, "received" + " video", videoCheck, "plain");
-        Reporter.getInstance()
+        reporter.textAttachment(report, "received" + " video", videoCheck, "plain");
+        reporter
             .screenshotAttachment(
                 report, "received" + "_video_" + timestamp(), saveScreenshotPNG(webDriver));
         throw new KiteTestException(

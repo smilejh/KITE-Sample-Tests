@@ -47,8 +47,8 @@ public class GetStatsStep extends TestStep {
       JsonObjectBuilder builder = Json.createObjectBuilder();
       builder.add("local", sentStats);
       builder.add("remote", arrayBuilder);
-      Reporter.getInstance().jsonAttachment(report, "getStatsRaw", builder.build());
-      Reporter.getInstance().jsonAttachment(report, "getStatsSummary", json);
+      reporter.jsonAttachment(report, "getStatsRaw", builder.build());
+      reporter.jsonAttachment(report, "getStatsSummary", json);
     } catch (Exception e) {
       e.printStackTrace();
       throw new KiteTestException("Failed to getStats", Status.BROKEN, e);
