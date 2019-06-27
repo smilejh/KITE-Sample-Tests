@@ -1,6 +1,5 @@
-const {By, Key, promise} = require('selenium-webdriver');
-const map = promise.map;
-const {TestUtils, Status, KiteTestError} = require('kite-common'); 
+const {By, Key} = require('selenium-webdriver');
+const {TestUtils} = require('kite-common'); 
 const waitAround = TestUtils.waitAround;
 const verifyVideoDisplayByIndex = TestUtils.verifyVideoDisplayByIndex;
 
@@ -129,13 +128,13 @@ class MedoozePage {
     let i;
     let timeout = stepInfo.timeout;
 
-    await TestUtils.waitVideos(stepInfo, elements.videos);
+    await TestUtils.waitForVideos(stepInfo, elements.videos);
 
     let idx = ("sent" === direction) ? 0 : 1;
     let checked = await verifyVideoDisplayByIndex(stepInfo.driver, idx);
     i = 0;
     checked = await verifyVideoDisplayByIndex(stepInfo.driver, idx);
-    while(checked.result === 'blank' || checked.result === undefined && i < timeout) {
+    while(checked.result === 'blank' || typeof checked.result === "undefined" && i < timeout) {
       checked = await verifyVideoDisplayByIndex(stepInfo.driver, idx);
       i++;
       await waitAround(1000);

@@ -1,14 +1,16 @@
 const OpenViduBasePage = require('./OpenViduBasePage');
-const {By} = require('selenium-webdriver');
+const {By, Key} = require('selenium-webdriver');
+const {TestUtils} = require('kite-common');
 
 // Elements
 const sessionRoom = By.id('sessionName');
 const userInput = By.id('user');
 const passInput = By.id('pass');
+
 const username = 'publisher1';
 const password = 'pass';
 
-class CallPage extends OpenViduBasePage {
+class WebinarPage extends OpenViduBasePage {
   constructor(driver) {
     super(driver);
   }
@@ -28,4 +30,4 @@ class CallPage extends OpenViduBasePage {
 
 }
 
-module.exports = CallPage;
+module.exports = WebinarPage;

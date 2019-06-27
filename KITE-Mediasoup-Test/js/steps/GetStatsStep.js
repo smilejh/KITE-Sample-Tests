@@ -28,7 +28,9 @@ class GetStatsStep extends TestStep {
 
     let sentStats = await TestUtils.getStats(this, 'kite', this.peerConnections[0]);
 
-    let receivedStats = await TestUtils.getStats(this, 'kite', this.peerConnections[1]);
+    let receivedStats = [];
+    let receivedObj = await TestUtils.getStats(this, 'kite', this.peerConnections[1]);
+      receivedStats.push(receivedObj);
 
     let builder = {};
     builder['local'] = sentStats;
@@ -36,8 +38,8 @@ class GetStatsStep extends TestStep {
     let obj = await TestUtils.extractStats(sentStats, receivedStats);
 
     // Data
-    this.testReporter.textAttachment(this.report, 'Raw stats', JSON.stringify(builder), "json")
-    this.testReporter.textAttachment(this.report, 'Summary Stats', JSON.stringify(obj), "json");
+    this.testReporter.textAttachment(this.report, 'Raw stats', JSON.stringify(builder, null, 4), "json")
+    this.testReporter.textAttachment(this.report, 'Summary Stats', JSON.stringify(obj, null, 4), "json");
     
     } catch (error) {
       console.log(error);

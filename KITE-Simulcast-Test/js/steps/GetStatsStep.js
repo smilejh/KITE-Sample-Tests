@@ -27,7 +27,7 @@ class GetStatsStep extends TestStep {
     let receivedStats = await TestUtils.getStats(this, 'kite', this.pc);
 
     // Data
-    this.testReporter.textAttachment(this.report, 'getStatsRaw', JSON.stringify(receivedStats), "json");
+    this.testReporter.textAttachment(this.report, 'getStatsRaw', JSON.stringify(receivedStats, null, 4), "json");
     
     } catch (error) {
       console.log(error);
