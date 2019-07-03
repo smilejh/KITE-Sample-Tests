@@ -15,7 +15,6 @@ class VideoConferencePage extends OpenViduBasePage {
     await meeting.sendKeys(sessionId); // Fill out the session field and add some random numbers
     await meeting.sendKeys(Key.ENTER); // Press ENTER to enter in the room
   }
-
 }
 
 module.exports = VideoConferencePage;

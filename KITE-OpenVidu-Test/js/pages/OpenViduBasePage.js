@@ -1,5 +1,6 @@
-const {By} = require('selenium-webdriver');
+const {By, promise} = require('selenium-webdriver');
 const {TestUtils} = require('kite-common');
+const waitAround = TestUtils.waitAround;
 const verifyVideoDisplayByIndex = TestUtils.verifyVideoDisplayByIndex;
 
 const videoElements = By.css('video');
@@ -16,16 +17,15 @@ class OpenViduBasePage {
 
   async videoCheck(stepInfo, index) {
     let checked; // Result of the verification
-    let i
-    let timeout = stepInfo.timeout / 1000;
+    let i = 0;
+    let timeout = stepInfo.timeout;
 
     // Waiting for all the videos
-    await TestUtils.waitVideos(stepInfo, this.videos);
+    await TestUtils.waitForVideos(stepInfo, this.videos);
 
     // Check the status of the video
     // checked.result = 'blank' || 'still' || 'video'
     checked = await verifyVideoDisplayByIndex(stepInfo.driver, index);
-    i = 0;
     while(checked.result === 'blank' && i < timeout) {
       checked = await verifyVideoDisplayByIndex(stepInfo.driver, index);
       i++;
@@ -45,8 +45,7 @@ class OpenViduBasePage {
     let ids = [];
     let videos;
     let i = 0;
-    let timeout = stepInfo.timeout / 1000;
-    // let numberOfParticipant = parseInt(stepInfo.numberOfParticipant) + 1; // +1 for the large video
+    let timeout = stepInfo.timeout;
     let numberOfParticipant = stepInfo.numberOfParticipant;
   
     // Getting all the videos

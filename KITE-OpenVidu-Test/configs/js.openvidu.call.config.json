@@ -1,10 +1,10 @@
 {
   "type": 1,
-  "name": "js.openvidu.call.config.json %ts",
-  "remotes": [
+  "name": "Openvidu call %ts",
+  "grids": [
     {
       "type": "local",
-      "remoteAddress": "http://localhost:4444/wd/hub"
+      "url": "http://localhost:4444/wd/hub"
     }
   ],
   "tests": [
@@ -29,7 +29,7 @@
       }
     }
   ],
-  "browsers": [
+  "clients": [
     {
       "browserName": "chrome",
       "version": "74",

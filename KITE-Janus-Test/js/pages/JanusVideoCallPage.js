@@ -7,50 +7,43 @@ const waitAround = TestUtils.waitAround;
 const usernameInput = By.id('username');
 const peerInput = By.id('peer');
 const answerButton = By.className("btn btn-success");
-const btnElements = By.className("btn");
 const closeButton = By.className("bootbox-close-button close");
+const bodyModal =  By.className("bootbox-body");
+const modalWaitingText = "Waiting for the peer to answer...";
 
 const call = async function(stepInfo) {
-  let peer = await stepInfo.driver.findElement(peerInput);
-  await peer.sendKeys(stepInfo.sessionId + parseInt((stepInfo.id + 1)));
-  await peer.sendKeys(Key.ENTER);
-  await waitAround(3000); // wait for modal to display
-  
-  let btns = await stepInfo.driver.findElements(btnElements);
-  // If there are more than 6 buttons, it means
-  // there is a modal which indicates the receiver doesn't exist
-  if(btns.length > 6) {
-    do {
-      // To close the modal
-      await stepInfo.driver.wait(until.elementLocated(closeButton)); // attente du modal
+  let running = true;
+  let i = 0;
+  do {
+    let peer = await stepInfo.driver.findElement(peerInput);
+    await peer.sendKeys(stepInfo.sessionId + parseInt((stepInfo.id + 1)));
+    await peer.sendKeys(Key.ENTER);
+    await stepInfo.driver.wait(until.elementLocated(bodyModal));
+    let txt = await stepInfo.driver.findElements(bodyModal); // Array of elements
+    let modalText = await txt[0].getText();
+    if (typeof modalText !== "undefined" && modalText.includes(modalWaitingText)) {
+      running = false;
+    } else {
+      await stepInfo.driver.wait(until.elementLocated(closeButton));
       let close = await stepInfo.driver.findElement(closeButton);
       await close.click();
-
-      await stepInfo.driver.wait(until.elementLocated(peerInput));
-      peer = await stepInfo.driver.findElement(peerInput);
-      await stepInfo.driver.wait(until.elementIsVisible(peer) || 6000);
-      await stepInfo.driver.wait(until.elementIsEnabled(peer) || 6000);
-
-      await peer.clear();
-      await peer.sendKeys(stepInfo.sessionId + parseInt(stepInfo.id + 1));
-      await peer.sendKeys(Key.ENTER);
-
-      await waitAround(3000); // wait for buttons to display
-      
-      btns = await stepInfo.driver.findElements(btnElements);
-    } while(btns.length > 6);
-  }
+      await waitAround(2000);
+    }
+    i++;
+  } while(running && i < stepInfo.timeout);
 }
 
-const receive = async function(driver) {
+const receive = async function(driver, timeout) {
   let answer = await driver.findElements(answerButton);
+  let i = 0;
   // answer[2] is a modal button that permites to answer the call
-  while(answer[2] === undefined) {
+  while(typeof answer[2] === "undefined" && i < timeout) {
     answer = await driver.findElements(answerButton);
+    await waitAround(2000);
+    i++;
   }
   await answer[2].click();
 }
-
 
 class JanusVideoCallPage extends JanusBasepage {
   constructor(driver) {
@@ -70,7 +63,7 @@ class JanusVideoCallPage extends JanusBasepage {
     if (stepInfo.id %2 === 0) {
       await call(stepInfo);
     } else {
-      await receive(stepInfo.driver);
+      await receive(stepInfo.driver, stepInfo.timeout);
     }
   }
 }
