@@ -5,12 +5,16 @@ import io.cosmosoftware.kite.interfaces.Runner;
 import io.cosmosoftware.kite.jitsi.pages.MeetingPage;
 import io.cosmosoftware.kite.report.Reporter;
 import io.cosmosoftware.kite.steps.TestStep;
+import java.util.LinkedHashMap;
+import java.util.List;
 import org.openqa.selenium.JavascriptExecutor;
 
 import javax.json.JsonObject;
+import org.webrtc.kite.stats.RTCStats;
 
-import static org.webrtc.kite.stats.StatsUtils.extractStats;
+import static org.webrtc.kite.stats.StatsUtils.buildStatSummary;
 import static org.webrtc.kite.stats.StatsUtils.getPCStatOvertime;
+import static org.webrtc.kite.stats.StatsUtils.transformToJson;
 
 public class GetStatsStep extends TestStep {
   
@@ -31,9 +35,9 @@ public class GetStatsStep extends TestStep {
   @Override
   protected void step() throws KiteTestException {
     ((JavascriptExecutor) webDriver).executeScript(meetingPage.getPeerConnectionScript());
-    JsonObject rawStats = getPCStatOvertime(webDriver, getStatsConfig).get(0);
-    JsonObject statsSummary = extractStats(rawStats, "both").build();
-    reporter.jsonAttachment(report, "getStatsRaw", rawStats);
-    reporter.jsonAttachment(report, "getStatsSummary", statsSummary);
+    LinkedHashMap<String, List<RTCStats>> statsOverTime =  getPCStatOvertime(webDriver, getStatsConfig);
+    List<RTCStats> localPcStats = statsOverTime.get(statsOverTime.keySet().toArray()[0]);
+    reporter.jsonAttachment(this.report, "Stats (Raw)", transformToJson(localPcStats));
+    reporter.jsonAttachment(this.report, "Stats Summary", buildStatSummary(localPcStats));
   }
 }

@@ -38,8 +38,8 @@
       
   <properties>
     <kite.version>[2.0.5,)</kite.version>
-    <kite.extras.version>[0.1.28,)</kite.extras.version>
-    <kite.framework.version>[1.0.5,)</kite.framework.version>
+    <kite.extras.version>[0.1.32,)</kite.extras.version>
+    <kite.framework.version>[1.0.8,)</kite.framework.version>
     
     <!-- Core dependencies -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -53,8 +53,8 @@
     <kite.npm.version>6.9.0</kite.npm.version>
 
     <!-- Comment out the following line and uncomment the next to use your local maven repo for KITE-Extras -->
-    <kite.extras.repo>com.github.CoSMoSoftware</kite.extras.repo>
-    <!--<kite.extras.repo>io.cosmosoftware.kite</kite.extras.repo>-->
+<!--    <kite.extras.repo>com.github.CoSMoSoftware</kite.extras.repo>-->
+    <kite.extras.repo>io.cosmosoftware.kite</kite.extras.repo>
     
   </properties>
 

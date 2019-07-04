@@ -5,6 +5,8 @@ import io.cosmosoftware.kite.interfaces.Runner;
 import io.cosmosoftware.kite.report.Reporter;
 import io.cosmosoftware.kite.report.Status;
 import io.cosmosoftware.kite.steps.TestStep;
+import java.util.LinkedHashMap;
+import org.webrtc.kite.stats.RTCStats;
 import org.webrtc.kite.stats.StatsUtils;
 
 import javax.json.Json;
@@ -14,7 +16,9 @@ import javax.json.JsonObjectBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.webrtc.kite.stats.StatsUtils.buildStatSummary;
 import static org.webrtc.kite.stats.StatsUtils.getPCStatOvertime;
+import static org.webrtc.kite.stats.StatsUtils.transformToJson;
 
 public class GetStatsStep extends TestStep {
 
@@ -34,21 +38,10 @@ public class GetStatsStep extends TestStep {
   protected void step() throws KiteTestException {
     logger.info("Getting WebRTC stats via getStats");
     try {
-      List<JsonObject> stats = getPCStatOvertime(webDriver, getStatsConfig);
-      JsonObject sentStats = stats.get(0);
-      JsonObject receivedObject = stats.get(1);
-      JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
-      List<JsonObject> receivedStats = new ArrayList<>();
-      
-      receivedStats.add(stats.get(1));
-      arrayBuilder.add(receivedObject);
-
-      JsonObject json = StatsUtils.extractStats(sentStats, receivedStats);
-      JsonObjectBuilder builder = Json.createObjectBuilder();
-      builder.add("local", sentStats);
-      builder.add("remote", arrayBuilder);
-      reporter.jsonAttachment(report, "getStatsRaw", builder.build());
-      reporter.jsonAttachment(report, "getStatsSummary", json);
+      LinkedHashMap<String, List<RTCStats>> statsOverTime =  getPCStatOvertime(webDriver, getStatsConfig);
+      List<RTCStats> localPcStats = statsOverTime.get(statsOverTime.keySet().toArray()[0]);
+      reporter.jsonAttachment(this.report, "Stats (Raw)", transformToJson(localPcStats));
+      reporter.jsonAttachment(this.report, "Stats Summary", buildStatSummary(localPcStats));
     } catch (Exception e) {
       e.printStackTrace();
       throw new KiteTestException("Failed to getStats", Status.BROKEN, e);
