@@ -83,10 +83,7 @@ public class GetStatsStep extends TestStep {
         builder.add("local", transformToJson(sentStats));
         builder.add("remote", arrayBuilder);
         reporter.jsonAttachment(report, "Stats (Raw)", builder.build());
-        logger.info("=======================================================================");
-        //logger.info(pcStatMap.toString());
         reporter.jsonAttachment(report, "Stats Summary", buildStatSummary(pcStatMap));
-        logger.info("=======================================================================");
       } else {
         LinkedHashMap<String, List<RTCStats>> statsOverTime =  getPCStatOvertime(webDriver, getStatsConfig);
         List<RTCStats> localPcStats = statsOverTime.get(statsOverTime.keySet().toArray()[0]);
