@@ -77,12 +77,12 @@ public class JanusVideoCallTest extends KiteBaseTest {
 
     for(int index = 0; index < this.tuple.size(); ++index) {
       Client client = this.tuple.get(index);
-      name.append(client.retrievePlatform().name(), 0, 3);
+      name.append(client.getPlatform().name(), 0, 3);
       if (client instanceof Browser) {
         name.append(((Browser)client).getBrowserName(), 0, 2);
         name.append(((Browser)client).getVersion());
       } else {
-        name.append(((App)client).retrieveDeviceName(), 0, 2);
+        name.append(client.getDeviceName(), 0, 2);
       }
 
     }
