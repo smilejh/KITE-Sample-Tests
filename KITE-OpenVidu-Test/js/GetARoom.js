@@ -3,19 +3,14 @@ const {OpenUrlStep} = require('./steps');
 const {VideoSentCheck, VideoReceivedCheck} = require('./checks');
 const {GetARoomPage} = require('./pages');
 
-// KiteBaseTest config
-const globalVariables = TestUtils.getGlobalVariables(process);
-const capabilities = require(globalVariables.capabilitiesPath);
-const payload = require(globalVariables.payloadPath);
-
 class GetARoom extends KiteBaseTest {
-  constructor(name, globalVariables, capabilities, payload) {
-    super(name, globalVariables, capabilities, payload);
+  constructor(name, kiteConfig) {
+    super(name, kiteConfig);
   }
   
   async testScript() {
     try {
-      this.driver = await WebDriverFactory.getDriver(capabilities, capabilities.remoteAddress);
+      this.driver = await WebDriverFactory.getDriver(this.capabilities, this.remoteUrl);
       this.page = new GetARoomPage(this.driver);
 
       let openUrlStep = new OpenUrlStep(this);
@@ -36,7 +31,7 @@ class GetARoom extends KiteBaseTest {
         let screenshotStep = new ScreenshotStep(this);
         await screenshotStep.execute(this);
       }
-      await super.waitAllSteps();
+      await this.waitAllSteps();
     } catch (e) {
       console.log(e);
     } finally {
@@ -47,5 +42,8 @@ class GetARoom extends KiteBaseTest {
 
 module.exports= GetARoom;
 
-let test = new GetARoom('GetARoom test', globalVariables, capabilities, payload);
-test.run();
+(async () => {
+  const kiteConfig = await TestUtils.getKiteConfig(__dirname);
+  let test = new GetARoom('GetARoom test', kiteConfig);
+  await test.run();
+})();

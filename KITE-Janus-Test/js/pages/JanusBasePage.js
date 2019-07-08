@@ -1,5 +1,5 @@
 const {By} = require('selenium-webdriver');
-const {TestUtils, KiteTestError, Status} = require('kite-common'); 
+const {TestUtils} = require('kite-common'); 
 const waitAround = TestUtils.waitAround;
 const verifyVideoDisplayByIndex = TestUtils.verifyVideoDisplayByIndex;
 
@@ -22,13 +22,13 @@ class JanusBasePage {
     let timeout = stepInfo.timeout;
 
     // Waiting for the videos
-    await TestUtils.waitVideos(stepInfo, this.videos);
+    await TestUtils.waitForVideos(stepInfo, this.videos);
 
     // Check the status of the video
     // checked.result = 'blank' || 'still' || 'video'
     let i = 0;
     let checked = await verifyVideoDisplayByIndex(stepInfo.driver, index);
-    while(checked.result === 'blank' || checked.result === undefined && i < timeout) {
+    while(checked.result === 'blank' || typeof checked.result === "undefined" && i < timeout) {
       checked = await verifyVideoDisplayByIndex(stepInfo.driver, index);
       i++;
       await waitAround(1000);

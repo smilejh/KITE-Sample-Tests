@@ -6,11 +6,11 @@ const {TestStep} = require('kite-common');
  * Description:
  */
 class JoinVideoCallStep extends TestStep {
-  constructor(kiteBaseTest, url) {
+  constructor(kiteBaseTest) {
     super();
     this.driver = kiteBaseTest.driver;
     this.timeout = kiteBaseTest.timeout;
-    this.url = url;
+    this.url = kiteBaseTest.url;
     this.uuid = kiteBaseTest.uuid;
     this.page = kiteBaseTest.page;
   }

@@ -1,6 +1,6 @@
 {
   "type": 1,
-  "name": "Openvidu webinar %ts",
+  "name": "Openvidu classroom %ts",
   "grids": [
     {
       "type": "local",
@@ -9,13 +9,13 @@
   ],
   "tests": [
     {
-      "name": "Webinar OpenVidu Test %ts",
-      "description":"Webinar OpenVidu Test",
+      "name": "JS Classroom OpenVidu Test %ts",
+      "description":"JS Classroom OpenVidu Test",
       "tupleSize": 2,
       "noOfThreads": 1,
-      "testImpl": "Webinar.js",
+      "testImpl": "Classroom.js",
       "payload":{
-        "url": "https://demos.openvidu.io/basic-webinar/",
+        "url": "https://demos.openvidu.io/classroom/#/",
         "port": 30000,
         "takeScreenshotForEachTest": true,
         "testTimeout": 60,

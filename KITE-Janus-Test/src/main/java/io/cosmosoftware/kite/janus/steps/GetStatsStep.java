@@ -15,9 +15,14 @@ import javax.json.JsonObjectBuilder;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import org.webrtc.kite.stats.RTCStatList;
+import org.webrtc.kite.stats.RTCStatMap;
+import org.webrtc.kite.stats.RTCStats;
 
 import static io.cosmosoftware.kite.util.ReportUtils.getStackTrace;
 import static org.webrtc.kite.stats.StatsUtils.*;
+import static org.webrtc.kite.stats.StatsUtils.buildStatSummary;
+import static org.webrtc.kite.stats.StatsUtils.transformToJson;
 
 public class GetStatsStep extends TestStep {
 
@@ -57,36 +62,35 @@ public class GetStatsStep extends TestStep {
     LinkedHashMap<String, String> results = new LinkedHashMap<>();
     try {
       if (sfu) {
+        RTCStatMap pcStatMap = new RTCStatMap();
         List<String> remotePC = janusPage.getRemotePC();
-        JsonObject sentStats = getPCStatOvertime(webDriver,
+        RTCStatList sentStats = getPCStatOvertime(webDriver,
             getStatsConfig.getJsonArray("peerConnections").getString(0),
             getStatsConfig.getInt("statsCollectionTime"),
             getStatsConfig.getInt("statsCollectionInterval"),
             getStatsConfig.getJsonArray("selectedStats"));
         JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
-        List<JsonObject> receivedStats = new ArrayList<>();
+        pcStatMap.put(getStatsConfig.getJsonArray("peerConnections").getString(0), sentStats);
         for (int i = 1; i < remotePC.size() + 1; i++) {
-          JsonObject receivedObject = getPCStatOvertime(webDriver,
+          RTCStatList receivedStats = getPCStatOvertime(webDriver,
               remotePC.get(i - 1),
               getStatsConfig.getInt("statsCollectionTime"),
               getStatsConfig.getInt("statsCollectionInterval"),
               getStatsConfig.getJsonArray("selectedStats"));
-          receivedStats.add(receivedObject);
-          arrayBuilder.add(receivedObject);
+          logger.info("Adding pc stats to map for :" + remotePC.get(i - 1) );
+          pcStatMap.put(remotePC.get(i - 1), receivedStats);
+          arrayBuilder.add(transformToJson(receivedStats));
         }
-        JsonObject json = extractStats(sentStats, receivedStats);
-        results = statsHashMap(json, remotePC.size());
         JsonObjectBuilder builder = Json.createObjectBuilder();
-        builder.add("local", sentStats);
+        builder.add("local", transformToJson(sentStats));
         builder.add("remote", arrayBuilder);
-        reporter.jsonAttachment(report, "getStatsRaw", builder.build());
-        reporter.jsonAttachment(report, "getStatsSummary", json);
+        reporter.jsonAttachment(report, "Stats (Raw)", builder.build());
+        reporter.jsonAttachment(report, "Stats Summary", buildStatSummary(pcStatMap));
       } else {
-        JsonObject stats = getPCStatOvertime(webDriver, getStatsConfig).get(0);
-        JsonObject statsSummary = buildstatSummary(stats, getStatsConfig.getJsonArray("selectedStats"));
-        results = statsHashMap(statsSummary);
-        reporter.jsonAttachment(report, "getStatsRaw", stats);
-        reporter.jsonAttachment(this.report, "Stats Summary", statsSummary);
+        RTCStatMap statsOverTime =  getPCStatOvertime(webDriver, getStatsConfig);
+        RTCStatList localPcStats = statsOverTime.getLocalPcStats();
+        reporter.jsonAttachment(this.report, "Stats (Raw)", transformToJson(localPcStats));
+        reporter.jsonAttachment(this.report, "Stats Summary", buildStatSummary(localPcStats));
       }
 
     } catch (Exception e) {

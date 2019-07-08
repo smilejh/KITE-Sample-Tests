@@ -3,20 +3,15 @@ const {JoinUrlStep, GetStatsStep} = require('./steps');
 const {FirstVideoCheck, AllVideoCheck} = require('./checks');
 const {JanusVideoRoomPage} = require('./pages'); 
 
-// KiteBaseTest config
-const globalVariables = TestUtils.getGlobalVariables(process);
-const capabilities = require(globalVariables.capabilitiesPath);
-const payload = require(globalVariables.payloadPath);
-
 class JanusVideoRoom extends KiteBaseTest {
-  constructor(name, globalVariables, capabilities, payload) {
-    super(name, globalVariables, capabilities, payload);
+  constructor(name, kiteConfig) {
+    super(name, kiteConfig);
     this.page = new JanusVideoRoomPage();
   }
   
   async testScript() {
     try {
-      this.driver = await WebDriverFactory.getDriver(capabilities, capabilities.remoteAddress);
+      this.driver = await WebDriverFactory.getDriver(this.capabilities, this.remoteUrl);
       this.page = new JanusVideoRoomPage(this.driver);
 
       let joinUrlStep = new JoinUrlStep(this);
@@ -37,7 +32,7 @@ class JanusVideoRoom extends KiteBaseTest {
         let screenshotStep = new ScreenshotStep(this);
         await screenshotStep.execute(this);
       }
-      await super.waitAllSteps();
+      await this.waitAllSteps();
       await this.page.stopVideo();
     } catch (e) {
       console.log(e);
@@ -49,5 +44,8 @@ class JanusVideoRoom extends KiteBaseTest {
 
 module.exports= JanusVideoRoom;
 
-let test = new JanusVideoRoom('VideoRoom test', globalVariables, capabilities, payload);
-test.run();
+(async () => {
+  const kiteConfig = await TestUtils.getKiteConfig(__dirname);
+  let test = new JanusVideoRoom('VideoRoom test', kiteConfig);
+  await test.run();
+})();
