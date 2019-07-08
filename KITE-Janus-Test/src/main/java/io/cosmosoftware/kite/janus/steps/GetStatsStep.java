@@ -15,6 +15,8 @@ import javax.json.JsonObjectBuilder;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import org.webrtc.kite.stats.RTCStatList;
+import org.webrtc.kite.stats.RTCStatMap;
 import org.webrtc.kite.stats.RTCStats;
 
 import static io.cosmosoftware.kite.util.ReportUtils.getStackTrace;
@@ -60,9 +62,9 @@ public class GetStatsStep extends TestStep {
     LinkedHashMap<String, String> results = new LinkedHashMap<>();
     try {
       if (sfu) {
-        LinkedHashMap<String, List<RTCStats>> pcStatMap = new LinkedHashMap<>();
+        RTCStatMap pcStatMap = new RTCStatMap();
         List<String> remotePC = janusPage.getRemotePC();
-        List<RTCStats> sentStats = getPCStatOvertime(webDriver,
+        RTCStatList sentStats = getPCStatOvertime(webDriver,
             getStatsConfig.getJsonArray("peerConnections").getString(0),
             getStatsConfig.getInt("statsCollectionTime"),
             getStatsConfig.getInt("statsCollectionInterval"),
@@ -70,7 +72,7 @@ public class GetStatsStep extends TestStep {
         JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
         pcStatMap.put(getStatsConfig.getJsonArray("peerConnections").getString(0), sentStats);
         for (int i = 1; i < remotePC.size() + 1; i++) {
-          List<RTCStats> receivedStats = getPCStatOvertime(webDriver,
+          RTCStatList receivedStats = getPCStatOvertime(webDriver,
               remotePC.get(i - 1),
               getStatsConfig.getInt("statsCollectionTime"),
               getStatsConfig.getInt("statsCollectionInterval"),
@@ -85,8 +87,8 @@ public class GetStatsStep extends TestStep {
         reporter.jsonAttachment(report, "Stats (Raw)", builder.build());
         reporter.jsonAttachment(report, "Stats Summary", buildStatSummary(pcStatMap));
       } else {
-        LinkedHashMap<String, List<RTCStats>> statsOverTime =  getPCStatOvertime(webDriver, getStatsConfig);
-        List<RTCStats> localPcStats = statsOverTime.get(statsOverTime.keySet().toArray()[0]);
+        RTCStatMap statsOverTime =  getPCStatOvertime(webDriver, getStatsConfig);
+        RTCStatList localPcStats = statsOverTime.getLocalPcStats();
         reporter.jsonAttachment(this.report, "Stats (Raw)", transformToJson(localPcStats));
         reporter.jsonAttachment(this.report, "Stats Summary", buildStatSummary(localPcStats));
       }

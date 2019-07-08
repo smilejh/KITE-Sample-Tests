@@ -6,6 +6,8 @@ import io.cosmosoftware.kite.report.Reporter;
 import io.cosmosoftware.kite.report.Status;
 import io.cosmosoftware.kite.steps.TestStep;
 import java.util.LinkedHashMap;
+import org.webrtc.kite.stats.RTCStatList;
+import org.webrtc.kite.stats.RTCStatMap;
 import org.webrtc.kite.stats.RTCStats;
 import org.webrtc.kite.stats.StatsUtils;
 
@@ -38,8 +40,8 @@ public class GetStatsStep extends TestStep {
   protected void step() throws KiteTestException {
     logger.info("Getting WebRTC stats via getStats");
     try {
-      LinkedHashMap<String, List<RTCStats>> statsOverTime =  getPCStatOvertime(webDriver, getStatsConfig);
-      List<RTCStats> localPcStats = statsOverTime.get(statsOverTime.keySet().toArray()[0]);
+      RTCStatMap statsOverTime =  getPCStatOvertime(webDriver, getStatsConfig);
+      RTCStatList localPcStats = statsOverTime.getLocalPcStats();
       reporter.jsonAttachment(this.report, "Stats (Raw)", transformToJson(localPcStats));
       reporter.jsonAttachment(this.report, "Stats Summary", buildStatSummary(localPcStats));
     } catch (Exception e) {

@@ -10,6 +10,8 @@ import java.util.List;
 import org.openqa.selenium.JavascriptExecutor;
 
 import javax.json.JsonObject;
+import org.webrtc.kite.stats.RTCStatList;
+import org.webrtc.kite.stats.RTCStatMap;
 import org.webrtc.kite.stats.RTCStats;
 
 import static org.webrtc.kite.stats.StatsUtils.buildStatSummary;
@@ -35,8 +37,8 @@ public class GetStatsStep extends TestStep {
   @Override
   protected void step() throws KiteTestException {
     ((JavascriptExecutor) webDriver).executeScript(meetingPage.getPeerConnectionScript());
-    LinkedHashMap<String, List<RTCStats>> statsOverTime =  getPCStatOvertime(webDriver, getStatsConfig);
-    List<RTCStats> localPcStats = statsOverTime.get(statsOverTime.keySet().toArray()[0]);
+    RTCStatMap statsOverTime =  getPCStatOvertime(webDriver, getStatsConfig);
+    RTCStatList localPcStats = statsOverTime.getLocalPcStats();
     reporter.jsonAttachment(this.report, "Stats (Raw)", transformToJson(localPcStats));
     reporter.jsonAttachment(this.report, "Stats Summary", buildStatSummary(localPcStats));
   }
