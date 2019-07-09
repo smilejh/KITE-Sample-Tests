@@ -3,19 +3,14 @@ const {JoinUrlStep, GetStatsStep} = require('./steps');
 const {AllVideoCheck} = require('./checks');
 const {JanusStreamingPage} = require('./pages');
 
-// KiteBaseTest config
-const globalVariables = TestUtils.getGlobalVariables(process);
-const capabilities = require(globalVariables.capabilitiesPath);
-const payload = require(globalVariables.payloadPath);
-
 class JanusStreaming extends KiteBaseTest {
-  constructor(name, globalVariables, capabilities, payload) {
-    super(name, globalVariables, capabilities, payload);
+  constructor(name, kiteConfig) {
+    super(name, kiteConfig);
   }
   
   async testScript() {
     try {
-      this.driver = await WebDriverFactory.getDriver(capabilities, capabilities.remoteAddress);
+      this.driver = await WebDriverFactory.getDriver(this.capabilities, this.remoteUrl);
       this.page = new JanusStreamingPage(this.driver);
 
       let joinUrlStep = new JoinUrlStep(this);
@@ -34,7 +29,7 @@ class JanusStreaming extends KiteBaseTest {
         await screenshotStep.execute(this);
       }
 
-      await super.waitAllSteps();
+      await this.waitAllSteps();
     } catch (e) {
       console.log(e);
     } finally {
@@ -45,5 +40,8 @@ class JanusStreaming extends KiteBaseTest {
 
 module.exports= JanusStreaming;
 
-let test = new JanusStreaming('Streaming test', globalVariables, capabilities, payload);
-test.run();
+(async () => {
+  const kiteConfig = await TestUtils.getKiteConfig(__dirname);
+  let test = new JanusStreaming('Streaming test', kiteConfig);
+  await test.run();
+})();

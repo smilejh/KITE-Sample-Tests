@@ -38,14 +38,14 @@ class JitsiPage {
     stepInfo.numberOfParticipant = parseInt(stepInfo.numberOfParticipant) + 1; // To add the first video
     
     // Waiting for all the videos
-    await TestUtils.waitVideos(stepInfo, videoElements);
+    await TestUtils.waitForVideos(stepInfo, videoElements);
     stepInfo.numberOfParticipant --; // To delete the first video
 
     // Check the status of the video
     // checked.result = 'blank' || 'still' || 'video'
     i = 0;
     checked = await verifyVideoDisplayByIndex(stepInfo.driver, index + 1);
-    while(checked.result === 'blank' || checked.result === undefined && i < timeout) {
+    while(checked.result === 'blank' || typeof checked.result === "undefined" && i < timeout) {
       checked = await verifyVideoDisplayByIndex(stepInfo.driver, index + 1);
       i++;
       await waitAround(1000);

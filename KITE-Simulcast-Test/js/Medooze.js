@@ -3,24 +3,17 @@ const {LoadPageStep, GetStatsStep, SelectProfileStep} = require('./steps');
 const {SenderVideoCheck, ReceivedVideoCheck, GaugesCheck} = require('./checks');
 const {MedoozePage} = require('./pages');
 
-// KiteBaseTest config
-const globalVariables = TestUtils.getGlobalVariables(process);
-const capabilities = require(globalVariables.capabilitiesPath);
-const payload = require(globalVariables.payloadPath);
-
-
 const rids = ['a', 'b', 'c'];
 const tids = [0, 1, 2];
 
-
 class Medooze extends KiteBaseTest {
-  constructor(name, globalVariables, capabilities, payload) {
-    super(name, globalVariables, capabilities, payload);
+  constructor(name, kiteConfig) {
+    super(name, kiteConfig);
   }
   
   async testScript() {
     try {
-      this.driver = await WebDriverFactory.getDriver(capabilities, capabilities.remoteAddress);
+      this.driver = await WebDriverFactory.getDriver(this.capabilities, this.remoteUrl);
       this.page = new MedoozePage(this.driver);
 
       let loadPageStep = new LoadPageStep(this);
@@ -60,5 +53,8 @@ class Medooze extends KiteBaseTest {
 
 module.exports = Medooze;
 
-let test = new Medooze('Medooze test', globalVariables, capabilities, payload);
-test.run();
+(async () => {
+  const kiteConfig = await TestUtils.getKiteConfig(__dirname);
+  let test = new Medooze('Medooze test', kiteConfig);
+  await test.run();
+})();

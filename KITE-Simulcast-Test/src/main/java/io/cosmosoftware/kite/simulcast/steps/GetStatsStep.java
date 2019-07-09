@@ -5,11 +5,15 @@ import io.cosmosoftware.kite.interfaces.Runner;
 import io.cosmosoftware.kite.report.Reporter;
 import io.cosmosoftware.kite.report.Status;
 import io.cosmosoftware.kite.steps.TestStep;
+import java.util.List;
 import org.openqa.selenium.WebDriver;
 
 import javax.json.JsonObject;
+import org.webrtc.kite.stats.RTCStatList;
+import org.webrtc.kite.stats.RTCStats;
 
 import static org.webrtc.kite.stats.StatsUtils.getPCStatOvertime;
+import static org.webrtc.kite.stats.StatsUtils.transformToJson;
 
 public class GetStatsStep extends TestStep {
 
@@ -30,8 +34,8 @@ public class GetStatsStep extends TestStep {
   @Override
   protected void step() throws KiteTestException {
     try {
-      JsonObject stats = getPCStatOvertime(webDriver, getStatsConfig).get(0);
-      reporter.jsonAttachment(report, "getStatsRaw", stats);
+      RTCStatList localPcStats = getPCStatOvertime(webDriver, getStatsConfig).get(0);
+      reporter.jsonAttachment(report, "getStatsRaw", transformToJson(localPcStats));
     } catch (Exception e) {
       e.printStackTrace();
       throw new KiteTestException("Failed to getStats", Status.BROKEN, e);

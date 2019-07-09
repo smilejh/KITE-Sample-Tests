@@ -3,19 +3,15 @@ const {OpenUrlStep} = require('./steps');
 const {VideoSentCheck, VideoReceivedCheck} = require('./checks');
 const {WebinarPage} = require('./pages');
 
-// KiteBaseTest config
-const globalVariables = TestUtils.getGlobalVariables(process);
-const capabilities = require(globalVariables.capabilitiesPath);
-const payload = require(globalVariables.payloadPath);
-
 class Webinar extends KiteBaseTest {
-  constructor(name, globalVariables, capabilities, payload) {
-    super(name, globalVariables, capabilities, payload);
+  constructor(name, kiteConfig) {
+    super(name, kiteConfig);
+    this.numberOfParticipant++; // For the large video
   }
   
   async testScript() {
     try {
-      this.driver = await WebDriverFactory.getDriver(capabilities, capabilities.remoteAddress);
+      this.driver = await WebDriverFactory.getDriver(this.capabilities, this.remoteUrl);
       this.page = new WebinarPage(this.driver);
 
       let openUrlStep = new OpenUrlStep(this);
@@ -36,7 +32,7 @@ class Webinar extends KiteBaseTest {
         let screenshotStep = new ScreenshotStep(this);
         await screenshotStep.execute(this);
       }
-      await super.waitAllSteps();
+      await this.waitAllSteps();
     } catch (e) {
       console.log(e);
     } finally {
@@ -47,5 +43,8 @@ class Webinar extends KiteBaseTest {
 
 module.exports= Webinar;
 
-let test = new Webinar('Webinar test', globalVariables, capabilities, payload);
-test.run();
+(async () => {
+  const kiteConfig = await TestUtils.getKiteConfig(__dirname);
+  let test = new Webinar('Webinar test', kiteConfig);
+  await test.run();
+})();

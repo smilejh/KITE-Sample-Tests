@@ -19,12 +19,12 @@ class MediasoupPage {
   async videoCheck(stepInfo, index) {
     let timeout = stepInfo.timeout;
 
-    await TestUtils.waitVideos(stepInfo, videoElements);
+    await TestUtils.waitForVideos(stepInfo, videoElements);
 
     let checked = await verifyVideoDisplayByIndex(stepInfo.driver, index);
     let i = 0;
     checked = await verifyVideoDisplayByIndex(stepInfo.driver, index);
-    while(checked.result === 'blank' || checked.result === undefined && i < timeout) {
+    while(checked.result === 'blank' || typeof checked.result === "undefined" && i < timeout) {
       checked = await verifyVideoDisplayByIndex(stepInfo.driver, index);
       i++;
       await waitAround(1000);

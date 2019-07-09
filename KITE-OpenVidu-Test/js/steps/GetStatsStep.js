@@ -41,8 +41,8 @@ class GetStatsStep extends TestStep {
     let obj = await TestUtils.extractStats(sentStats, receivedStats);
 
     // Data
-    this.testReporter.textAttachment(this.report, 'getStatsRaw', JSON.stringify(builder), "json");
-    this.testReporter.textAttachment(this.report, 'getStatsSummary', JSON.stringify(obj), "json");
+    this.testReporter.textAttachment(this.report, 'getStatsRaw', JSON.stringify(builder, null, 4), "json");
+    this.testReporter.textAttachment(this.report, 'getStatsSummary', JSON.stringify(obj, null, 4), "json");
     
     } catch (error) {
       console.log(error);

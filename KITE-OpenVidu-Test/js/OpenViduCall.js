@@ -3,19 +3,14 @@ const {OpenUrlStep} = require('./steps');
 const {VideoSentCheck, VideoReceivedCheck} = require('./checks');
 const {CallPage} = require('./pages');
 
-// KiteBaseTest config
-const globalVariables = TestUtils.getGlobalVariables(process);
-const capabilities = require(globalVariables.capabilitiesPath);
-const payload = require(globalVariables.payloadPath);
-
 class OpenViduCall extends KiteBaseTest {
-  constructor(name, globalVariables, capabilities, payload) {
-    super(name, globalVariables, capabilities, payload);
+  constructor(name, kiteConfig) {
+    super(name, kiteConfig);
   }
   
   async testScript() {
     try {
-      this.driver = await WebDriverFactory.getDriver(capabilities, capabilities.remoteAddress);
+      this.driver = await WebDriverFactory.getDriver(this.capabilities, this.remoteUrl);
       this.page = new CallPage(this.driver);
 
       let openUrlStep = new OpenUrlStep(this);
@@ -36,7 +31,7 @@ class OpenViduCall extends KiteBaseTest {
         let screenshotStep = new ScreenshotStep(this);
         await screenshotStep.execute(this);
       }
-      await super.waitAllSteps();
+      await this.waitAllSteps();
     } catch (e) {
       console.log(e);
     } finally {
@@ -48,5 +43,8 @@ class OpenViduCall extends KiteBaseTest {
 
 module.exports= OpenViduCall;
 
-let test = new OpenViduCall('OpenViduCall test', globalVariables, capabilities, payload);
-test.run();
+(async () => { 
+  const kiteConfig = await TestUtils.getKiteConfig(__dirname);
+  let test = new OpenViduCall('OpenViduCall test', kiteConfig);
+  await test.run();
+})();
