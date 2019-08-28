@@ -112,13 +112,13 @@
   "clients": [
     {
       "browserName": "chrome",
-      "version": "74",
+      "version": "76",
       "platform": "localhost",
       "headless": false
     },
     {
       "browserName": "firefox",
-      "version": "66",
+      "version": "68",
       "platform": "localhost",
       "headless": false
     }

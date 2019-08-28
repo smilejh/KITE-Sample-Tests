@@ -35,7 +35,7 @@ You can use `localhost` as the platform name if the grid is running on your loca
 "browsers": [
     {
       "browserName": "chrome",
-      "version": "74",
+      "version": "76",
       "platform": "WINDOWS",
       "headless": false
     }

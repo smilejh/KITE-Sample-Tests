@@ -26,13 +26,13 @@
   "clients": [
     {
       "browserName": "chrome",
-      "version": "74",
+      "version": "76",
       "platform": "localhost",
       "focus": true
     },
     {
       "browserName": "firefox",
-      "version": "66",
+      "version": "68",
       "platform": "localhost",
       "focus": true
     }

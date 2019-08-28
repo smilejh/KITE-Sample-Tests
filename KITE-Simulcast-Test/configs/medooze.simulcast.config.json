@@ -51,7 +51,7 @@
   "clients": [
     {
       "browserName": "chrome",
-      "version": "74",
+      "version": "76",
       "platform": "localhost",
       "windowSize": "1280,800",
       "headless": false
@@ -68,7 +68,7 @@
     {
       "browserName": "firefox",
       "windowSize": "1280,800",
-      "version": "66",
+      "version": "68",
       "platform": "localhost",
       "headless": false
     },
