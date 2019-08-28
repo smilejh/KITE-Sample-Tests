@@ -38,8 +38,8 @@
       
   <properties>
     <kite.version>[2.0.5,)</kite.version>
-    <kite.extras.version>[0.1.32,)</kite.extras.version>
-    <kite.framework.version>[1.0.9,)</kite.framework.version>
+    <kite.extras.version>[0.1.44,)</kite.extras.version>
+    <kite.framework.version>[1.0.12,)</kite.framework.version>
     
     <!-- Core dependencies -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

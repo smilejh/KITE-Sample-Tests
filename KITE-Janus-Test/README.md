@@ -35,7 +35,7 @@ Set your Chrome version and OS according to what is available on your Grid. You 
 "browsers": [
     {
       "browserName": "chrome",
-      "version": "74",
+      "version": "76",
       "platform": "WINDOWS",
       "headless": false
     }

@@ -47,7 +47,7 @@
   "clients": [
     {
       "browserName": "chrome",
-      "version": "74",
+      "version": "76",
       "platform": "localhost",
       "headless": false
     }
@@ -55,13 +55,13 @@
   "_browsers_list": [
     {
       "browserName": "chrome",
-      "version": "74",
+      "version": "76",
       "platform": "MAC",
       "headless": true
     },
     {
       "browserName": "firefox",
-      "version": "66",
+      "version": "68",
       "platform": "LINUX",
       "headless": true
     }
