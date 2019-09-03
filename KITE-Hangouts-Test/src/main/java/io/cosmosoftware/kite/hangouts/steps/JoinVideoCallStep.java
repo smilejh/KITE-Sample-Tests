@@ -6,7 +6,6 @@ import io.cosmosoftware.kite.manager.RoomManager;
 import io.cosmosoftware.kite.steps.TestStep;
 import org.webrtc.kite.tests.TestRunner;
 
-import static io.cosmosoftware.kite.entities.Timeouts.ONE_SECOND_INTERVAL;
 import static io.cosmosoftware.kite.entities.Timeouts.THREE_SECOND_INTERVAL;
 import static io.cosmosoftware.kite.util.TestUtils.waitAround;
 
@@ -40,7 +39,7 @@ public class JoinVideoCallStep extends TestStep {
       String roomUrl = roomManager.getDynamicUrl(id);
       logger.info("Joining call at: " + roomUrl);
       mainPage.open(roomUrl);
-      waitAround(ONE_SECOND_INTERVAL);
+      mainPage.clickJoin();
     }
   }
 }

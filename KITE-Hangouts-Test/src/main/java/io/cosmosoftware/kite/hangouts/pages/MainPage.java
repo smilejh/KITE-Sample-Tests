@@ -1,21 +1,18 @@
 package io.cosmosoftware.kite.hangouts.pages;
 
 import io.cosmosoftware.kite.exception.KiteInteractionException;
-import io.cosmosoftware.kite.exception.KiteTestException;
 import io.cosmosoftware.kite.interfaces.Runner;
 import io.cosmosoftware.kite.pages.BasePage;
-import io.cosmosoftware.kite.report.Status;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
+import java.util.List;
 import java.util.Set;
 
 import static io.cosmosoftware.kite.entities.Timeouts.*;
-import static io.cosmosoftware.kite.util.ReportUtils.getStackTrace;
 import static io.cosmosoftware.kite.util.TestUtils.waitAround;
 import static io.cosmosoftware.kite.util.WebDriverUtils.loadPage;
 
@@ -42,8 +39,14 @@ public class MainPage extends BasePage {
   @FindBy(xpath = "//*[@id=\"yDmH0d\"]/div[4]/div[4]/div/div/ul/li[1]/div[1]")
   WebElement videoCallButton;
 
-  @FindBy(xpath = " //*[@id=\"yDmH0d\"]/div[6]/div/div[2]/span/div/div[3]/div[2]/div/span/span")
-  WebElement copyToClipboard;
+  @FindBy(xpath = "//*[@id=\"yDmH0d\"]/div[4]/div[2]/div/div/div[2]/div[2]/div/span/span")
+  WebElement joinButton;
+
+  @FindBy(tagName="video")
+  private List<WebElement> videos;
+
+  @FindBy(xpath = "//*[@id=\"yDmH0d\"]/div[6]/div/div[2]/div[2]/div[3]/div/span")
+  WebElement closePopup;
 
   public MainPage(Runner runner) {
     super(runner);
@@ -56,6 +59,11 @@ public class MainPage extends BasePage {
   public void clickSignIn() throws KiteInteractionException {
     waitUntilVisibilityOf(signinButton, TEN_SECOND_INTERVAL_IN_SECONDS);
     click(signinButton);    
+  }
+  
+  public void clickJoin() throws KiteInteractionException {
+    waitUntilVisibilityOf(joinButton, TEN_SECOND_INTERVAL_IN_SECONDS);
+    click(joinButton);
   }
 
   public void enterEmail(String email) throws KiteInteractionException {
@@ -107,23 +115,30 @@ public class MainPage extends BasePage {
     }
     return false;
     });
-  }
-  
-  public String getClipboardText() throws KiteTestException {
-
     try {
-      Clipboard c= Toolkit.getDefaultToolkit().getSystemClipboard();
-      return (String) c.getData(DataFlavor.stringFlavor);
-    } catch (Exception e) {
-      logger.error(getStackTrace(e));
-      throw new KiteTestException("Error retrieving clipboard text", Status.BROKEN, e);
+      waitUntilVisibilityOf(closePopup, TEN_SECOND_INTERVAL_IN_SECONDS);
+      click(closePopup);
+    } catch (KiteInteractionException e) {
+      //ignore
+      logger.debug("Unable to close the popup ", e);
     }
-//    // Get current window handle
-//    waitUntilVisibilityOf(copyToClipboard, TEN_SECOND_INTERVAL_IN_SECONDS);
-//    click(copyToClipboard);
-//    return (String) executeJsScript(webDriver, 
-//      "window.text = \"empty\";" + 
-//        "navigator.clipboard.readText().then(text => { return window.text = text;}); return window.text;");    
+    
+  }
+
+
+  public void videoIsPublishing(int timeout) throws TimeoutException {
+    if (videos.size() < 1) {
+      waitAround(timeout * ONE_SECOND_INTERVAL);
+      if (videos.size() < 1) {
+        throw new TimeoutException("videoIsPublishing: no <video> element found on the page");
+      }
+    }
+    WebDriverWait wait = new WebDriverWait(webDriver, timeout);
+    wait.until(ExpectedConditions.visibilityOf(videos.get(0)));
+  }
+
+  public List<WebElement> getVideoElements() {
+    return videos;
   }
 
 }

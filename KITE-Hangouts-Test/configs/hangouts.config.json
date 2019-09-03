@@ -1,6 +1,6 @@
 {
   "name": "Hangouts %ts",
-  "matrix": [[0,0,0]],
+  "matrix": [[0,1]],
   "grids": [
     {
       "type": "local",
@@ -10,17 +10,19 @@
   "tests": [
     {
       "name": "Hangouts Test %ts",
-      "tupleSize": 3,
+      "tupleSize": 2,
       "description": "Sign in, start a video call and check the video.",
       "testImpl": "io.cosmosoftware.kite.hangouts.KiteHangoutsTest",
       "payload" : {
         "url": "https://hangouts.google.com/",
-        "usersPerRoom": 3,
+        "usersPerRoom": 2,
+        "meetingDuration": 10,
+        "windowSize": "800x600",
         "users": [
           {"user":"kite.test.cosmo", "pass":"Test!123"},
+          {"user":"kite5.test.cosmo", "pass":"Test!123"},
           {"user":"kite2.test.cosmo", "pass":"Test!123"},
-          {"user":"kite3.test.cosmo", "pass":"Test!123"},
-          {"user":"kite4.test.cosmo", "pass":"Test!123"}
+          {"user":"kite3.test.cosmo", "pass":"Test!123"}
         ]
       }
     }
