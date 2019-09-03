@@ -2,18 +2,13 @@
   "name": "js",
   "version": "1.0.0",
   "description": "KITE Javascript Test",
-  "main": "Call.js",
+  "main": "Hangouts.js",
   "scripts": {
     "test": "test"
   },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/ManuCosmo/KITE-Hackathon.git"
-  },
-  "author": "emmanuel.andre@cosmosoftware.io",
   "license": "ISC",
   "dependencies": {
-    "kite-common": "0.1.8",
+    "kite-common": "0.1.6",
     "express": "^4.15.2",
     "socket.io": "^2.2.0"
   }

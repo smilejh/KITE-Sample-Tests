@@ -1,0 +1,38 @@
+{
+  "name": "Hangouts %ts",
+  "matrix": [[0,0,0]],
+  "grids": [
+    {
+      "type": "local",
+      "url": "http://localhost:4444/wd/hub"
+    }
+  ],
+  "tests": [
+    {
+      "name": "Hangouts Test %ts",
+      "tupleSize": 3,
+      "description": "Sign in, start a video call and check the video.",
+      "testImpl": "io.cosmosoftware.kite.hangouts.KiteHangoutsTest",
+      "payload" : {
+        "url": "https://hangouts.google.com/",
+        "usersPerRoom": 3,
+        "users": [
+          {"user":"kite.test.cosmo", "pass":"Test!123"},
+          {"user":"kite2.test.cosmo", "pass":"Test!123"},
+          {"user":"kite3.test.cosmo", "pass":"Test!123"},
+          {"user":"kite4.test.cosmo", "pass":"Test!123"}
+        ]
+      }
+    }
+  ],
+  "clients": [
+    {
+      "browserName": "chrome",
+      "platform": "localhost"
+    },
+    {
+      "browserName": "firefox",
+      "platform": "localhost"
+    }
+  ]
+}
