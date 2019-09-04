@@ -1,0 +1,31 @@
+{
+  "name": "Hangouts %ts",
+  "grids": [
+    {
+      "type": "local",
+      "url": "http://localhost:4444/wd/hub"
+    }
+  ],
+  "tests": [
+    {
+      "name": "Hangouts Test %ts",
+      "tupleSize": 1,
+      "description": "Hangout test description",
+      "testImpl": "Hangouts.js",
+      "payload" : {
+        "url": "https://google.com",
+        "testTimeout": 60
+      }
+    }
+  ],
+  "clients": [
+    {
+      "browserName": "chrome",
+      "platform": "localhost"
+    },
+    {
+      "browserName": "firefox",
+      "platform": "localhost"
+    }
+  ]
+}

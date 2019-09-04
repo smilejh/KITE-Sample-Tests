@@ -1,0 +1,52 @@
+{
+  "name": "Hangouts %ts",
+  "matrix": [[0,0,1,0]],
+  "grids": [
+    {
+      "type": "local",
+      "url": "http://localhost:4444/wd/hub"
+    }
+  ],
+  "tests": [
+    {
+      "name": "Hangouts Test %ts",
+      "tupleSize": 4,
+      "description": "Sign in, start a video call and check the video.",
+      "testImpl": "io.cosmosoftware.kite.hangouts.KiteHangoutsTest",
+      "payload" : {
+        "url": "https://hangouts.google.com/",
+        "usersPerRoom": 4,
+        "meetingDuration": 30,
+        "windowSize": "800x600",
+        "users": [
+          {"user":"kite.test.cosmo", "pass":"Test!123"},
+          {"user":"kite5.test.cosmo", "pass":"Test!123"},
+          {"user":"kite2.test.cosmo", "pass":"Test!123"},
+          {"user":"kite3.test.cosmo", "pass":"Test!123"}
+        ]
+      }
+    }
+  ],
+  "clients": [
+    {
+      "browserName": "chrome",
+      "platform": "localhost",
+      "video": {
+        "directory": "/home/ubuntu/Videos/",
+        "filename": "e-dv548_lwe08_christa_casebeer_003",
+        "duration": "01:00:00",
+        "type": "Video"
+      },
+      "audio": {
+        "directory": "/home/ubuntu/Audios/",
+        "filename": "e-dv548_lwe08_christa_casebeer_003",
+        "duration": "01:00:00",
+        "type": "Audio"
+      }
+    },    
+    {
+      "browserName": "firefox",
+      "platform": "localhost"
+    }
+  ]
+}
