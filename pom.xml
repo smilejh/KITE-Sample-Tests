@@ -53,8 +53,8 @@
     <kite.npm.version>6.9.0</kite.npm.version>
 
     <!-- Comment out the following line and uncomment the next to use your local maven repo for KITE-Extras -->
-<!--    <kite.extras.repo>com.github.CoSMoSoftware</kite.extras.repo>-->
-    <kite.extras.repo>io.cosmosoftware.kite</kite.extras.repo>
+    <kite.extras.repo>com.github.CoSMoSoftware</kite.extras.repo>
+<!--    <kite.extras.repo>io.cosmosoftware.kite</kite.extras.repo>-->
     
   </properties>
 
