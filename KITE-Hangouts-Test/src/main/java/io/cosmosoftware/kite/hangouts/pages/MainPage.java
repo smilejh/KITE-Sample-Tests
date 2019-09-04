@@ -18,19 +18,19 @@ import static io.cosmosoftware.kite.util.WebDriverUtils.loadPage;
 
 public class MainPage extends BasePage {
 
-  @FindBy(xpath = "//*[@id=\"gb_70\"]")
+  @FindBy(id = "gb_70")
   WebElement signinButton;
 
-  @FindBy(xpath = "//*[@id=\"identifierId\"]")
+  @FindBy(id = "identifierId")
   WebElement emailInput;
 
   @FindBy(xpath = "//*[@id=\"password\"]/div[1]/div/div[1]/input")
   WebElement passwordInput;
 
-  @FindBy(xpath = "//*[@id=\"identifierNext\"]/span/span")
+  @FindBy(id = "identifierNext")
   WebElement idNextButton;
 
-  @FindBy(xpath = "//*[@id=\"passwordNext\"]/span/span")
+  @FindBy(id = "passwordNext")
   WebElement pwNextButton;
 
   @FindBy(xpath = "//*[@id=\"yDmH0d\"]/div[8]/div[2]/div/div[3]")
