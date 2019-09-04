@@ -37,7 +37,8 @@ public class KiteHangoutsTest extends KiteBaseTest {
     //first user starts the video call, others wait
     runner.addStep(new StartVideoCallStep(runner, this.roomManager, mainPage));
     if (this.windowWidth > 0 && this.windowHeight > 0) {
-      runner.addStep(new ResizeWindowStep(runner, this.windowWidth, this.windowHeight));
+      runner.addStep(new ResizeWindowStep(runner, this.windowWidth, this.windowHeight, 
+        getX(runner.getId()), getY(runner.getId())));
     }
     //all users wait for the call to be started.
     runner.addStep(new WaitForOthersStep(runner, this, runner.getLastStep()));
@@ -55,6 +56,14 @@ public class KiteHangoutsTest extends KiteBaseTest {
     }
   }
 
+  private final int NO_WINDOWS_HORIZONTAL = 4;
   
+  private int getX(int id) {
+    return (id % NO_WINDOWS_HORIZONTAL ) * this.windowWidth/2;
+  }
+
+  private int getY(int id) {
+    return ((id - (id % NO_WINDOWS_HORIZONTAL)) / NO_WINDOWS_HORIZONTAL) * this.windowHeight/2;
+  }
   
 }

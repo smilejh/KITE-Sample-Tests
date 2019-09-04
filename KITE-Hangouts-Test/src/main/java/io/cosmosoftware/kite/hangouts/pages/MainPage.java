@@ -126,15 +126,14 @@ public class MainPage extends BasePage {
   }
 
 
-  public void videoIsPublishing(int timeout) throws TimeoutException {
+  public void videoIsPublishing(int timeout) throws TimeoutException, KiteInteractionException {
     if (videos.size() < 1) {
       waitAround(timeout * ONE_SECOND_INTERVAL);
       if (videos.size() < 1) {
         throw new TimeoutException("videoIsPublishing: no <video> element found on the page");
       }
     }
-    WebDriverWait wait = new WebDriverWait(webDriver, timeout);
-    wait.until(ExpectedConditions.visibilityOf(videos.get(0)));
+    waitUntilVisibilityOf(videos.get(0), timeout);
   }
 
   public List<WebElement> getVideoElements() {

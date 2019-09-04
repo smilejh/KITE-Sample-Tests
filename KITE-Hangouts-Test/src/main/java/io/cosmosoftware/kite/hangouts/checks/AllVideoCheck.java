@@ -6,6 +6,7 @@ import io.cosmosoftware.kite.interfaces.Runner;
 import io.cosmosoftware.kite.report.Status;
 import io.cosmosoftware.kite.steps.StepPhase;
 import io.cosmosoftware.kite.steps.TestStep;
+import org.openqa.selenium.Rectangle;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
@@ -53,7 +54,19 @@ public class AllVideoCheck extends TestStep {
       waitAround(numberOfParticipants * ONE_SECOND_INTERVAL);
       String videoCheck = "";
       boolean error = false;
-      for (int i = 1; i < numberOfParticipants; i++) {
+
+      for (int i = 0; i < videos.size(); i++) {
+        //debug code to help identifying the video. Can be deleted.
+        Rectangle r = videos.get(i).getRect();
+        logger.debug("Video[" + i +"] " + r.x + ", " + r.y + ", " + r.width + ", " + r.width + "  "
+          + videos.get(i).getCssValue("display"));
+      }
+      
+      //first video is the fullscreen
+      //second video is "display": "none"
+      //third video is "You" (the publisher)
+      final int FIRST_VIDEO_INDEX = videos.size() > 1 ? 2 : 0;
+      for (int i = FIRST_VIDEO_INDEX + 1; i < numberOfParticipants; i++) {
         String v = videoCheck(webDriver, i);
         videoCheck += v;
         if (i < numberOfParticipants - 1) {

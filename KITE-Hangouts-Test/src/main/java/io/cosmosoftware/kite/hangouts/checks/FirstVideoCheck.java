@@ -40,8 +40,11 @@ public class FirstVideoCheck extends TestStep {
         throw new KiteTestException(
             "Unable to find any <video> element on the page", Status.FAILED);
       }
-
-      String videoCheck = videoCheck(webDriver, 0);
+      //first video is the fullscreen
+      //second video is "display": "none"
+      //third video is "You" (the publisher)
+      final int FIRST_VIDEO_INDEX = videos.size() > 1 ? 2 : 0;
+      String videoCheck = videoCheck(webDriver, FIRST_VIDEO_INDEX);
       if (!"video".equalsIgnoreCase(videoCheck)) {
         reporter.screenshotAttachment(report,
           "FirstVideoCheck_" + timestamp(), saveScreenshotPNG(webDriver));
