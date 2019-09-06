@@ -1,6 +1,6 @@
 const {TestUtils, WebDriverFactory, KiteBaseTest, ScreenshotStep} = require('./node_modules/kite-common'); 
-const {OpenUrlStep} = require('./steps');
-const {MyFirstCheck} = require('./checks');
+const {LoginStep, StartVideoCallStep, JoinVideoCallStep} = require('./steps');
+const {FirstVideoCheck, AllVideoCheck} = require('./checks');
 const {MainPage} = require('./pages');
 
 class Hangout extends KiteBaseTest {
@@ -13,14 +13,25 @@ class Hangout extends KiteBaseTest {
       this.driver = await WebDriverFactory.getDriver(this.capabilities, this.remoteUrl);
       this.page = new MainPage(this.driver);
 
-      let openUrlStep = new OpenUrlStep(this);
-      await openUrlStep.execute(this);
+      let loginStep = new LoginStep(this);
+      await loginStep.execute(this);
+      
+      let startVideoCallStep = new StartVideoCallStep(this);
+      await startVideoCallStep.execute(this);      
+      await this.waitAllSteps();
+      
+      let joinVideoCallStep = new JoinVideoCallStep(this);
+      await joinVideoCallStep.execute(this);      
+      await this.waitAllSteps();
+      
+      let firstVideoCheck = new FirstVideoCheck(this);
+      await firstVideoCheck.execute(this);
 
-//      let myFirstCheck = new MyFirstCheck(this);
-//      await myFirstCheck.execute(this);
+      let allVideoCheck = new AllVideoCheck(this);
+      await allVideoCheck.execute(this);
 
-
-      let screenshotStep = new ScreenshotStep(this);
+      await this.waitAllSteps();
+      let screenshotStep = new ScreenshotStep(this);    
       await screenshotStep.execute(this);
       
       

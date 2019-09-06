@@ -28,7 +28,7 @@ public class StartVideoCallStep extends TestStep {
 
   @Override
   public String stepDescription() {
-    if (id == 0) {
+    if (id % roomManager.getUsersPerRoom() == 0) {
       return "Starting the video call";
     } else {
       return "Waiting for the video call to start";

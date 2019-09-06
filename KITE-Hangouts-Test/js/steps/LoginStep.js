@@ -1,7 +1,7 @@
 const {TestStep, TestUtils} = require('kite-common');
 const waitAround = TestUtils.waitAround;
 
-class OpenUrlStep extends TestStep {
+class LoginStep extends TestStep {
 
   constructor(kiteBaseTest) {
     super();
@@ -21,7 +21,7 @@ class OpenUrlStep extends TestStep {
 
   async step() {
     await this.page.open(this);
-    await this.page.open(this);
+    this.driver.manage().window().setRect(540, 960, 960 * (this.id % 2), 540 * (( this.id - (this.id % 2))/2));
     await this.page.clickSignIn();
     await this.page.enterEmail(this.user);
     await this.page.enterPassword(this.pass);    
@@ -29,4 +29,4 @@ class OpenUrlStep extends TestStep {
   }
 }
 
-module.exports = OpenUrlStep;
+module.exports = LoginStep;

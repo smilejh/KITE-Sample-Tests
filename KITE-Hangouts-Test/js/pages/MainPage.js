@@ -1,6 +1,9 @@
 const {By, Key, until} = require('selenium-webdriver');
 const {TestUtils, KiteTestError, Status} = require('kite-common'); 
 
+const verifyVideoDisplayByIndex = TestUtils.verifyVideoDisplayByIndex;
+const waitAround = TestUtils.waitAround;
+
 
 const signinButton = By.id('gb_70');
 const emailInput = By.id('identifierId');
@@ -65,11 +68,69 @@ class MainPage {
   
   async enterPassword(password) {
     console.log("enterPassword(" + password + ")");
+    await waitAround(1000);
     await this.driver.wait(until.elementLocated(passwordInput), FIVE_SECONDS);
     let input = await this.driver.findElement(passwordInput);
-    await input.sendKeys(password);    
+    await input.sendKeys(password);
+    await waitAround(1000);
+    console.log("click pwNextButton");
     await clickButton(this.driver, pwNextButton);
     await skipPresentation(this.driver);
+  }
+  
+
+  // VideoCheck with verifyVideoDisplayByIndex
+  async videoCheck(stepInfo, index) {
+    console.log('videoCheck(' + index + ')');
+    let timeout = stepInfo.timeout;
+
+    // Waiting for the videos
+    await TestUtils.waitForVideos(stepInfo, this.videos);
+
+    // Check the status of the video
+    // checked.result = 'blank' || 'still' || 'video'
+    let i = 0;
+    let checked = await verifyVideoDisplayByIndex(stepInfo.driver, index);
+    while(checked.result === 'blank' || typeof checked.result === "undefined" && i < timeout) {
+      checked = await verifyVideoDisplayByIndex(stepInfo.driver, index);
+      i++;
+      await waitAround(1000);
+    }
+
+    i = 0;
+    while(i < 3 && checked.result != 'video') {
+      checked = await verifyVideoDisplayByIndex(stepInfo.driver, index);
+      i++;
+      await waitAround(3 * 1000); // waiting 3s after each iteration
+    }
+    return checked.result;
+  }
+  
+  async getVideos() {
+    return videoElements;
+  }
+  
+  async startVideoCall() {
+    console.log("startVideoCall");
+    await clickButton(this.driver, videoCallButton);
+    //await waitAround(3 * 1000);    
+    const d = this.driver;
+    await this.driver.wait(function () {
+      return d.getAllWindowHandles().then(async function (handles) {
+        var isHandleCount2 = (handles.length == 2);
+        if (isHandleCount2) {
+          d.switchTo().window(handles[1]);
+        }
+        return isHandleCount2;
+      });
+    }).then(async function () {
+    // Now do some stuff in new tab
+      try {       
+        await clickButton(d, closePopup);
+      } catch (err) {
+        console.log('no popup to close');
+      }
+    });    
   }
   
   /*
