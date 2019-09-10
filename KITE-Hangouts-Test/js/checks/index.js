@@ -1,2 +1,2 @@
-exports.MyFirstCheck = require("./MyFirstCheck");
-
+exports.FirstVideoCheck = require("./FirstVideoCheck");
+exports.AllVideoCheck = require("./AllVideoCheck");
