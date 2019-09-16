@@ -32,11 +32,12 @@ repository, come from the compilation of the KITE Engine (namely, kite-framework
 ### Run KITE-Janus-Test Example
 
 Edit the file `./KITE-Janus-Test/configs/local.janus.config.json` with your favorite text editor.  
-You will need to change __`version`__ and __`platform`__ according to what is installed on your local grid.
+You might need to change __`version`__ and __`platform`__ according to what is installed on your local grid (if your grid is running on localhost, it's fine to keep "localhost" as the platform).
+
 
 To run the Janus test:
 ```
-cd %KITE_HOME%\KITE-Janus-Test
+cd KITE-Janus-Test
 r local.janus.config.json
 ```
 
@@ -56,7 +57,7 @@ When the tests is launched using the above script, it will generate Allure repor
 
 After running the test, you can open the Allure dashboard with the command `a`.
 ```
-cd %KITE_HOME%\KITE-Janus-Test
+cd KITE-Janus-Test
 a
 ```
 
