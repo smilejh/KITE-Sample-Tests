@@ -56,6 +56,54 @@ meetingDuration is in seconds.
 The other parameters are self-explanatory.
 
 
+#### Audio and Video (Chrome only)
+
+
+The current configuration assume that you have the following audio and video files, which can be downloaded at:
+https://drive.google.com/file/d/1kBAEgiJbzos1fUeGMs86xvxKrkN9JpsX/view?usp=sharing
+
+If possible, extract the files to:
+/home/ubuntu/Videos/e-dv548_lwe08_christa_casebeer_003.y4m  
+/home/ubuntu/Audios/e-dv548_lwe08_christa_casebeer_003.wav  
+
+On Windows:
+c:\home\ubuntu\Videos\e-dv548_lwe08_christa_casebeer_003.y4m  
+c:\home\ubuntu\Audios\e-dv548_lwe08_christa_casebeer_003.wav  
+
+If you want to use a different location, just updated the "directory" in the config so KITE can find the files.
+
+```
+  "video": {
+    "directory": "/home/ubuntu/Videos/",
+    "filename": "e-dv548_lwe08_christa_casebeer_003",
+    "duration": "01:00:00",
+    "type": "Video"
+  },
+  "audio": {
+    "directory": "/home/ubuntu/Audios/",
+    "filename": "e-dv548_lwe08_christa_casebeer_003",
+    "duration": "01:00:00",
+    "type": "Audio"
+  }
+```
+
+In order to use the default media, you can 'comment out' the "video" and "audio" configs or just delete it altogether.
+
+```
+  "_video": {
+    "directory": "/home/ubuntu/Videos/",
+    "filename": "e-dv548_lwe08_christa_casebeer_003",
+    "duration": "01:00:00",
+    "type": "Video"
+  },
+  "_audio": {
+    "directory": "/home/ubuntu/Audios/",
+    "filename": "e-dv548_lwe08_christa_casebeer_003",
+    "duration": "01:00:00",
+    "type": "Audio"
+  }
+```
+
 ### Running the KITE-Hangouts-Test 
 
 #### Java
